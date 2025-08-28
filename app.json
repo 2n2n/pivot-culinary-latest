@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "pivot-culinary-latest",
-    "slug": "pivot-culinary-latest",
-    "version": "1.0.0",
+    "name": "Pivot Culinary",
+    "slug": "pivot-culinary",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "pivotculinarylatest",
@@ -14,13 +14,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.pivotculinary.mobile"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/img/adaptive-icon.png",
+        "backgroundColor": "#1D2846"
       },
+      "googleServicesFile": "./google-services.json",
+      "package": "com.pivotculinary",
       "edgeToEdgeEnabled": true
     },
     "web": {
@@ -33,6 +37,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "29cc0143-298c-4261-8cb0-e45bb9dce767"
+      }
     }
   }
 }
