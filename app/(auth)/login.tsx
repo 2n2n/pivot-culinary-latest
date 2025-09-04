@@ -6,7 +6,7 @@ import { Box } from "../../components/ui/box";
 import { Text } from "../../components/ui/text";
 import { useRouter } from "expo-router";
 
-export default function LoginScreen() {
+function AuthLoginScreen() {
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState("");
 
@@ -48,3 +48,5 @@ export default function LoginScreen() {
     </Box>
   );
 }
+
+export default AuthLoginScreen;

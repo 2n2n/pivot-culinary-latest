@@ -1,11 +1,13 @@
 import React, { useState, useRef } from "react";
-import { View } from "react-native";
 import { Input, InputField } from "../../components/ui/input";
 import { Button, ButtonText } from "../../components/ui/button";
 import { Box } from "../../components/ui/box";
 import { Text } from "../../components/ui/text";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function OTPScreen() {
+export default function AuthOTPScreen() {
+  const router = useRouter();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<Array<any>>([]);
 
@@ -30,69 +32,86 @@ export default function OTPScreen() {
   const handleVerifyOTP = () => {
     const otpString = otp.join("");
     console.log("OTP verification attempted with:", otpString);
+    router.replace("/(application)/agenda");
   };
 
   const isOtpComplete = otp.every((digit) => digit !== "");
 
   return (
-    <Box className="flex-1 justify-center items-center px-6 bg-background-0">
-      <Box className="w-full max-w-sm space-y-6 items-center">
-        <Text size="4xl" bold className="text-typography-900 mb-8">
-          Verify OTP
-        </Text>
-
-        <Text size="md" className="text-typography-600 text-center mb-8">
-          Enter the 6-digit code sent to your phone
-        </Text>
-
-        <Box className="w-full flex-row justify-between mb-8">
-          {otp.map((digit, index) => (
-            <Input
-              key={index}
-              size="lg"
-              variant="outline"
-              className="w-12 h-12 mx-1"
-            >
-              <InputField
-                ref={(ref) => {
-                  inputRefs.current[index] = ref;
-                }}
-                value={digit}
-                onChangeText={(value) => handleOtpChange(value, index)}
-                onKeyPress={(e) => handleKeyPress(e, index)}
-                placeholder=""
-                keyboardType="numeric"
-                maxLength={1}
-                textAlign="center"
-                className="text-center text-lg font-bold"
-              />
-            </Input>
-          ))}
-        </Box>
-
+    <Box className="flex-1 bg-background-0">
+      {/* Back Button */}
+      <Box className="absolute top-12 left-6 z-10">
         <Button
-          size="lg"
-          variant="solid"
-          action="primary"
-          onPress={handleVerifyOTP}
-          className="w-full"
-          isDisabled={!isOtpComplete}
+          size="sm"
+          variant="outline"
+          action="secondary"
+          onPress={() => router.back()}
+          className="w-10 h-10 rounded-full"
         >
-          <ButtonText>Verify OTP</ButtonText>
+          <Ionicons name="chevron-back" size={20} color="#0000" />
         </Button>
+      </Box>
 
-        <Box className="flex-row items-center justify-center mt-4">
-          <Text size="sm" className="text-typography-500">
-            Didn't receive the code?{" "}
+      {/* Main Content */}
+      <Box className="flex-1 justify-center items-center px-6">
+        <Box className="w-full max-w-sm space-y-6 items-center">
+          <Text size="4xl" bold className="text-typography-900 mb-8">
+            Verify OTP
           </Text>
+
+          <Text size="md" className="text-typography-600 text-center mb-8">
+            Enter the 6-digit code sent to your phone
+          </Text>
+
+          <Box className="w-full flex-row justify-between mb-8">
+            {otp.map((digit, index) => (
+              <Input
+                key={index}
+                size="lg"
+                variant="outline"
+                className="w-12 h-12 mx-1"
+              >
+                <InputField
+                  ref={(ref) => {
+                    inputRefs.current[index] = ref;
+                  }}
+                  value={digit}
+                  onChangeText={(value) => handleOtpChange(value, index)}
+                  onKeyPress={(e) => handleKeyPress(e, index)}
+                  placeholder=""
+                  keyboardType="numeric"
+                  maxLength={1}
+                  textAlign="center"
+                  className="text-center text-lg font-bold"
+                />
+              </Input>
+            ))}
+          </Box>
+
           <Button
-            size="sm"
-            variant="link"
+            size="lg"
+            variant="solid"
             action="primary"
-            onPress={() => console.log("Resend OTP")}
+            onPress={handleVerifyOTP}
+            className="w-full"
+            isDisabled={!isOtpComplete}
           >
-            <ButtonText>Resend</ButtonText>
+            <ButtonText>Verify OTP</ButtonText>
           </Button>
+
+          <Box className="flex-row items-center justify-center mt-4">
+            <Text size="sm" className="text-typography-500">
+              Didn't receive the code?{" "}
+            </Text>
+            <Button
+              size="sm"
+              variant="link"
+              action="primary"
+              onPress={() => console.log("Resend OTP")}
+            >
+              <ButtonText>Resend</ButtonText>
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>
