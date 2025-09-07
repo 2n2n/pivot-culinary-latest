@@ -1,12 +1,17 @@
+import CalendarIcon from "@/components/icons/CalendarIcon";
+import { Icon } from "@/components/ui/icon";
 import { Tabs } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ApplicationLayout() {
   return (
     <Tabs>
       <Tabs.Screen
         name="agenda"
-        options={{ title: "Agenda", headerShown: false }}
+        options={{
+          title: "Agenda",
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Icon as={CalendarIcon} color="green" />,
+        }}
       />
       <Tabs.Screen
         name="bookings"
