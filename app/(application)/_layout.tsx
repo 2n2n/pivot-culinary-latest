@@ -1,11 +1,6 @@
 // @ts-nocheck
-import {
-  BellIcon,
-  CalendarDaysIcon,
-  EditIcon,
-  MailIcon,
-  Icon,
-} from "@/components/ui/icon";
+import { Icon } from "@/components/ui/icon";
+import { Inbox, Bell, CalendarCheck, CalendarDays } from "lucide-react-native";
 import { createIcon } from "@gluestack-ui/core/icon/creator";
 import { Tabs } from "expo-router";
 /**
@@ -24,7 +19,7 @@ export default function ApplicationLayout() {
           title: "Agenda",
           headerShown: false,
           tabBarIcon: ({ focused, color }) => (
-            <Icon as={CalendarDaysIcon} style={{ color }} />
+            <Icon as={CalendarDays} style={{ color }} />
           ),
         }}
       />
@@ -33,7 +28,9 @@ export default function ApplicationLayout() {
         options={{
           title: "Bookings",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Icon as={EditIcon} style={{ color }} />,
+          tabBarIcon: ({ color }) => (
+            <Icon as={CalendarCheck} style={{ color }} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -41,7 +38,7 @@ export default function ApplicationLayout() {
         options={{
           title: "Notifications",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Icon as={BellIcon} style={{ color }} />,
+          tabBarIcon: ({ color }) => <Icon as={Bell} style={{ color }} />,
         }}
       />
       <Tabs.Screen
@@ -49,7 +46,7 @@ export default function ApplicationLayout() {
         options={{
           title: "Inbox",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Icon as={MailIcon} style={{ color }} />,
+          tabBarIcon: ({ color }) => <Icon as={Inbox} style={{ color }} />,
         }}
       />
     </Tabs>
