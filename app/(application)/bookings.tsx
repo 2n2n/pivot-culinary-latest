@@ -140,12 +140,7 @@ export default function ApplicationBookingsScreen() {
 
   return (
     <TabSafeAreaView>
-      <TabDashboardHeader />
-      <Box>
-        <Text className="text-4xl font-bold text-gray-900 px-4 py-2 bg-white">
-          Bookings
-        </Text>
-      </Box>
+      <TabDashboardHeader title="Bookings" />
       <FlatList
         className="pt-5"
         data={bookings}

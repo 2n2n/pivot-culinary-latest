@@ -19,7 +19,7 @@ import {
 import { Heading } from "@/components/ui/heading";
 import { useState } from "react";
 
-const TabDashboardHeader = () => {
+const TabDashboardHeader = ({ title = " " }: { title: string }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState("Chicago Bulls");
   return (
@@ -64,6 +64,11 @@ const TabDashboardHeader = () => {
           ),
         }}
       />
+      <Box className="py-2 bg-white">
+        <Text className="text-4xl font-bold text-gray-900 px-4 mb-2">
+          {title}
+        </Text>
+      </Box>
       {/* MODAL */}
       <Modal
         isOpen={showModal}
@@ -80,7 +85,7 @@ const TabDashboardHeader = () => {
               <Icon as={CloseIcon} />
             </ModalCloseButton>
           </ModalHeader>
-          <ModalBody className="p-4">
+          <ModalBody className="py-4">
             {/* 
               // TODO: Identify the type of the accounts here.
             */}
