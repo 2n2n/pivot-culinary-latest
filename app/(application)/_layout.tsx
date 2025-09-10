@@ -5,7 +5,7 @@ import { createIcon } from "@gluestack-ui/core/icon/creator";
 import { Tabs } from "expo-router";
 // REVIEW: Understand why we are calling the Svg component directly instead of calling it via the Icon component <Icon as={BookingsIcon} />
 export default function ApplicationLayout() {
-  // BUGFIX: the label of the active icons are disappearing on the tab bar.
+  // BUG: the label of the active icons are disappearing on the tab bar.
   return (
     <Tabs
       screenOptions={{

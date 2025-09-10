@@ -76,19 +76,6 @@ export default function ApplicationBookingsScreen() {
     }, 1000);
   }, [bookings.length, isLoading]);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "confirmed":
-        return "text-green-600";
-      case "pending":
-        return "text-yellow-600";
-      case "cancelled":
-        return "text-red-600";
-      default:
-        return "text-gray-600";
-    }
-  };
-
   const TextWithIcon = ({
     icon,
     text,
