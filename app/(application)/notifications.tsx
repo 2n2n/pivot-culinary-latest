@@ -1,10 +1,12 @@
+import TabDashboardHeader from "@/components/shared/TabDashboardHeader";
+import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
 import { Text } from "@/components/Themed";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ApplicationNotificationScreen() {
   return (
-    <SafeAreaView>
+    <TabSafeAreaView>
+      <TabDashboardHeader />
       <Text>Notificaitons</Text>
-    </SafeAreaView>
+    </TabSafeAreaView>
   );
 }

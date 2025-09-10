@@ -3,9 +3,7 @@ import { Icon } from "@/components/ui/icon";
 import { Inbox, Bell, CalendarCheck, CalendarDays } from "lucide-react-native";
 import { createIcon } from "@gluestack-ui/core/icon/creator";
 import { Tabs } from "expo-router";
-/**
- * TODO: Understand why we are calling the Svg component directly instead of calling it via the Icon component <Icon as={BookingsIcon} />
- */
+// REVIEW: Understand why we are calling the Svg component directly instead of calling it via the Icon component <Icon as={BookingsIcon} />
 export default function ApplicationLayout() {
   return (
     <Tabs
@@ -17,7 +15,6 @@ export default function ApplicationLayout() {
         name="agenda"
         options={{
           title: "Agenda",
-          headerShown: false,
           tabBarIcon: ({ focused, color }) => (
             <Icon as={CalendarDays} style={{ color }} />
           ),
@@ -27,7 +24,6 @@ export default function ApplicationLayout() {
         name="bookings"
         options={{
           title: "Bookings",
-          headerShown: false,
           tabBarIcon: ({ color }) => (
             <Icon as={CalendarCheck} style={{ color }} />
           ),
@@ -37,7 +33,6 @@ export default function ApplicationLayout() {
         name="notifications"
         options={{
           title: "Notifications",
-          headerShown: false,
           tabBarIcon: ({ color }) => <Icon as={Bell} style={{ color }} />,
         }}
       />
@@ -45,7 +40,6 @@ export default function ApplicationLayout() {
         name="inbox"
         options={{
           title: "Inbox",
-          headerShown: false,
           tabBarIcon: ({ color }) => <Icon as={Inbox} style={{ color }} />,
         }}
       />
