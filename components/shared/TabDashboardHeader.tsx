@@ -19,7 +19,7 @@ import {
 import { Heading } from "@/components/ui/heading";
 import { useState } from "react";
 
-const TabDashboardHeader = ({ title = " " }: { title: string }) => {
+const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState("Chicago Bulls");
   return (
