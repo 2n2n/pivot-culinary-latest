@@ -1,48 +1,27 @@
-// @ts-nocheck
-import { Icon } from "@/components/ui/icon";
-import { Inbox, Bell, CalendarCheck, CalendarDays } from "lucide-react-native";
-import { createIcon } from "@gluestack-ui/core/icon/creator";
-import { Tabs } from "expo-router";
-// REVIEW: Understand why we are calling the Svg component directly instead of calling it via the Icon component <Icon as={BookingsIcon} />
+import { Stack } from "expo-router";
+
 export default function ApplicationLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: "#F47C20",
-      }}
-    >
-      <Tabs.Screen
-        name="agenda"
+    <Stack screenOptions={{ headerShown: true }}>
+      <Stack.Screen
+        name="(tabs)"
         options={{
-          title: "Agenda",
-          tabBarIcon: ({ focused, color }) => (
-            <Icon as={CalendarDays} style={{ color }} />
-          ),
+          headerShown: false,
+          headerTitle: "Home",
         }}
       />
-      <Tabs.Screen
-        name="bookings"
+      <Stack.Screen
+        name="booking-details/[bookingId]"
         options={{
-          title: "Bookings",
-          tabBarIcon: ({ color }) => (
-            <Icon as={CalendarCheck} style={{ color }} />
-          ),
+          headerShown: true,
+          headerTintColor: "#fff",
+          headerBackVisible: true,
+          headerTitle: "Booking Details",
+          headerBackTitle: "Booking Details",
+          headerTitleStyle: { fontWeight: "bold" },
+          headerStyle: { backgroundColor: "#F47C20" },
         }}
       />
-      <Tabs.Screen
-        name="notifications"
-        options={{
-          title: "Notifications",
-          tabBarIcon: ({ color }) => <Icon as={Bell} style={{ color }} />,
-        }}
-      />
-      <Tabs.Screen
-        name="inbox"
-        options={{
-          title: "Inbox",
-          tabBarIcon: ({ color }) => <Icon as={Inbox} style={{ color }} />,
-        }}
-      />
-    </Tabs>
+    </Stack>
   );
 }

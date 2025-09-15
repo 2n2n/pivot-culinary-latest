@@ -15,6 +15,7 @@ const TabSafeAreaView = ({ children }: { children: React.ReactNode }) => {
   const insets = useSafeAreaInsets();
   return (
     <SafeAreaView
+      className="flex"
       style={{ paddingTop: -insets.top, paddingBottom: -insets.bottom }}
     >
       {children}
