@@ -16,7 +16,7 @@ function AppIndexScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/(application)/(tabs)/agenda");
+    router.replace("/bookings");
   }, []);
 
   return null;

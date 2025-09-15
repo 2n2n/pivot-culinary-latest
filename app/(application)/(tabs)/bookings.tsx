@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Pressable } from "react-native";
 import TabDashboardHeader from "@/components/shared/TabDashboardHeader";
 import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
 import { Text } from "@/components/Themed";
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { Calendar, MapPin } from "lucide-react-native";
-import { Box } from "@/components/ui/box";
+import { Link } from "expo-router";
 
 // Sample data for bookings
 interface BookingItem {
@@ -60,9 +60,7 @@ export default function ApplicationBookingsScreen() {
   // Function to load more data for continuous scroll
   const loadMoreBookings = useCallback(() => {
     if (isLoading) return;
-
     setIsLoading(true);
-
     // Simulate API call delay
     setTimeout(() => {
       const newBookings = generateSampleBookings().map((booking, index) => ({
@@ -91,28 +89,35 @@ export default function ApplicationBookingsScreen() {
     );
   };
   const renderBookingCard = ({ item }: { item: BookingItem }) => (
-    <Card
-      size="md"
-      variant="elevated"
-      className="mb-4 mx-4 shadow-sm rounded-[8px]"
-    >
-      <View className="flex-row justify-between items-start mb-2">
-        <Text className="text-xl font-semibold text-gray-900">
-          Chicago Bulls @ Kansas City, MO
-        </Text>
-      </View>
+    <Link push href={`/booking-details/${item.id}`} asChild>
+      <Pressable>
+        <Card
+          size="md"
+          variant="elevated"
+          className="mb-4 mx-4 shadow-sm rounded-[8px]"
+        >
+          <View className="flex-row justify-between items-start mb-2">
+            <Text className="text-xl font-semibold text-gray-900">
+              Chicago Bulls @ Kansas City, MO
+            </Text>
+          </View>
 
-      <View>
-        <TextWithIcon icon={Calendar} text={`${item.date} – ${item.date}`} />
-      </View>
+          <View>
+            <TextWithIcon
+              icon={Calendar}
+              text={`${item.date} – ${item.date}`}
+            />
+          </View>
 
-      <View className="flex-row justify-between items-center">
-        <TextWithIcon
-          icon={MapPin}
-          text="Kauffman Stadium: 1 Royal Way, Kansas City, MO 64129"
-        />
-      </View>
-    </Card>
+          <View className="flex-row justify-between items-center">
+            <TextWithIcon
+              icon={MapPin}
+              text="Kauffman Stadium: 1 Royal Way, Kansas City, MO 64129"
+            />
+          </View>
+        </Card>
+      </Pressable>
+    </Link>
   );
 
   const renderFooter = () => {
