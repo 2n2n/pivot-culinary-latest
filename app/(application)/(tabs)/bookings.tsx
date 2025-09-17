@@ -4,10 +4,9 @@ import TabDashboardHeader from "@/components/shared/TabDashboardHeader";
 import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
 import { Text } from "@/components/Themed";
 import { Card } from "@/components/ui/card";
-import { Icon } from "@/components/ui/icon";
-import { Calendar, MapPin } from "lucide-react-native";
+import { Calendar, Calendar1, MapPin } from "lucide-react-native";
 import { Link } from "expo-router";
-
+import TextWithIcon from "@/components/shared/TextWithIcon";
 // Sample data for bookings
 interface BookingItem {
   id: string;
@@ -74,20 +73,6 @@ export default function ApplicationBookingsScreen() {
     }, 1000);
   }, [bookings.length, isLoading]);
 
-  const TextWithIcon = ({
-    icon,
-    text,
-  }: {
-    icon: React.ComponentType<any>;
-    text: string;
-  }) => {
-    return (
-      <View className="flex-row items-center py-1">
-        <Icon as={icon} className="w-5 h-5 text-orange-500 mr-2" />
-        <Text className="text-sm font-medium text-blue-900">{text}</Text>
-      </View>
-    );
-  };
   const renderBookingCard = ({ item }: { item: BookingItem }) => (
     <Link push href={`/booking-details/${item.id}`} asChild>
       <Pressable>
@@ -104,7 +89,7 @@ export default function ApplicationBookingsScreen() {
 
           <View>
             <TextWithIcon
-              icon={Calendar}
+              icon={Calendar1}
               text={`${item.date} – ${item.date}`}
             />
           </View>
