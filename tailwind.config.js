@@ -168,6 +168,7 @@ module.exports = {
           light: '#FBFBFB',
           dark: '#181719',
         },
+        pivot: "#F47C20",
         indicator: {
           primary: 'rgb(var(--color-indicator-primary)/<alpha-value>)',
           info: 'rgb(var(--color-indicator-info)/<alpha-value>)',
