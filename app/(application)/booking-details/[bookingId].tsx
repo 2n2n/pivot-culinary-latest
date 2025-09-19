@@ -17,10 +17,12 @@ import {
   NotepadText,
   Phone,
   Search,
+  Users,
+  UsersRound,
 } from "lucide-react-native";
 import { Icon } from "@/components/ui/icon";
 
-// TODO: use ScrollView stickyHeaderIndices https://reactnative.dev/docs/scrollview#stickyheaderindices
+// REVIEW: Screen should be polished.
 export default function BookingDetails() {
   const router = useRouter();
   const { bookingId } = useLocalSearchParams<{ bookingId: string }>();
@@ -32,7 +34,7 @@ export default function BookingDetails() {
           headerTitle: "",
           headerBackTitle: "Booking Details",
           headerRight: () => (
-            <Box className="flex flex-row mr-5">
+            <HStack className="gap-2">
               <Button
                 variant="link"
                 onPress={() => Alert.alert("testing")}
@@ -43,7 +45,7 @@ export default function BookingDetails() {
               {
                 // TODO: Make profile image dynamic based on the active account.
               }
-              <Button variant="link" onPress={() => {}} className="ml-3 p-2">
+              <Button variant="link" onPress={() => {}} className="ml-2">
                 <Avatar className="bg-white rounded-full">
                   <AvatarImage
                     alt="Chicago bulls"
@@ -53,7 +55,7 @@ export default function BookingDetails() {
                   />
                 </Avatar>
               </Button>
-            </Box>
+            </HStack>
           ),
         }}
       />
@@ -166,7 +168,9 @@ export default function BookingDetails() {
               </VStack>
             </Box>
             <VStack className="bg-white py-2 gap-1">
+              {/* Events scrollable calendar */}
               <Text className="text-xl font-bold px-4">Events</Text>
+              {/* Events calendar scrollview */}
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <HStack className="gap-4 px-4">
                   {[
@@ -190,24 +194,24 @@ export default function BookingDetails() {
                       key={index}
                       className={`flex-col items-center justify-center rounded-xl h-14 w-12 ${
                         item.selected
-                          ? "bg-orange-400 transform -skew-x-12"
+                          ? "bg-orange-500 transform -skew-x-12"
                           : "bg-transparent"
                       }`}
                     >
                       <VStack className="gap-0">
                         <Text
-                          className={`text-center text-xs font-semibold italic ${
+                          className={`text-center text-xs font-bold ${
                             item.selected
-                              ? "text-white skew-x-13"
+                              ? "text-white skew-x-12"
                               : "text-gray-800"
                           }`}
                         >
                           {item.day}
                         </Text>
                         <Text
-                          className={`text-center text-xs font-semibold ${
+                          className={`text-center text-xs font-bold ${
                             item.selected
-                              ? "text-white skew-x-13"
+                              ? "text-white skew-x-12"
                               : "text-gray-800"
                           }`}
                         >
@@ -219,30 +223,68 @@ export default function BookingDetails() {
                 </HStack>
               </ScrollView>
             </VStack>
-            <VStack className="bg-gray-300 px-4 py-4 gap-4">
-              {Array.from({ length: 30 }).map((_, eventId) => (
-                <View
+            <VStack className="bg-gray-100 px-4 py-4 gap-4">
+              {Array.from({ length: 5 }).map((_, eventId) => (
+                <Box
                   key={eventId}
-                  style={{
-                    flex: 1,
-                    padding: 20,
-                    backgroundColor: "#fff",
-                    borderRadius: 12,
-                  }}
+                  className="bg-white p-4  shadow-slate-100 rounded-[8px]"
                 >
-                  <Text style={{ fontSize: 16, color: "#666" }}>
-                    Event ID: {eventId}
-                  </Text>
-                  <Text style={{ fontSize: 16, marginTop: 20, lineHeight: 24 }}>
-                    This is the booking details screen. You can access it via
-                    the path: event/details/{eventId}
-                  </Text>
-                  <Button
-                    onPress={() => router.push(`/event-details/${eventId}`)}
-                  >
-                    <ButtonText>Go Back</ButtonText>
-                  </Button>
-                </View>
+                  <HStack className="justify-between items-start mb-3">
+                    <VStack className="flex-1">
+                      <HStack className="justify-between items-center">
+                        <Text className="text-sm text-gray-600 mb-1">
+                          7:00 AM - 8:00 AM
+                        </Text>
+                        <HStack className="gap-1">
+                          <Icon
+                            as={UsersRound}
+                            className="w-5 h-5 text-orange-500"
+                          />
+                          <Text className="text-sm text-gray-700">100</Text>
+                        </HStack>
+                      </HStack>
+                      <Text className="text-xl font-bold text-gray-900 flex-1">
+                        ROCKFORD PCHS BREAKFAST
+                      </Text>
+                      <HStack className="flex flex-1 items-center justify-between">
+                        <Text className="text-base text-gray-700 mt-1">
+                          $3,278.88
+                        </Text>
+                        <Box className="bg-green-100 px-2 py-1 rounded">
+                          <Text className="text-green-800 text-xs font-bold">
+                            DEFINITE
+                          </Text>
+                        </Box>
+                      </HStack>
+                    </VStack>
+                  </HStack>
+
+                  <HStack className="justify-end gap-3 mt-4">
+                    <Button
+                      variant="outline"
+                      className="border-orange-500 bg-white px-4 py-2 rounded-full"
+                    >
+                      <HStack className="items-center gap-2">
+                        <Icon
+                          as={NotepadText}
+                          fill="#f97316"
+                          className="w-4 h-4 text-orange-500"
+                        />
+                        <ButtonText className="text-orange-500 font-medium">
+                          BEO
+                        </ButtonText>
+                      </HStack>
+                    </Button>
+                    <Button
+                      className="bg-orange-500 px-4 py-2 rounded-full"
+                      onPress={() => router.push(`/event-details/${eventId}`)}
+                    >
+                      <ButtonText className="text-white font-medium">
+                        View Details
+                      </ButtonText>
+                    </Button>
+                  </HStack>
+                </Box>
               ))}
             </VStack>
           </ScrollView>
