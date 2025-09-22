@@ -17,7 +17,6 @@ import {
   NotepadText,
   Phone,
   Search,
-  Users,
   UsersRound,
 } from "lucide-react-native";
 import { Icon } from "@/components/ui/icon";
@@ -38,14 +37,19 @@ export default function BookingDetails() {
               <Button
                 variant="link"
                 onPress={() => Alert.alert("testing")}
-                className="w-10 h-10 rounded-full p-0 items-center  justify-center"
+                className="w-10 h-10 rounded-full p-0 items-center justify-center"
               >
                 <Icon as={Search} className="color-white" />
               </Button>
               {
                 // TODO: Make profile image dynamic based on the active account.
               }
-              <Button variant="link" onPress={() => {}} className="ml-2">
+              <Button
+                variant="link"
+                onPress={() => {
+                  console.log("clicked me");
+                }}
+              >
                 <Avatar className="bg-white rounded-full">
                   <AvatarImage
                     alt="Chicago bulls"
