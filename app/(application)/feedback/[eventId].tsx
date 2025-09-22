@@ -6,7 +6,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 function Feedback() {
   const { SwipeableComponent } = useGesture();
   return (
-    <SwipeableComponent className="flex flex-1">
+    <SwipeableComponent style={{ flex: 1, borderWidth: 1, borderColor: "red" }}>
       <Box className="flex flex-1">
         <Text>Feedback</Text>
         <Button onPress={() => {

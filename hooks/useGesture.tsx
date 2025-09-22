@@ -1,11 +1,10 @@
 import {
-  PanResponder,
   Dimensions,
-  Animated,
-  View,
   ViewProps,
 } from "react-native";
-import { RefObject, useCallback, useRef, useState } from "react";
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withClamp, withSpring, withTiming } from "react-native-reanimated";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { useCallback, useState } from "react";
 
 type UseGestureOptions = {
   threshold?: number;
@@ -14,11 +13,10 @@ type UseGestureOptions = {
 };
 
 const DEFAULT_THRESHOLD = 0.6;
-const DEFAULT_MAX_VELOCITY = 180;
+const DEFAULT_MAX_VELOCITY = 1500;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const DEFAULT_GESTURE_DRAG_ALLOWANCE = 50;
-
-const AnimateableComponent = Animated.createAnimatedComponent(View);
+const SLOPE_ANGLE_THRESHOLD = 30;
 
 export default function useGesture(options: UseGestureOptions = {}) {
   const MAX_VELOCITY = options.maxVelocity || DEFAULT_MAX_VELOCITY;
@@ -26,51 +24,49 @@ export default function useGesture(options: UseGestureOptions = {}) {
   const DISTANCE_TO_RELEASE = SCREEN_HEIGHT - SCREEN_HEIGHT * THRESHOLD;
   const GESTURE_DRAG_ALLOWANCE = options.gestureDragAllowance || DEFAULT_GESTURE_DRAG_ALLOWANCE;
   const [release, setRelease] = useState(false);
-  const swipeTranslationY = useRef(new Animated.Value(0));
-  const safeSwipeTranslationY = swipeTranslationY.current.interpolate({
-    inputRange: [SCREEN_HEIGHT * -1, 0],
-    outputRange: [SCREEN_HEIGHT * -1, 0],
-    extrapolate: "clamp"
-  })
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_, gestureState) => gestureState.dy < -GESTURE_DRAG_ALLOWANCE && Math.abs(gestureState.dx) < GESTURE_DRAG_ALLOWANCE,
-      onPanResponderTerminationRequest: () => true, 
-      onPanResponderMove: Animated.event(
-        [null, { dy: swipeTranslationY.current }]
-      ),
-      onPanResponderRelease: (_, gestureState) => {
-        const hasReachedCertainHeight = DISTANCE_TO_RELEASE + gestureState.dy <= 0;
-        const calculatedVelocity = Math.abs(gestureState.vy) * 100;
-        const hasReachedCertainVelocity = calculatedVelocity > MAX_VELOCITY;
-        const hasReachedCertainHeightAndVelocity = hasReachedCertainHeight || hasReachedCertainVelocity;
-        if (hasReachedCertainHeightAndVelocity) {
-          Animated.spring(swipeTranslationY.current, {
-            toValue: SCREEN_HEIGHT * -1,
-            useNativeDriver: true,
-          }).start(() => setRelease(true));
-        } else {
-          Animated.spring(swipeTranslationY.current, {
-            toValue: 0,
-            bounciness: 0,
-            useNativeDriver: true,
-          }).start(() => setRelease(false));
-        }
-      },
+  const swipeTranslationY = useSharedValue(0);
+  const swipeableComponentStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateY: swipeTranslationY.value,
+      }
+    ],
+  }));
+  const panGesture = Gesture.Pan()
+    .onUpdate((event) => {
+      const hasDraggedUp = Math.abs(event.translationY) > GESTURE_DRAG_ALLOWANCE;
+      const angleRadians = Math.atan2(Math.abs(event.translationY), Math.abs(event.translationX));
+      const angleDegrees = (angleRadians * 180) / Math.PI;
+      const hasValidSlopeAngle = angleDegrees > SLOPE_ANGLE_THRESHOLD;
+      if (hasDraggedUp && hasValidSlopeAngle) swipeTranslationY.value = withClamp(
+        { min: -SCREEN_HEIGHT, max: 0 },
+        withSpring(event.translationY)
+      );
     })
-  );
+    .onEnd((event) => {
+      const hasReachedCertainHeight = DISTANCE_TO_RELEASE + event.translationY <= 0;
+      const upwardsVelocity = event.velocityY * -1;
+      const hasReachedCertainVelocity = upwardsVelocity > MAX_VELOCITY;
+      const hasReachedCertainHeightAndVelocity =
+        hasReachedCertainHeight || hasReachedCertainVelocity;
+      if (hasReachedCertainHeightAndVelocity) {
+        swipeTranslationY.value = withTiming(-SCREEN_HEIGHT);
+        runOnJS(setRelease)(true);
+      } else {
+        swipeTranslationY.value = withTiming(0);
+        runOnJS(setRelease)(false);
+      }
+  });
   const SwipeableComponent = useCallback((props: ViewProps & { enabled?: boolean }) => {
     return (
-      <AnimateableComponent
-        {...props}
-        {...(props.enabled === undefined || props.enabled ? panResponder.current.panHandlers : {})}
-        style={{
-          borderWidth: 1,
-          transform: [{ translateY: safeSwipeTranslationY }],
-        }}
-      />
+      <GestureDetector gesture={panGesture}>
+        <Animated.View
+          {...props}
+          style={[props.style || {}, swipeableComponentStyle]}
+        />
+      </GestureDetector>
     );
-  }, []);
+  }, [panGesture]);
 
   return {
     release,
