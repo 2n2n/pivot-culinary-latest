@@ -16,7 +16,7 @@ function AppIndexScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/event-details/1");
+    router.replace("/login");
   }, []);
 
   return null;
