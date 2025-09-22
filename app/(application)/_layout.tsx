@@ -26,7 +26,8 @@ export default function ApplicationLayout() {
           headerTransparent: true,
           headerShown: true,
           headerBackVisible: true,
-          headerTitle: "EventDetails",
+          headerTitle: "Event Details",
+          headerTintColor: "#fff",
           headerTitleStyle: { fontWeight: "bold" },
         }}
       />
