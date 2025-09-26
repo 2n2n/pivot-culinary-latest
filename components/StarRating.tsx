@@ -7,6 +7,7 @@ import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedProps, useDer
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Svg, { Defs, Mask, Path } from "react-native-svg";
 import React, { useEffect } from "react";
+import * as Haptics from "expo-haptics";
 
 type StarRatingProps = {
     rating?: number;
@@ -58,6 +59,7 @@ const StarRating = (props: StarRatingProps) => {
         else calculatedTappedHalfStar = pointedUnit >= size / 2 ? 1 : 0.5;
         const calculatedRating = nthTappedStar + calculatedTappedHalfStar;
         const sanitizedCalculatedRating = Math.max(Math.min(maxRating, Math.min(maxRating, calculatedRating)), DEFAULT_VALUE);
+        if (currentRating.value != sanitizedCalculatedRating) runOnJS(Haptics.selectionAsync)();
         currentRating.value = sanitizedCalculatedRating;
         if (props.onChange) runOnJS(props.onChange)(sanitizedCalculatedRating);
     }).onTouchesUp(() => {
@@ -97,7 +99,7 @@ export const StarElement = (props: StarElementProps) => {
         return withSpring(normalizedDistance);
     });
     const animatedStrokeProps = useAnimatedProps<React.ComponentProps<typeof AnimatedPath>>(() => ({
-        strokeWidth: interpolate(swellTransition.value, [0, 1], [1, 2], Extrapolation.CLAMP),
+        strokeWidth: interpolate(swellTransition.value, [0, 1], [1, 1.6], Extrapolation.CLAMP),
     }));
     const animatedMaskedPathProps = useAnimatedProps<React.ComponentProps<typeof AnimatedPath>>(() => ({
         d: `M0 0 0 0 l${interpolate(fillTransition.value, [0, 1], [0, 24], Extrapolation.CLAMP)} 0 0 0 l0 23 0 0 l0 0 -${interpolate(fillTransition.value, [0, 1], [0, 24], Extrapolation.CLAMP)} 0 z`
