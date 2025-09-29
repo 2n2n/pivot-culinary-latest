@@ -1,30 +1,39 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { Easing, Pressable, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import Animated, {
   Extrapolation,
   interpolate,
-  interpolateColor,
+  ReduceMotion,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
+  Easing,
 } from "react-native-reanimated";
-import { tva } from "@gluestack-ui/utils/nativewind-utils";
-import type { VariantProps } from "tailwind-variants";
 import { Box } from "@/components/ui/box";
-import { HStack } from "@/components/ui/hstack";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { Icon } from "../icon";
+import PivotCulinaryIcon from "@/components/SvgIcons/PivotIconWhite";
+import PivotIcon from "@/components/SvgIcons/PivotIcon";
+import { Image } from "../image";
 
 const AnimatedBox = Animated.createAnimatedComponent(Box);
 
-const AppSwitch = () => {
-  const SBAnim = useSharedValue(0);
+const AppSwitch = ({
+  onChangeMode,
+  initialMode = "pivot",
+}: {
+  onChangeMode: (mode: string) => void;
+  initialMode?: string;
+}) => {
+  const SBAnim = useSharedValue(initialMode === "pivot" ? 0 : 1);
   const [boxWidth, setBoxWidth] = useState(0);
   const [switchContainerWidth, setSwitchContainerWidth] = useState(0);
 
-  const [mode, setMode] = useState("pivot"); // pivot or gameday
+  const [mode, setMode] = useState(initialMode); // pivot or gameday
 
+  useEffect(() => {
+    onChangeMode(mode);
+  }, [mode]);
   // SB means Switch Button this is SBAnimatedStyles
   const SBanimatedStyles = useAnimatedStyle(() => ({
     transform: [
@@ -37,24 +46,20 @@ const AppSwitch = () => {
         ),
       },
     ],
-  })); // 09914509097
-  // TODO: update the color based on the color mode from pivot and gameday
-  // const SBCointainerAnimatedStyles = useAnimatedStyle(() => ({
-  //   backgroundColor: interpolateColor(
-  //     SBAnim.value,
-  //     [0, 1],
-  //     ["#f97316", "#22c55e"],
-  //     "RGB"
-  //   ),
-  // }));
+  }));
 
   return (
     <Button
       variant="link"
       onPress={() => {
-        setMode(SBAnim.value === 0 ? "pivot" : "gameday");
-        SBAnim.value = withSpring(SBAnim.value === 0 ? 1 : 0, {
-          duration: 350,
+        const newAnimationValue = SBAnim.value === 0 ? 1 : 0;
+        setMode(() => {
+          SBAnim.value = withTiming(SBAnim.value === 0 ? 1 : 0, {
+            duration: 350,
+            easing: Easing.out(Easing.quad),
+            reduceMotion: ReduceMotion.System,
+          });
+          return newAnimationValue === 0 ? "pivot" : "gameday";
         });
       }}
     >
@@ -65,8 +70,17 @@ const AppSwitch = () => {
         }}
         className="relative flex-row bg-white w-32 h-10 items-start mb-14 rounded-full overflow-hidden"
       >
-        <Box className="flex-1 h-10 bg-orange-400" />
-        <Box className="flex-1 h-10 bg-green-500" />
+        <Box className="flex-1 justify-center items-center h-10 bg-orange-400">
+          <Icon as={PivotCulinaryIcon} className="text-white" />
+        </Box>
+        {/** // REVIEW: update the color to right color of green. */}
+        <Box className="flex-1 justify-center items-center h-10 bg-green-800">
+          <Image
+            source={require("@/assets/images/icons/gamedayicon-white.png")}
+            className="w-7 h-4"
+            alt="gameday-icon"
+          />
+        </Box>
 
         <AnimatedBox
           onLayout={(event) => {
@@ -81,7 +95,17 @@ const AppSwitch = () => {
             SBanimatedStyles,
           ]}
         >
-          <Text>{mode}</Text>
+          {mode === "pivot" ? (
+            <Icon as={PivotIcon} />
+          ) : (
+            <Box className="relative w-full h-full items-center justify-center w-8 h-5">
+              <Image
+                source={require("@/assets/images/icons/gameday-icon.png")}
+                className="w-full h-full"
+                alt="gameday-icon"
+              />
+            </Box>
+          )}
         </AnimatedBox>
       </Box>
     </Button>
