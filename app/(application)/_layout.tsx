@@ -35,11 +35,10 @@ export default function ApplicationLayout() {
         name="feedback/[eventId]"
         options={{
           headerShown: true,
-          headerTintColor: "#fff",
+          headerTintColor: "#000",
           headerBackVisible: true,
-          headerTitle: "Feedback",
-          headerTitleStyle: { fontWeight: "bold" },
-          headerStyle: { backgroundColor: "#F47C20" },
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: "#FFFFFF" },
         }}
       />
     </Stack>
