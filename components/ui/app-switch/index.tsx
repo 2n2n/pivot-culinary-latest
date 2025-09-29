@@ -98,7 +98,7 @@ const AppSwitch = ({
           {mode === "pivot" ? (
             <Icon as={PivotIcon} />
           ) : (
-            <Box className="relative w-full h-full items-center justify-center w-8 h-5">
+            <Box className="relative w-full h-full items-center justify-center w-9 h-5">
               <Image
                 source={require("@/assets/images/icons/gameday-icon.png")}
                 className="w-full h-full"

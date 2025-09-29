@@ -8,10 +8,19 @@ import AppSwitch from "@/components/ui/app-switch";
 import { useRouter } from "expo-router";
 import { Icon } from "@/components/ui/icon";
 import PivotIcon from "@/components/SvgIcons/PivotIcon";
+import { useColorMode } from "./_layout";
+import { ModeType } from "@/components/ui/gluestack-ui-provider";
+
+const ThemeSwitchMap: Record<string, ModeType> = {
+  pivot: "light",
+  gameday: "dark",
+};
 
 function LandingPage() {
   const [selectedSegment, setSelectedSegment] = useState("pivot");
   const [isEnabled, setIsEnabled] = useState(false);
+
+  const { setColorMode } = useColorMode();
 
   const router = useRouter();
 
@@ -40,7 +49,12 @@ function LandingPage() {
       <VStack className="flex-1 justify-center items-center px-6">
         {/* Segmented Control */}
         <AppSwitch
-          onChangeMode={(mode) => setSelectedSegment(mode)}
+          onChangeMode={(mode) =>
+            setSelectedSegment(() => {
+              setColorMode(ThemeSwitchMap[mode as keyof typeof ThemeSwitchMap]);
+              return mode;
+            })
+          }
           initialMode={selectedSegment}
         />
 
