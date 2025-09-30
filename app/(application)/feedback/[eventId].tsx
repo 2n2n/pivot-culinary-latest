@@ -1,12 +1,12 @@
 
 import type { BookingEvent } from "@/types/event";
 
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+import FeedbackStarRatingSection from "@/components/FeedbackStarRatingSection";
 import { Progress, ProgressFilledTrack } from "@/components/ui/progress";
+import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import EventDetails from "@/components/EventDetails/EventDetails";
 import SwipeUpView from "@/components/SwipeUpView";
-import StarRating from "@/components/StarRating";
 import { Center } from "@/components/ui/center";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
@@ -50,16 +50,18 @@ function Feedback() {
       metadata: {}
     }
   ]);
+  const [overallRating, setOverallRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [tasteRating, setTasteRating] = useState(0);
-  const [serviceRating, setServiceRating] = useState(0);
-  const [timelinessRating, setTimelinessRating] = useState(0);
-  const [presentationRating, setPresentationRating] = useState(0);
+  const [categoryRatings, setCategoryRatings] = useState<Record<string, number>>({
+    taste: 0,
+    timeliness: 0,
+    service: 0,
+    presentation: 0,
+  });
   const [comment, setComment] = useState("");
   // TODO: canSubmit - should require all star ratings, and comment to be set to true.
-  const canSubmit = presentationRating > 0;
-  const overallRating = ( tasteRating + timelinessRating + serviceRating + presentationRating ) / 4;
+  const canSubmit = Object.values(categoryRatings).every(rating => rating > 0);
   const SHOW_FINANCE = true;
   const SHOW_BEO = true;
   const EVENT_DATA: BookingEvent = {
@@ -92,9 +94,6 @@ function Feedback() {
       }, 2000);
     }, 5000);
   }
-  useEffect(() => {
-    
-  }, [submitting, submitted]);
   return <View className="relative placeholder:flex-1 bg-pivot-blue">
     <Stack.Screen
       options={{
@@ -124,23 +123,10 @@ function Feedback() {
       <VStack className="px-4 gap-3 flex-1">
         {/* //* REVIEW STAR RATINGS */}
         {/* //! NOTE: reanimated shared value resets when the dev app is hot-reloaded, make sure to include the rating prop */}
-        <StarRating disabled={true} size={45} rating={overallRating} style={{ alignSelf: "center" }} />
-        <HStack className="items-center justify-between">
-          <Text className="font-bold">Taste</Text>
-          <StarRating rating={tasteRating} onChange={setTasteRating} />
-        </HStack>
-        <HStack className="items-center justify-between">
-          <Text className="font-bold">Timeliness</Text>
-          <StarRating rating={timelinessRating} onChange={setTimelinessRating} />
-        </HStack>
-        <HStack className="items-center justify-between">
-          <Text className="font-bold">Service</Text>
-          <StarRating rating={serviceRating} onChange={setServiceRating} />
-        </HStack>
-        <HStack className="items-center justify-between">
-          <Text className="font-bold">Presentation</Text>
-          <StarRating rating={presentationRating} onChange={setPresentationRating} />
-        </HStack>
+        <FeedbackStarRatingSection 
+          categoryRatings={categoryRatings}
+          onChangeRating={setCategoryRatings} 
+        />
         {/* //* REVIEW STAR RATINGS */}
         <Text className="font-bold mt-1">Share more about your experience</Text>
         <Textarea size="sm" className="h-[60px]" >

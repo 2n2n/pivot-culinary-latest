@@ -16,6 +16,7 @@ type StarRatingProps = {
     size?: number;
     spacing?: number;
     onChange?: (value: number) => void;
+    onChangeSharedValue?: (value: number) => void;
 } & React.ComponentProps<typeof HStack>;
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -25,7 +26,6 @@ const DEFAULT_MAX_RATING = 5;
 const DEFAULT_DISABLED = false;
 const DEFAULT_SIZE = 40;
 const DEFAULT_SPACING = 8;
-const ONCHANGE_CALL_DEBOUNCE_MS = 150; // Throttle haptic feedback to 50ms
 
 //! NOTE: excessive hot-reloading will crash the dev app
 const StarRating = (props: StarRatingProps) => {
@@ -36,14 +36,9 @@ const StarRating = (props: StarRatingProps) => {
     const spacing = props.spacing || DEFAULT_SPACING;
     const currentRating = useSharedValue(rating);
     const isDragging = useSharedValue(false);
-    const debounceRef = useRef<number | null>(null);
     const handleChange = useCallback((value: number) => {   
         if (!props.onChange) return;
-        if (debounceRef.current) clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(() => {
-            if (!props.onChange) return;
-            props.onChange(value);
-        }, ONCHANGE_CALL_DEBOUNCE_MS);
+        props.onChange(value);
     }, [props.onChange]);
     const tapGesture = Gesture.Tap().onStart((event) => {
         const positionX = event.x;
@@ -59,6 +54,7 @@ const StarRating = (props: StarRatingProps) => {
         if (currentRating.value != sanitizedCalculatedRating) {
             currentRating.value = sanitizedCalculatedRating;
             runOnJS(handleChange)(sanitizedCalculatedRating);
+            if (props.onChangeSharedValue) runOnJS(props.onChangeSharedValue)(sanitizedCalculatedRating);
         }
     });
     const panGesture = Gesture.Pan().onTouchesDown(() => {
@@ -77,10 +73,12 @@ const StarRating = (props: StarRatingProps) => {
         if (currentRating.value != sanitizedCalculatedRating) {
             currentRating.value = sanitizedCalculatedRating;
             runOnJS(Haptics.selectionAsync)();
+            if (props.onChangeSharedValue) runOnJS(props.onChangeSharedValue)(sanitizedCalculatedRating);
+            runOnJS(handleChange)(currentRating.value);
         }
     }).onTouchesUp(() => {
         isDragging.value = false;
-        runOnJS(handleChange)(currentRating.value);
+        
     });
     useEffect(() => {
         currentRating.value = rating || DEFAULT_VALUE;
