@@ -1,4 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -68,13 +69,18 @@ function RootLayoutNav() {
 
   return (
     <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
-      <GluestackUIProvider mode={colorMode}>
-        <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(application)" options={{ headerShown: false }} />
-          <Stack.Screen name="landing" options={{ headerShown: false }} />
-        </Stack>
-      </GluestackUIProvider>
+      <GestureHandlerRootView className="flex-1">
+        <GluestackUIProvider mode={colorMode}>
+          <Stack>
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(application)"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="landing" options={{ headerShown: false }} />
+          </Stack>
+        </GluestackUIProvider>
+      </GestureHandlerRootView>
     </ColorModeContext.Provider>
   );
 }
