@@ -132,7 +132,6 @@ function Feedback() {
         <Textarea size="sm" className="h-[60px]" >
           <TextareaInput value={comment} onChangeText={setComment} />
         </Textarea>
-        {/* // TODO: Pivot gameday blue */}
         {/* // TODO: Implement expo-image-picker with upload progress indicator */}
         <Button size="lg" variant="outline" className="rounded-full">
           <ButtonIcon as={ImagePlus} />
@@ -161,7 +160,7 @@ function Feedback() {
             {/* PENDING UPLOAD PROGRESS INDICATOR */}
           </Box>)}
           contentContainerClassName="gap-2"
-          className="flex-1 rounded-lg overflow-hidden"
+          className="min-h-[120px] rounded-lg overflow-hidden"
         />
       </VStack>
     </SwipeUpView>
