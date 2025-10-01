@@ -30,7 +30,6 @@ export default function ApplicationNotificationScreen() {
   return (
     <TabSafeAreaView>
       <TabDashboardHeader title="Notifications" />
-      import React from "react"; return (
       <SectionList
         sections={sections}
         keyExtractor={(item, index) => item?.id ?? index.toString()}
@@ -70,7 +69,6 @@ export default function ApplicationNotificationScreen() {
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
       />
-      );
     </TabSafeAreaView>
   );
 }

@@ -3,10 +3,15 @@ import { Input, InputField } from "../../components/ui/input";
 import { Button, ButtonText } from "../../components/ui/button";
 import { Box } from "../../components/ui/box";
 import { Text } from "../../components/ui/text";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Icon } from "@/components/ui/icon";
+import PivotIcon from "@/components/SvgIcons/PivotIcon";
+import { VStack } from "@/components/ui/vstack";
 
 export default function AuthOTPScreen() {
+  const { phoneNumber } = useLocalSearchParams();
+
   const router = useRouter();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<Array<any>>([]);
@@ -38,7 +43,7 @@ export default function AuthOTPScreen() {
   const isOtpComplete = otp.every((digit) => digit !== "");
 
   return (
-    <Box className="flex-1 bg-background-0">
+    <Box className="flex-1">
       {/* Back Button */}
       <Box className="absolute top-12 left-6 z-10">
         <Button
@@ -54,13 +59,15 @@ export default function AuthOTPScreen() {
 
       {/* Main Content */}
       <Box className="flex-1 justify-center items-center px-6">
-        <Box className="w-full max-w-sm space-y-6 items-center">
-          <Text size="4xl" bold className="text-typography-900 mb-8">
-            Verify OTP
+        <VStack className="w-full max-w-sm gap-6 items-center">
+          <Icon as={PivotIcon} className="h-14 w-14" />
+
+          <Text bold className="text-typography-900">
+            Verify Phone
           </Text>
 
-          <Text size="md" className="text-typography-600 text-center mb-8">
-            Enter the 6-digit code sent to your phone
+          <Text size="md" className="text-typography-600 text-center">
+            Enter the 6-digit code sent to {phoneNumber}
           </Text>
 
           <Box className="w-full flex-row justify-between mb-8">
@@ -82,7 +89,7 @@ export default function AuthOTPScreen() {
                   keyboardType="numeric"
                   maxLength={1}
                   textAlign="center"
-                  className="text-center text-lg font-bold"
+                  className="text-center text-lg font-bold rounded-full"
                 />
               </Input>
             ))}
@@ -93,7 +100,7 @@ export default function AuthOTPScreen() {
             variant="solid"
             action="primary"
             onPress={handleVerifyOTP}
-            className="w-full"
+            className="w-full rounded-full"
             isDisabled={!isOtpComplete}
           >
             <ButtonText>Verify OTP</ButtonText>
@@ -112,7 +119,7 @@ export default function AuthOTPScreen() {
               <ButtonText>Resend</ButtonText>
             </Button>
           </Box>
-        </Box>
+        </VStack>
       </Box>
     </Box>
   );

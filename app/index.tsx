@@ -16,7 +16,7 @@ function AppIndexScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/feedback/1");
+    router.replace("/landing");
   }, []);
 
   return null;
