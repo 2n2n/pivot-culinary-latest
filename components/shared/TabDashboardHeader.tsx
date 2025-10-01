@@ -91,6 +91,7 @@ const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
             */}
             {[1, 2].map((val) => (
               <Button
+                key={val}
                 className="w-full h-auto flex flex-row items-center justify-between py-2 my-1"
                 variant="link"
                 onPress={() => {
