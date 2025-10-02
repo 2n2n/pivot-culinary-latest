@@ -102,6 +102,7 @@ function Feedback() {
         headerShown: !submitting && !submitted,
       }}
     />
+    {/* // TODO: Fix issue with flickering screen when Stack Navigation header is collapsed  */}
     <Center className="absolute inset-0">
       {submitting && <LoadingIndicator />}
       {submitted && <>
