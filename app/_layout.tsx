@@ -68,16 +68,19 @@ function RootLayoutNav() {
   const [colorMode, setColorMode] = useState<ModeType>("light");
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
+    <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
+      <GestureHandlerRootView className="flex-1">
         <GluestackUIProvider mode={colorMode}>
-            <Stack>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(application)" options={{ headerShown: false }} />
-              <Stack.Screen name="landing" options={{ headerShown: false }} />
+          <Stack>
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(application)"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="landing" options={{ headerShown: false }} />
           </Stack>
         </GluestackUIProvider>
-      </ColorModeContext.Provider>
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </ColorModeContext.Provider>
   );
 }
