@@ -1,0 +1,96 @@
+import React, { useState } from "react";
+import { Input, InputField } from "../../components/ui/input";
+import { Button, ButtonText } from "../../components/ui/button";
+import { Box } from "../../components/ui/box";
+import { Text } from "../../components/ui/text";
+import { Stack } from "expo-router";
+import { Icon } from "@/components/ui/icon";
+import PivotIcon from "@/components/SvgIcons/PivotIcon";
+import { VStack } from "@/components/ui/vstack";
+import useAuth from "@/services/auth/hooks/useAuth";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import AuthOTPForm from "@/components/OtpForm";
+
+// TODO: Polish this screen, where it should animate the initial state of the phone number into the active state
+function AuthLoginScreen() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [authResponse, setAuthResponse] =
+    useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
+  const { signIn } = useAuth();
+
+  async function handleLogin() {
+    try {
+      setIsSubmitting(true);
+      const response = await signIn(phoneNumber);
+      setAuthResponse(response);
+    } catch (error) {
+      // TODO: Add handler for error message here.
+      console.log("error when signing in", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function onSubmitOTP(code: string) {
+    authResponse?.confirm(code);
+  }
+
+  async function onResendOTP() {}
+
+  if (!authResponse) {
+    return (
+      <>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Box className="flex-1 justify-center items-center px-6">
+          <VStack className="w-full max-w-sm gap-12">
+            <VStack className="items-center gap-4">
+              <Icon as={PivotIcon} className="h-14 w-14" />
+              <Text size="md" className="font-bold text-center">
+                Login to your account
+              </Text>
+            </VStack>
+
+            <VStack className="flex gap-4">
+              <Input
+                size="lg"
+                variant="outline"
+                className="w-full rounded-full px-4"
+              >
+                <InputField
+                  placeholder="Enter your phone number"
+                  value={phoneNumber}
+                  onChangeText={setPhoneNumber}
+                />
+              </Input>
+              <Button
+                disabled={isSubmitting}
+                size="lg"
+                variant="solid"
+                action="primary"
+                onPress={handleLogin}
+                className="w-ful rounded-full"
+                isDisabled={!phoneNumber.trim()}
+              >
+                <ButtonText>Sign In</ButtonText>
+              </Button>
+            </VStack>
+          </VStack>
+        </Box>
+      </>
+    );
+  } else {
+    return (
+      <AuthOTPForm
+        onSubmitHandler={onSubmitOTP}
+        onResendHandler={onResendOTP}
+      />
+    );
+  }
+}
+
+export default AuthLoginScreen;
