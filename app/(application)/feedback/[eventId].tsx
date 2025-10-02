@@ -2,23 +2,26 @@
 import type { BookingEvent } from "@/types/event";
 
 import FeedbackStarRatingSection from "@/components/FeedbackStarRatingSection";
+import LoadingIndicator from "@/components/LoadingIndicator/LoadingIndicator";
+import ReviewSubmittedIndicator from "@/components/ReviewSubmittedIndicator";
 import { Progress, ProgressFilledTrack } from "@/components/ui/progress";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import EventDetails from "@/components/EventDetails/EventDetails";
+import { PilledButton } from "@/components/styled/PilledButton";
+import ConfettiCanon from "@/components/ConfettiCanon";
 import SwipeUpView from "@/components/SwipeUpView";
 import { Center } from "@/components/ui/center";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
-
-import { router, Stack, useLocalSearchParams } from "expo-router";
-import { ImagePlus, X } from "lucide-react-native";
-import { FlatList, View } from "react-native";
-import { useEffect, useState } from "react";
 import { Box } from "@/components/ui/box";
 
+import { router, Stack, useLocalSearchParams } from "expo-router";
+import { ImagePlus, NotepadText, X } from "lucide-react-native";
+import { FlatList, View } from "react-native";
+import { useState } from "react";
 
 type ImageUploadItem = Array<{
   id: string,
@@ -50,7 +53,6 @@ function Feedback() {
       metadata: {}
     }
   ]);
-  const [overallRating, setOverallRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [categoryRatings, setCategoryRatings] = useState<Record<string, number>>({
@@ -89,10 +91,8 @@ function Feedback() {
     setTimeout(() => {
       setSubmitting(false);
       setSubmitted(true);
-      setTimeout(() => {
-        router.replace("/(application)/(tabs)/bookings");
-      }, 2000);
     }, 5000);
+    setTimeout(() => router.replace("/(application)/(tabs)/bookings"), 10000);
   }
   return <View className="relative placeholder:flex-1 bg-pivot-blue">
     <Stack.Screen
@@ -103,10 +103,12 @@ function Feedback() {
       }}
     />
     <Center className="absolute inset-0">
-      {/* // TODO: Pivot/Gameday logo animation and submission success animation including confetti..  */}
-      {/* //TODO: Fix snapping issues due to Stack navigation header showing dynamically */}
-      {submitting && <Text className="text-white">Submitting...</Text>}
-      {submitted && <Text className="text-white">!!!! SUBMITTED !!!!</Text>}
+      {submitting && <LoadingIndicator />}
+      {submitted && <>
+        <ConfettiCanon origin="bottom-right"/>
+        <ConfettiCanon origin="bottom-left"/>
+        <ReviewSubmittedIndicator />
+      </>}
     </Center>
     <SwipeUpView enabled={canSubmit} onRelease={handleSubmission} style={{ flex: 1, gap: 12, backgroundColor: "#FFFFFF" }}>
       <EventDetails showFinance={SHOW_FINANCE} showBeo={SHOW_BEO} event={EVENT_DATA}>
@@ -117,22 +119,22 @@ function Feedback() {
         <EventDetails.Financial />
         <EventDetails.Date />
         <EventDetails.Address />
-        <EventDetails.BEO />
+        <PilledButton>
+            <ButtonIcon as={NotepadText} />
+            <ButtonText className="text-sm">Banquet Event Order</ButtonText>
+        </PilledButton>
         <EventDetails.ManagerAccount className="pt-2"/>
       </EventDetails>
       <VStack className="px-4 gap-3 flex-1">
-        {/* //* REVIEW STAR RATINGS */}
         {/* //! NOTE: reanimated shared value resets when the dev app is hot-reloaded, make sure to include the rating prop */}
         <FeedbackStarRatingSection 
           categoryRatings={categoryRatings}
           onChangeRating={setCategoryRatings} 
         />
-        {/* //* REVIEW STAR RATINGS */}
         <Text className="font-bold mt-1">Share more about your experience</Text>
         <Textarea size="sm" className="h-[60px]" >
           <TextareaInput value={comment} onChangeText={setComment} />
         </Textarea>
-        {/* // TODO: Implement expo-image-picker with upload progress indicator */}
         <Button size="lg" variant="outline" className="rounded-full">
           <ButtonIcon as={ImagePlus} />
           <ButtonText>Add Photos</ButtonText>
@@ -141,23 +143,17 @@ function Feedback() {
           data={imageUploads}
           horizontal
           showsHorizontalScrollIndicator={false}
-          // TODO: uploaded image item to a component
-          // TODO: fix type issues with ListRenderItemInfo item property
           // * NOTE: THERE MIGHT BE A BETTER WAY OF DISPLAYING UPLOADED PHOTOS 
           renderItem={({ item }) => (<Box key={item.id} className="relative rounded-lg overflow-hidden bg-gray-400">
             <Image source={{ uri: item.uri }} alt="Uploaded Image" className="h-full min-w-[120px] aspect-auto" />
-            {/* REMOVE UPLOADED IMAGE X BUTTON */}
             {item.complete && <Button size="sm" className="rounded-full px-2 py-1 bg-black/60 absolute top-1 left-1">
               <ButtonIcon as={X} className="text-white"/>
             </Button>}
-            {/* REMOVE UPLOADED IMAGE X BUTTON */}
-            {/* PENDING UPLOAD PROGRESS INDICATOR */}
             {item.progress && !item.complete && <Center className="flex-1 absolute inset-0 px-4 bg-black/60">
               <Progress value={item.progress}>
-                <ProgressFilledTrack className="bg-pivot" />
+                <ProgressFilledTrack/>
               </Progress>
             </Center>}
-            {/* PENDING UPLOAD PROGRESS INDICATOR */}
           </Box>)}
           contentContainerClassName="gap-2"
           className="min-h-[120px] rounded-lg overflow-hidden"
