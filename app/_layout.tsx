@@ -40,6 +40,9 @@ export default function RootLayout() {
   if (!loaded) return null;
   else return <RootLayoutNav />;
 }
+
+import { AuthProvider } from "@/services/auth/AuthProvider";
+
 // Create context for color mode
 interface ColorModeContextType {
   colorMode: ModeType;
@@ -95,21 +98,23 @@ function RootLayoutNav() {
       <GestureHandlerRootView className="flex-1">
         <GluestackUIProvider mode={colorMode}>
           {/** //* THEMED LOADER SCREEN */}
-          <ThemedLoaderScreen
-            theme={colorMode}
-            switching={isSwitchingApp}
-            completed={isCompleted}
-            account={mockAccount}
-          >
-            <Stack>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="(application)"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="landing" options={{ headerShown: false }} />
-            </Stack>
-          </ThemedLoaderScreen>
+          <AuthProvider>
+            <ThemedLoaderScreen
+              theme={colorMode}
+              switching={isSwitchingApp}
+              completed={isCompleted}
+              account={mockAccount}
+            >
+              <Stack>
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="(application)"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen name="landing" options={{ headerShown: false }} />
+              </Stack>
+            </ThemedLoaderScreen>
+          </AuthProvider>
         </GluestackUIProvider>
       </GestureHandlerRootView>
     </ColorModeContext.Provider>

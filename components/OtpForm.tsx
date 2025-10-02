@@ -1,15 +1,23 @@
 import React, { useState, useRef } from "react";
-import { Input, InputField } from "../../components/ui/input";
-import { Button, ButtonText } from "../../components/ui/button";
-import { Box } from "../../components/ui/box";
-import { Text } from "../../components/ui/text";
+import { Input, InputField } from "@/components/ui/input";
+import { Button, ButtonText } from "@/components/ui/button";
+import { Box } from "@/components/ui/box";
+import { Text } from "@/components/ui/text";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Icon } from "@/components/ui/icon";
 import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { VStack } from "@/components/ui/vstack";
 
-export default function AuthOTPScreen() {
+interface AuthOTPFormProps {
+  onSubmitHandler: (otp: string) => void;
+  onResendHandler: () => void;
+}
+
+export default function AuthOTPForm({
+  onSubmitHandler,
+  onResendHandler,
+}: AuthOTPFormProps) {
   const { phoneNumber } = useLocalSearchParams();
 
   const router = useRouter();
@@ -34,16 +42,10 @@ export default function AuthOTPScreen() {
     }
   };
 
-  const handleVerifyOTP = () => {
-    const otpString = otp.join("");
-    router.replace("/agenda");
-  };
-
   const isOtpComplete = otp.every((digit) => digit !== "");
 
   return (
     <Box className="flex-1">
-      {/* Back Button */}
       <Box className="absolute top-12 left-6 z-10">
         <Button
           size="sm"
@@ -98,7 +100,7 @@ export default function AuthOTPScreen() {
             size="lg"
             variant="solid"
             action="primary"
-            onPress={handleVerifyOTP}
+            onPress={() => onSubmitHandler(otp.join(""))}
             className="w-full rounded-full"
             isDisabled={!isOtpComplete}
           >
@@ -113,7 +115,7 @@ export default function AuthOTPScreen() {
               size="sm"
               variant="link"
               action="primary"
-              onPress={() => console.log("Resend OTP")}
+              onPress={onResendHandler}
             >
               <ButtonText>Resend</ButtonText>
             </Button>

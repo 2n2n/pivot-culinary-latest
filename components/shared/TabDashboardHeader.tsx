@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/modal";
 import { Heading } from "@/components/ui/heading";
 import { useState } from "react";
+import { getAuth, signOut } from "@react-native-firebase/auth";
 
 const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
   const [showModal, setShowModal] = useState(false);
@@ -121,7 +122,7 @@ const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
             <Button
               variant="link"
               className="flex flex-row items-center justify-between w-full mt-4"
-              onPress={() => console.log("click profile")}
+              onPress={() => signOut(getAuth())}
             >
               <Box className="flex flex-row items-center flex-1">
                 <Avatar className="w-12 h-12 mr-3">
