@@ -31,6 +31,12 @@
           <string>com.pivotculinary.mobile</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.51678438138-9bjt6hh0r4v2ph6q5oh8ls38s7pns7u3</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
