@@ -7,18 +7,29 @@ import { Stack, useRouter } from "expo-router";
 import { Icon } from "@/components/ui/icon";
 import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { VStack } from "@/components/ui/vstack";
+// import useAuth from "@/services/auth/hooks/useAuth";r
+import { getAuth, signInWithPhoneNumber } from "@react-native-firebase/auth";
+import formatPhoneNumber from "@/utils/helpers/format-phone-number";
 
 // TODO: Polish this screen, where it should animate the initial state of the phone number into the active state
 function AuthLoginScreen() {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  // const { signIn } = useAuth();
 
-  const handleLogin = () => {
-    router.push({
-      pathname: "/(auth)/otp",
-      params: { phoneNumber },
-    });
-  };
+  async function handleLogin() {
+    // const response = await signIn(phoneNumber);
+    const response = await signInWithPhoneNumber(
+      getAuth(),
+      "+1 650-555-3434" //formatPhoneNumber(phoneNumber)
+    );
+    console.log(response);
+    // router.push({
+    //   pathname: "/(auth)/otp",
+    //   params: { phoneNumber },
+    // });
+  }
 
   return (
     <>
@@ -49,6 +60,7 @@ function AuthLoginScreen() {
               />
             </Input>
             <Button
+              disabled={isSubmitting}
               size="lg"
               variant="solid"
               action="primary"
