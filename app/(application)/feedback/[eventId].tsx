@@ -92,7 +92,7 @@ function Feedback() {
       setSubmitting(false);
       setSubmitted(true);
     }, 5000);
-    setTimeout(() => router.replace("/(application)/(tabs)/bookings"), 10000);
+    setTimeout(() => router.replace("/(application)/(tabs)/bookings"), 20000);
   }
   return <View className="relative placeholder:flex-1 bg-pivot-blue">
     <Stack.Screen
@@ -106,8 +106,8 @@ function Feedback() {
     <Center className="absolute inset-0">
       {submitting && <LoadingIndicator />}
       {submitted && <>
-        <ConfettiCanon origin="bottom-right"/>
-        <ConfettiCanon origin="bottom-left"/>
+        <ConfettiCanon origin="bottom-right" />
+        <ConfettiCanon origin="bottom-left" />
         <ReviewSubmittedIndicator />
       </>}
     </Center>
