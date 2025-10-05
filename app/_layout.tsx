@@ -42,6 +42,7 @@ export default function RootLayout() {
 }
 
 import { AuthProvider } from "@/services/auth/AuthProvider";
+import { AccountModalProvider } from "@/services/AccountModal/AccountModalProvider";
 
 // Create context for color mode
 interface ColorModeContextType {
@@ -105,6 +106,7 @@ function RootLayoutNav() {
               completed={isCompleted}
               account={mockAccount}
             >
+            <AccountModalProvider>
               <Stack>
                 <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                 <Stack.Screen
@@ -113,6 +115,8 @@ function RootLayoutNav() {
                 />
                 <Stack.Screen name="landing" options={{ headerShown: false }} />
               </Stack>
+
+            </AccountModalProvider>
             </ThemedLoaderScreen>
           </AuthProvider>
         </GluestackUIProvider>
