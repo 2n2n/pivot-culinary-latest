@@ -14,7 +14,7 @@ import {
   ModalHeader,
 } from "@/components/ui/modal";
 import { Heading } from "lucide-react-native";
-import { useModal } from "@/services/AccountModal/hooks/useModal";
+import { useModal } from "@/services/account_modal/hooks/useModal";
 
 const AccountModal = () => {
   const { show, setShow, accounts, signOut } = useModal();

@@ -1,3 +1,4 @@
+import { getContactInfo } from "@/requests/contact.request";
 import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
 import { useRouter, useSegments } from "expo-router";
 import { createContext, useEffect } from "react";
@@ -35,8 +36,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const subscriber = onAuthStateChanged(getAuth(), (user) => {
-      console.log("onAuthStateChanged", user);
-
       if (user) {
         setUser(user);
         router.replace("/(application)/(tabs)/agenda");
