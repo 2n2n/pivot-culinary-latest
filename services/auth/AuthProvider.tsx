@@ -3,9 +3,9 @@ import { useRouter, useSegments } from "expo-router";
 import { createContext, useEffect } from "react";
 import { useState } from "react";
 
-const isAuthorizedPath = (pathSegments: string[]) => {
+const isGuest = (pathSegments: string[]) => {
   return pathSegments.some((segment) => {
-    const AUTHORIZED_ROUTES = ["(application)"];
+    const AUTHORIZED_ROUTES = ["landing", "(auth)"];
     return AUTHORIZED_ROUTES.includes(segment);
   });
 };
@@ -39,10 +39,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (user) {
         setUser(user);
-        router.replace("/(application)/agenda");
+        router.replace("/(application)/(tabs)/agenda");
       } else {
-        if (!isAuthorizedPath(pathSegments || [])) {
-          // BUGFIX: landing page should be a valid screen
+        if (!isGuest(pathSegments || [])) {
+          // Redirect unauthenticated users to auth screen if not on guest routes
           router.replace("/(auth)/auth");
         }
       }
