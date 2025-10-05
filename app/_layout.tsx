@@ -45,6 +45,7 @@ export default function RootLayout() {
 }
 import { createContext, useContext } from "react";
 import { AuthProvider } from "@/services/auth/AuthProvider";
+import { AccountModalProvider } from "@/services/AccountModal/AccountModalProvider";
 
 // Create context for color mode
 interface ColorModeContextType {
@@ -73,14 +74,16 @@ function RootLayoutNav() {
       <GestureHandlerRootView className="flex-1">
         <GluestackUIProvider mode={colorMode}>
           <AuthProvider>
-            <Stack>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="(application)"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="landing" options={{ headerShown: false }} />
-            </Stack>
+            <AccountModalProvider>
+              <Stack>
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="(application)"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen name="landing" options={{ headerShown: false }} />
+              </Stack>
+            </AccountModalProvider>
           </AuthProvider>
         </GluestackUIProvider>
       </GestureHandlerRootView>

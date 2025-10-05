@@ -39,10 +39,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (user) {
         setUser(user);
-        console.log("current path with user", pathSegments);
         router.replace("/(application)/agenda");
       } else {
         if (!isAuthorizedPath(pathSegments || [])) {
+          // BUGFIX: landing page should be a valid screen
           router.replace("/(auth)/auth");
         }
       }
