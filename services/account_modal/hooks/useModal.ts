@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { AccountModalContext } from "../AccountModalProvider";
+import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
 import { getAuth, signOut } from "@react-native-firebase/auth";
 
 export const useModal = () => {

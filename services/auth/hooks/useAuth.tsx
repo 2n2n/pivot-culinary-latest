@@ -1,13 +1,8 @@
-import { useContext } from "react";
 import { signInWithPhoneNumber, getAuth } from "@react-native-firebase/auth";
 import crashlytics from "@react-native-firebase/crashlytics";
-import { AuthContext } from "@/services/auth/AuthProvider";
 import formatPhoneNumber from "@/utils/helpers/format-phone-number";
-import { useRouter } from "expo-router";
 
 const useAuth = () => {
-  const router = useRouter();
-
   /**
    * Initiates the sign-in process using a phone number. automatic redirect to (auth)/otp
    *

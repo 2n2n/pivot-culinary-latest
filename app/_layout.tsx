@@ -42,7 +42,7 @@ export default function RootLayout() {
 }
 
 import { AuthProvider } from "@/services/auth/AuthProvider";
-import { AccountModalProvider } from "@/services/AccountModal/AccountModalProvider";
+import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
 
 // Create context for color mode
 interface ColorModeContextType {

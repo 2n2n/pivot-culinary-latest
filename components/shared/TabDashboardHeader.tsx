@@ -7,13 +7,11 @@ import { Box } from "@/components/ui/box";
 import { Button } from "@/components/ui/button";
 import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import AccountModal from "@/services/AccountModal/component/AccountModal";
-import { useModal } from "@/services/AccountModal/hooks/useModal";
-import { useContext } from "react";
-import { AccountModalContext } from "@/services/AccountModal/AccountModalProvider";
+import AccountModal from "@/services/account_modal/component/AccountModal";
+import { useModal } from "@/services/account_modal/hooks/useModal";
 
 const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
-  const { setShowModal } = useContext(AccountModalContext);
+  const { setShow } = useModal();
   return (
     <>
       <Tabs.Screen
@@ -41,7 +39,7 @@ const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
               <Button
                 variant="link"
                 onPress={() => {
-                  setShowModal(true);
+                  setShow(true);
                 }} // show modal function
                 className="ml-3"
               >

@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { AuthContext } from "@/services/auth/AuthProvider";
 
 export const AccountModalContext = createContext<{
   showModal: boolean;
@@ -21,12 +22,15 @@ export const AccountModalProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const { user } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState("Chicago Bulls");
   const [accounts, setAccounts] = useState<any[]>([]);
 
-  // TODO: initiate fetching of users by account type
-
+  // TODO: improve implementation using tanstack useQuery for caching the accounts.
+  useEffect(() => {
+    console.log("user: call fetch of accounts here.");
+  }, [user]);
   return (
     <AccountModalContext.Provider
       value={{
