@@ -31,6 +31,7 @@ export const AccountModalProvider = ({
   useEffect(() => {
     console.log("user: call fetch of accounts here.");
   }, [user]);
+
   return (
     <AccountModalContext.Provider
       value={{

@@ -11,6 +11,15 @@ import {
   ModeType,
 } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
+import { createContext, useContext } from "react";
+import { AuthProvider } from "@/services/auth/AuthProvider";
+import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
+
+import { onlineManager, focusManager } from "@tanstack/react-query";
+import * as Network from "expo-network";
+
+import { AppState, Platform } from "react-native";
+import type { AppStateStatus } from "react-native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -19,6 +28,20 @@ export {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+// add online manager for Online status management
+onlineManager.setEventListener((setOnline) => {
+  const eventSubscription = Network.addNetworkStateListener((state) => {
+    setOnline(!!state.isConnected);
+  });
+  return eventSubscription.remove;
+});
+
+function onAppStateChange(status: AppStateStatus) {
+  if (Platform.OS !== "web") {
+    focusManager.setFocused(status === "active");
+  }
+}
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -43,9 +66,6 @@ export default function RootLayout() {
 
   return <RootLayoutNav />;
 }
-import { createContext, useContext } from "react";
-import { AuthProvider } from "@/services/auth/AuthProvider";
-import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
 
 // Create context for color mode
 interface ColorModeContextType {
@@ -68,6 +88,13 @@ export const useColorMode = () => {
 
 function RootLayoutNav() {
   const [colorMode, setColorMode] = useState<ModeType>("light");
+
+  // TODO: Polish this screen
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", onAppStateChange);
+
+    return () => subscription.remove();
+  }, []);
 
   return (
     <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
