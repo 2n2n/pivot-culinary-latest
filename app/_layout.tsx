@@ -13,6 +13,16 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
+import {
+  onlineManager,
+  focusManager,
+  QueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
+import * as Network from "expo-network";
+
+import { AppState, Platform } from "react-native";
+import type { AppStateStatus } from "react-native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,6 +63,8 @@ interface ColorModeContextType {
 const ColorModeContext = createContext<ColorModeContextType | undefined>(
   undefined
 );
+
+const queryClient = new QueryClient();
 
 // Hook to use the color mode context
 export const useColorMode = () => {
@@ -95,32 +107,39 @@ function RootLayoutNav() {
 
   //** IMPLEMENTATION FOR THEMED LOADER SCREEN */
   return (
-    <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
-      <GestureHandlerRootView className="flex-1">
-        <GluestackUIProvider mode={colorMode}>
-          {/** //* THEMED LOADER SCREEN */}
-          <AuthProvider>
-            <ThemedLoaderScreen
-              theme={colorMode}
-              switching={isSwitchingApp}
-              completed={isCompleted}
-              account={mockAccount}
-            >
-            <AccountModalProvider>
-              <Stack>
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="(application)"
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen name="landing" options={{ headerShown: false }} />
-              </Stack>
-
-            </AccountModalProvider>
-            </ThemedLoaderScreen>
-          </AuthProvider>
-        </GluestackUIProvider>
-      </GestureHandlerRootView>
-    </ColorModeContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
+        <GestureHandlerRootView className="flex-1">
+          <GluestackUIProvider mode={colorMode}>
+            {/** //* THEMED LOADER SCREEN */}
+            <AuthProvider>
+              <ThemedLoaderScreen
+                theme={colorMode}
+                switching={isSwitchingApp}
+                completed={isCompleted}
+                account={mockAccount}
+              >
+                <AccountModalProvider>
+                  <Stack>
+                    <Stack.Screen
+                      name="(auth)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(application)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="landing"
+                      options={{ headerShown: false }}
+                    />
+                  </Stack>
+                </AccountModalProvider>
+              </ThemedLoaderScreen>
+            </AuthProvider>
+          </GluestackUIProvider>
+        </GestureHandlerRootView>
+      </ColorModeContext.Provider>
+    </QueryClientProvider>
   );
 }
