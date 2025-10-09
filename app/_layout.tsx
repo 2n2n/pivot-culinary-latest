@@ -15,7 +15,12 @@ import { createContext, useContext } from "react";
 import { AuthProvider } from "@/services/auth/AuthProvider";
 import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
 
-import { onlineManager, focusManager } from "@tanstack/react-query";
+import {
+  onlineManager,
+  focusManager,
+  QueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
 import * as Network from "expo-network";
 
 import { AppState, Platform } from "react-native";
@@ -77,6 +82,8 @@ const ColorModeContext = createContext<ColorModeContextType | undefined>(
   undefined
 );
 
+const queryClient = new QueryClient();
+
 // Hook to use the color mode context
 export const useColorMode = () => {
   const context = useContext(ColorModeContext);
@@ -97,23 +104,31 @@ function RootLayoutNav() {
   }, []);
 
   return (
-    <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
-      <GestureHandlerRootView className="flex-1">
-        <GluestackUIProvider mode={colorMode}>
-          <AuthProvider>
-            <AccountModalProvider>
-              <Stack>
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="(application)"
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen name="landing" options={{ headerShown: false }} />
-              </Stack>
-            </AccountModalProvider>
-          </AuthProvider>
-        </GluestackUIProvider>
-      </GestureHandlerRootView>
-    </ColorModeContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
+        <GestureHandlerRootView className="flex-1">
+          <GluestackUIProvider mode={colorMode}>
+            <AuthProvider>
+              <AccountModalProvider>
+                <Stack>
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(application)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="landing"
+                    options={{ headerShown: false }}
+                  />
+                </Stack>
+              </AccountModalProvider>
+            </AuthProvider>
+          </GluestackUIProvider>
+        </GestureHandlerRootView>
+      </ColorModeContext.Provider>
+    </QueryClientProvider>
   );
 }

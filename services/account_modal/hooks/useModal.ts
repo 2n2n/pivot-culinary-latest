@@ -6,20 +6,11 @@ export const useModal = () => {
   const {
     showModal,
     setShowModal,
-    selectedTeam,
-    setSelectedTeam,
+    selectedAccount,
+    setSelectedAccount,
     accounts,
     setAccounts,
   } = useContext(AccountModalContext);
-
-  useEffect(() => {
-    setAccounts([
-      {
-        id: 1,
-        name: "Chicago Bulls",
-      },
-    ]);
-  }, []);
 
   const _signOut = async () => {
     await signOut(getAuth());
@@ -30,8 +21,8 @@ export const useModal = () => {
     accounts,
     show: showModal,
     setShow: setShowModal,
-    team: selectedTeam,
-    setTeam: setSelectedTeam,
+    selectedAccount,
+    setSelectedAccount,
     signOut: _signOut,
   };
 };
