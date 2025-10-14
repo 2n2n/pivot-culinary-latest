@@ -1,30 +1,29 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
-import "react-native-reanimated";
+import "@/global.css";
 
 import {
   GluestackUIProvider,
   ModeType,
 } from "@/components/ui/gluestack-ui-provider";
-import "@/global.css";
-import { createContext, useContext } from "react";
-import { AuthProvider } from "@/services/auth/AuthProvider";
-import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
+import ThemedLoaderScreen from "@/components/LoadingIndicator/ThemedLoadingScreen";
 
+import { useEffect, useState, createContext, useContext, useRef } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import "react-native-reanimated";
+import { AppState, Platform } from "react-native";
+import type { AppStateStatus } from "react-native";
 import {
   onlineManager,
   focusManager,
-  QueryClientProvider,
   QueryClient,
+  QueryClientProvider,
 } from "@tanstack/react-query";
 import * as Network from "expo-network";
-
-import { AppState, Platform } from "react-native";
-import type { AppStateStatus } from "react-native";
+import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
+import { AuthProvider } from "@/services/auth/AuthProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,7 +49,7 @@ function onAppStateChange(status: AppStateStatus) {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
 
@@ -60,18 +59,12 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
+    if (loaded) SplashScreen.hideAsync();
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
+  if (!loaded) return null;
+  else return <RootLayoutNav />;
 }
-
 // Create context for color mode
 interface ColorModeContextType {
   colorMode: ModeType;
@@ -87,14 +80,39 @@ const queryClient = new QueryClient();
 // Hook to use the color mode context
 export const useColorMode = () => {
   const context = useContext(ColorModeContext);
-  if (context === undefined) {
+  if (context === undefined)
     throw new Error("useColorMode must be used within a ColorModeProvider");
-  }
   return context;
 };
 
+const DEFAULT_COLOR_MODE = "light";
+
 function RootLayoutNav() {
-  const [colorMode, setColorMode] = useState<ModeType>("light");
+  const [colorMode, setColorMode] = useState<ModeType>(DEFAULT_COLOR_MODE);
+  //** IMPLEMENTATION FOR THEMED LOADER SCREEN */
+  // TODO: Match implementation to actual acc and theme switching logic
+  const prevColorMode = useRef<ModeType>(DEFAULT_COLOR_MODE); // Placeholder ref for preventing unnecessary re-renders on colorMode
+  const [isSwitchingApp, setIsSwitchingApp] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const mockAccount = {
+    name: "Raccoons FC",
+    avatar:
+      "https://plus.unsplash.com/premium_photo-1723600867732-a925c995c888?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHNxdWFyZSUyMHBvcnRyYWl0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=900",
+    theme: "Pivot Culinary & Gameday",
+    alias: "RFC",
+  };
+  useEffect(() => {
+    if (prevColorMode.current === colorMode) return;
+    prevColorMode.current = colorMode;
+    setIsSwitchingApp(true); // Triggers Fade in of the themed loader screen
+    setTimeout(() => {
+      setIsCompleted(true); // Triggers display of the current theme
+    }, 3000);
+    setTimeout(() => {
+      setIsSwitchingApp(false); // Triggers Fade out of the themed loader screen
+    }, 4000);
+  }, [colorMode]);
+  //** IMPLEMENTATION FOR THEMED LOADER SCREEN */
 
   // TODO: Polish this screen
   useEffect(() => {
@@ -102,7 +120,6 @@ function RootLayoutNav() {
 
     return () => subscription.remove();
   }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
@@ -110,20 +127,28 @@ function RootLayoutNav() {
           <GluestackUIProvider mode={colorMode}>
             <AuthProvider>
               <AccountModalProvider>
-                <Stack>
-                  <Stack.Screen
-                    name="(auth)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="(application)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="landing"
-                    options={{ headerShown: false }}
-                  />
-                </Stack>
+                {/** //* THEMED LOADER SCREEN */}
+                <ThemedLoaderScreen
+                  theme={colorMode}
+                  switching={isSwitchingApp}
+                  completed={isCompleted}
+                  account={mockAccount}
+                >
+                  <Stack>
+                    <Stack.Screen
+                      name="(auth)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(application)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="landing"
+                      options={{ headerShown: false }}
+                    />
+                  </Stack>
+                </ThemedLoaderScreen>
               </AccountModalProvider>
             </AuthProvider>
           </GluestackUIProvider>

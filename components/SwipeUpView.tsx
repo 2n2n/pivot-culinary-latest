@@ -1,11 +1,12 @@
-import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedStyle, useSharedValue, withClamp, withSpring, withTiming } from "react-native-reanimated";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Dimensions, ViewProps } from "react-native";
-import { useEffect, useId, useMemo } from "react";
-import { ChevronUp } from "lucide-react-native";
 import { Text } from "@/components/ui/text";
 import { Icon } from "@/components/ui/icon";
+
+import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedStyle, useSharedValue, withClamp, withSpring, withTiming } from "react-native-reanimated";
+import { Dimensions, KeyboardAvoidingView, ScrollView, ViewProps } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useEffect, useId, useMemo, useRef } from "react";
+import { ChevronUp } from "lucide-react-native";
 
 type SwipeUpViewProps = {
   enabled?: boolean
@@ -76,33 +77,35 @@ export default function SwipeUpView(props: ViewProps & SwipeUpViewProps) {
   useEffect(() => {
     swipeUpIndicatorLift.value = withSpring(enabled ? 1 : 0);
   }, [enabled]);
-  if (!enabled) return <>
-    <Animated.View key={swipableViewKey} {...viewProps} style={[{ flex: 1 }, swipeableComponentStyle]}>
-      <Animated.View style={[{ flex: 1, paddingBottom: bottom }, props.style || {}, swipeableComponentContainerStyle]}>
-        {children}
-      </Animated.View>
-      <Animated.View key={swipeUpIndicatorKey} style={swipeUpIndicatorStyle}>
-        <Text>Swipe up to continue</Text>
-      </Animated.View>
-    </Animated.View>
-  </>;
-  return <GestureDetector gesture={panGesture}>
-    <Animated.View
+  return <Animated.View
       key={swipableViewKey}
       {...viewProps}
       style={[{ flex: 1 }, swipeableComponentStyle]}
     >
-      <Animated.View style={[{ flex: 1, paddingBottom: bottom }, props.style || {}, swipeableComponentContainerStyle]}>
-        {children}
+      <Animated.View style={[{ flex: 1 }, props.style || {}, swipeableComponentContainerStyle]}>
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: bottom }}>
+          <KeyboardAvoidingView behavior="position" enabled={true} style={{ flex: 1 }} keyboardVerticalOffset={100}>
+            {children}
+          </KeyboardAvoidingView>
+        </ScrollView>
       </Animated.View>
-      <Animated.View 
-        key={swipeUpIndicatorKey} 
-        style={[{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 12 }, swipeUpIndicatorStyle]}
-      >
-        <Icon as={ChevronUp} className="text-white" />
-        <Text className="text-white">Swipe up to Submit Feedback</Text>
-        <Icon as={ChevronUp} className="text-white" />
-      </Animated.View>
+      {enabled && <GestureDetector gesture={panGesture}>
+        <Animated.View 
+          key={swipeUpIndicatorKey} 
+          style={[{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 12 }, swipeUpIndicatorStyle]}
+        >
+          <Icon as={ChevronUp} className="text-white" />
+          <Text className="text-white">Swipe up to Submit Feedback</Text>
+          <Icon as={ChevronUp} className="text-white" />
+        </Animated.View>
+      </GestureDetector>}
+      {!enabled && <Animated.View 
+          key={swipeUpIndicatorKey} 
+          style={[{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 12 }, swipeUpIndicatorStyle]}
+        >
+          <Icon as={ChevronUp} className="text-white" />
+          <Text className="text-white">Swipe up to Submit Feedback</Text>
+          <Icon as={ChevronUp} className="text-white" />
+        </Animated.View>}
     </Animated.View>
-  </GestureDetector>;
 };
