@@ -14,15 +14,15 @@ import { getContactInfo } from "@/requests/contact.request";
 export const AccountModalContext = createContext<{
   showModal: boolean;
   setShowModal: (isOpen: boolean) => void;
-  selectedAccount: number | null;
-  setSelectedAccount: (account_id: number | null) => void;
+  selectedAccount: Account | null;
+  setSelectedAccount: (account: Account | null) => void;
   accounts: Account[];
   setAccounts: (accounts: Account[]) => void;
 }>({
   showModal: false,
   setShowModal: () => {},
   selectedAccount: null,
-  setSelectedAccount: (account_id: number | null) => {},
+  setSelectedAccount: (account: Account | null) => {},
   accounts: [],
   setAccounts: () => {},
 });
@@ -34,7 +34,7 @@ export const AccountModalProvider = ({
 }) => {
   const { user } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState<number | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
   const [accounts, setAccounts] = useState<Account[]>([]);
 
   // TODO: improve implementation using tanstack useQuery for caching the accounts.
@@ -55,7 +55,7 @@ export const AccountModalProvider = ({
 
   useEffect(() => {
     if (accounts.length > 0) {
-      setSelectedAccount(accounts[0].account_id);
+      setSelectedAccount(accounts[0]);
     }
   }, [accounts]);
 

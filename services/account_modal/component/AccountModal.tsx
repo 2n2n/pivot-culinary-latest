@@ -49,8 +49,8 @@ const AccountModal = () => {
             <AccountModalItem
               key={account.account_id}
               account={account}
-              isSelected={account.account_id === selectedAccount}
-              onPress={(account_id) => setSelectedAccount(account_id)}
+              isSelected={account.account_id === selectedAccount?.account_id}
+              onPress={() => setSelectedAccount(account)}
             />
           ))}
         </ModalBody>
@@ -66,6 +66,7 @@ const AccountModal = () => {
             <HStack className="flex-1 justify-between items-center">
               <HStack className="gap-2 items-center">
                 <Avatar className="w-12 h-12 mr-3">
+                  {/* TODO use actual avatar based on the current logged in user. */}
                   <AvatarImage
                     alt="Kali Mary"
                     source={{

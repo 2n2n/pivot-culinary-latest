@@ -42,7 +42,7 @@ const AccountModalItem = ({
     staleTime: 5 * 60 * 60 * 1000, // 5 hours in milliseconds
   });
 
-  if (true) {
+  if (error) {
     return (
       <Button
         className="w-full h-auto flex flex-row items-center justify-between py-2 my-1 bg-red-100"
