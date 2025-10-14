@@ -7,28 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		08570A8F1D5347DCB9008F7C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AB8EE1206D6140D0A20AB532 /* GoogleService-Info.plist */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		6A4E30E33326F64B121FB724 /* Pods_PivotCulinary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D68E84302DBB32AE09FE644E /* Pods_PivotCulinary.framework */; };
-		79D0A067F2BBAC4A473872DF /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B82D28BDA703783964D4A33 /* ExpoModulesProvider.swift */; };
-		B9DF1405CBB0671E5E0193D6 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 19EBA0CB1C9D606202534826 /* PrivacyInfo.xcprivacy */; };
+		45B967466A0437F707D68298 /* Pods_PivotCulinary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 381341B3089A45BA777F370D /* Pods_PivotCulinary.framework */; };
+		A27F6956A9997D777134D84F /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24A197076F1D57BE32F2364 /* ExpoModulesProvider.swift */; };
+		A7D24DE541924755B89AD17A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A2C8972C2664EC1A263E9A7 /* GoogleService-Info.plist */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		F0C9A66FFAEADF461BE548A1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 223D4428AB8F68CA6076192E /* PrivacyInfo.xcprivacy */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0B82D28BDA703783964D4A33 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-PivotCulinary/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* PivotCulinary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PivotCulinary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = PivotCulinary/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = PivotCulinary/Info.plist; sourceTree = "<group>"; };
-		19EBA0CB1C9D606202534826 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = PivotCulinary/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		3ED46FBF7EEDF3B9D3EC8EC2 /* Pods-PivotCulinary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PivotCulinary.debug.xcconfig"; path = "Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary.debug.xcconfig"; sourceTree = "<group>"; };
+		223D4428AB8F68CA6076192E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = PivotCulinary/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		381341B3089A45BA777F370D /* Pods_PivotCulinary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PivotCulinary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A2C8972C2664EC1A263E9A7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "PivotCulinary/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		578035F557082BEA4778F050 /* Pods-PivotCulinary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PivotCulinary.debug.xcconfig"; path = "Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary.debug.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = PivotCulinary/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AB8EE1206D6140D0A20AB532 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "PivotCulinary/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		D68E84302DBB32AE09FE644E /* Pods_PivotCulinary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PivotCulinary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA9E3336E27022E7EAE5B241 /* Pods-PivotCulinary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PivotCulinary.release.xcconfig"; path = "Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary.release.xcconfig"; sourceTree = "<group>"; };
+		E23D382B2D33D4418AE9FEB2 /* Pods-PivotCulinary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PivotCulinary.release.xcconfig"; path = "Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary.release.xcconfig"; sourceTree = "<group>"; };
+		E24A197076F1D57BE32F2364 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-PivotCulinary/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = PivotCulinary/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* PivotCulinary-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PivotCulinary-Bridging-Header.h"; path = "PivotCulinary/PivotCulinary-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -39,13 +39,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A4E30E33326F64B121FB724 /* Pods_PivotCulinary.framework in Frameworks */,
+				45B967466A0437F707D68298 /* Pods_PivotCulinary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		019B2ABC416E01D542E22375 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				8FE16A8C9EB125D9EF2CA2D3 /* PivotCulinary */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* PivotCulinary */ = {
 			isa = PBXGroup;
 			children = (
@@ -55,8 +63,8 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				AB8EE1206D6140D0A20AB532 /* GoogleService-Info.plist */,
-				19EBA0CB1C9D606202534826 /* PrivacyInfo.xcprivacy */,
+				3A2C8972C2664EC1A263E9A7 /* GoogleService-Info.plist */,
+				223D4428AB8F68CA6076192E /* PrivacyInfo.xcprivacy */,
 			);
 			name = PivotCulinary;
 			sourceTree = "<group>";
@@ -65,24 +73,16 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				D68E84302DBB32AE09FE644E /* Pods_PivotCulinary.framework */,
+				381341B3089A45BA777F370D /* Pods_PivotCulinary.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		64B255D27A7E3FA9BEEF06E0 /* PivotCulinary */ = {
+		6F097761662E067E57AC6DFB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0B82D28BDA703783964D4A33 /* ExpoModulesProvider.swift */,
-			);
-			name = PivotCulinary;
-			sourceTree = "<group>";
-		};
-		65564FD81D0F92E0C10889CA /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				3ED46FBF7EEDF3B9D3EC8EC2 /* Pods-PivotCulinary.debug.xcconfig */,
-				EA9E3336E27022E7EAE5B241 /* Pods-PivotCulinary.release.xcconfig */,
+				578035F557082BEA4778F050 /* Pods-PivotCulinary.debug.xcconfig */,
+				E23D382B2D33D4418AE9FEB2 /* Pods-PivotCulinary.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -102,8 +102,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				65564FD81D0F92E0C10889CA /* Pods */,
-				E38A223EF1EDB33CCA96FD95 /* ExpoModulesProviders */,
+				6F097761662E067E57AC6DFB /* Pods */,
+				019B2ABC416E01D542E22375 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -118,6 +118,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8FE16A8C9EB125D9EF2CA2D3 /* PivotCulinary */ = {
+			isa = PBXGroup;
+			children = (
+				E24A197076F1D57BE32F2364 /* ExpoModulesProvider.swift */,
+			);
+			name = PivotCulinary;
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,14 +133,6 @@
 			);
 			name = Supporting;
 			path = PivotCulinary/Supporting;
-			sourceTree = "<group>";
-		};
-		E38A223EF1EDB33CCA96FD95 /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				64B255D27A7E3FA9BEEF06E0 /* PivotCulinary */,
-			);
-			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,15 +143,15 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PivotCulinary" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				C23924FEBA414170B2043A06 /* [Expo] Configure project */,
+				A16B6E2C58106ADA9C3DA1ED /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				8A26DF039FB3837A30C9D517 /* [CP] Embed Pods Frameworks */,
-				DDDD691F4B1980FADB24CE2F /* [CP-User] [RNFB] Core Configuration */,
-				5251C0877E73DD6D008724E9 /* [CP-User] [RNFB] Crashlytics Configuration */,
+				44CF3B3B3D88F6329D6F94B8 /* [CP] Embed Pods Frameworks */,
+				BBD1532FE8F81D33CC69C749 /* [CP-User] [RNFB] Core Configuration */,
+				85B1DF3C2E1CA8B3EEF0D7F8 /* [CP-User] [RNFB] Crashlytics Configuration */,
 			);
 			buildRules = (
 			);
@@ -201,8 +201,8 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				08570A8F1D5347DCB9008F7C /* GoogleService-Info.plist in Resources */,
-				B9DF1405CBB0671E5E0193D6 /* PrivacyInfo.xcprivacy in Resources */,
+				A7D24DE541924755B89AD17A /* GoogleService-Info.plist in Resources */,
+				F0C9A66FFAEADF461BE548A1 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,19 +246,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5251C0877E73DD6D008724E9 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
+		44CF3B3B3D88F6329D6F94B8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+				"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
 			);
-			name = "[CP-User] [RNFB] Crashlytics Configuration";
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -338,25 +342,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8A26DF039FB3837A30C9D517 /* [CP] Embed Pods Frameworks */ = {
+		85B1DF3C2E1CA8B3EEF0D7F8 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
+			name = "[CP-User] [RNFB] Crashlytics Configuration";
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
-		C23924FEBA414170B2043A06 /* [Expo] Configure project */ = {
+		A16B6E2C58106ADA9C3DA1ED /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -375,7 +375,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-PivotCulinary/expo-configure-project.sh\"\n";
 		};
-		DDDD691F4B1980FADB24CE2F /* [CP-User] [RNFB] Core Configuration */ = {
+		BBD1532FE8F81D33CC69C749 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -396,7 +396,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				79D0A067F2BBAC4A473872DF /* ExpoModulesProvider.swift in Sources */,
+				A27F6956A9997D777134D84F /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +405,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3ED46FBF7EEDF3B9D3EC8EC2 /* Pods-PivotCulinary.debug.xcconfig */;
+			baseConfigurationReference = 578035F557082BEA4778F050 /* Pods-PivotCulinary.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -441,7 +441,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EA9E3336E27022E7EAE5B241 /* Pods-PivotCulinary.release.xcconfig */;
+			baseConfigurationReference = E23D382B2D33D4418AE9FEB2 /* Pods-PivotCulinary.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
