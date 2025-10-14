@@ -170,6 +170,7 @@ module.exports = {
         },
         pivot: "#F47C20",
         "pivot-blue": "#212945",
+        "gameday-blue": "#022D55",
         indicator: {
           primary: 'rgb(var(--color-indicator-primary)/<alpha-value>)',
           info: 'rgb(var(--color-indicator-info)/<alpha-value>)',

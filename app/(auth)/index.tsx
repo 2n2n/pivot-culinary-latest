@@ -7,6 +7,7 @@ import { Stack, useRouter } from "expo-router";
 import { Icon } from "@/components/ui/icon";
 import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { VStack } from "@/components/ui/vstack";
+import GamedayLoadingIndicator from "@/components/LoadingIndicator/GamedayLoadingIndicator";
 
 // TODO: Polish this screen, where it should animate the initial state of the phone number into the active state
 function AuthLoginScreen() {
@@ -27,8 +28,9 @@ function AuthLoginScreen() {
           headerShown: false,
         }}
       />
-      <Box className="flex-1 justify-center items-center px-6">
-        <VStack className="w-full max-w-sm gap-12">
+      <Box className="flex-1 justify-center items-center px-6 bg-gameday-blue">
+        <GamedayLoadingIndicator size={100} />
+        {/* <VStack className="w-full max-w-sm gap-12">
           <VStack className="items-center gap-4">
             <Icon as={PivotIcon} className="h-14 w-14" />
             <Text size="md" className="font-bold text-center">
@@ -59,7 +61,7 @@ function AuthLoginScreen() {
               <ButtonText>Sign In</ButtonText>
             </Button>
           </VStack>
-        </VStack>
+        </VStack> */}
       </Box>
     </>
   );

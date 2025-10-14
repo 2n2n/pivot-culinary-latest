@@ -1,8 +1,12 @@
-import PivotCulinaryLoadingIndicator from "./PivotCulinaryLoadingIndicator.";
-import GamedayLoadingIndicator from "./GamedayLoadingIndicator";
+import PivotCulinaryLoadingIndicator from "@/components/LoadingIndicator/PivotCulinaryLoadingIndicator.";
+import GamedayLoadingIndicator from "@/components/LoadingIndicator/GamedayLoadingIndicator";
 import { useColorMode } from "@/app/_layout";
 
+import Svg from "react-native-svg";
+import { Ref } from "react";
+
 type LoadingIndicatorProps = {
+    ref?: Ref<Svg>;
     size?: "sm" | "md" | "lg";
     trailingColors?: string[];
 }
