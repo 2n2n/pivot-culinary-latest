@@ -9,7 +9,6 @@ export const useModal = () => {
     selectedAccount,
     setSelectedAccount,
     accounts,
-    setAccounts,
   } = useContext(AccountModalContext);
 
   const _signOut = async () => {
