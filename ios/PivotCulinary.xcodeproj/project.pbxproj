@@ -8,30 +8,30 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		17D085A8ACDC4D1E81564519 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E128F09D249419E87BA64F9 /* GoogleService-Info.plist */; };
+		19EC87ED7FB29FF7BDE3F599 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313AA10EF9CA2C15D7EC88A7 /* ExpoModulesProvider.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		42B99D09BF765242F141202C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DFFFB171BE865F30D5390D /* ExpoModulesProvider.swift */; };
-		84CA6FC0052C1E231F5B1CFB /* libPods-pivotculinarylatest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D324A812777BEA514A59A435 /* libPods-pivotculinarylatest.a */; };
-		A7E361029DDF239D3B18C5F7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF37E30360A7B5F20D7C7F5C /* PrivacyInfo.xcprivacy */; };
+		44A668691B154E3C92F4AEFF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB049B6E39274E07A519A860 /* GoogleService-Info.plist */; };
+		B0F1C45EA6CB75DE0A6CF3B0 /* libPods-PivotCulinary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C39EEC17A1EF2479B8EF84 /* libPods-PivotCulinary.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		CF174D139AC4402CDD0F0597 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 78F445503F4F7CD8EFBB1FC4 /* PrivacyInfo.xcprivacy */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		11DFFFB171BE865F30D5390D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-pivotculinarylatest/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* pivotculinarylatest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pivotculinarylatest.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = pivotculinarylatest/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = pivotculinarylatest/Info.plist; sourceTree = "<group>"; };
-		1B74A3B105AA8A4B4BA67D9D /* Pods-pivotculinarylatest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pivotculinarylatest.release.xcconfig"; path = "Target Support Files/Pods-pivotculinarylatest/Pods-pivotculinarylatest.release.xcconfig"; sourceTree = "<group>"; };
-		9E128F09D249419E87BA64F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "pivotculinarylatest/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = pivotculinarylatest/SplashScreen.storyboard; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* PivotCulinary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PivotCulinary.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = PivotCulinary/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = PivotCulinary/Info.plist; sourceTree = "<group>"; };
+		313AA10EF9CA2C15D7EC88A7 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-PivotCulinary/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		31C8C66CBFA39E2FED7119E4 /* Pods-PivotCulinary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PivotCulinary.debug.xcconfig"; path = "Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary.debug.xcconfig"; sourceTree = "<group>"; };
+		78C39EEC17A1EF2479B8EF84 /* libPods-PivotCulinary.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PivotCulinary.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		78F445503F4F7CD8EFBB1FC4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = PivotCulinary/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = PivotCulinary/SplashScreen.storyboard; sourceTree = "<group>"; };
+		BB049B6E39274E07A519A860 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "PivotCulinary/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		D324A812777BEA514A59A435 /* libPods-pivotculinarylatest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pivotculinarylatest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DF37E30360A7B5F20D7C7F5C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = pivotculinarylatest/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F0E1D804B240EFBB53D94A55 /* Pods-pivotculinarylatest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pivotculinarylatest.debug.xcconfig"; path = "Target Support Files/Pods-pivotculinarylatest/Pods-pivotculinarylatest.debug.xcconfig"; sourceTree = "<group>"; };
-		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = pivotculinarylatest/AppDelegate.swift; sourceTree = "<group>"; };
-		F11748442D0722820044C1D9 /* pivotculinarylatest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "pivotculinarylatest-Bridging-Header.h"; path = "pivotculinarylatest/pivotculinarylatest-Bridging-Header.h"; sourceTree = "<group>"; };
+		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = PivotCulinary/AppDelegate.swift; sourceTree = "<group>"; };
+		F11748442D0722820044C1D9 /* PivotCulinary-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PivotCulinary-Bridging-Header.h"; path = "PivotCulinary/PivotCulinary-Bridging-Header.h"; sourceTree = "<group>"; };
+		F6B3B5AC7A2DEEC9EE21FDCE /* Pods-PivotCulinary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PivotCulinary.release.xcconfig"; path = "Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,53 +39,45 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84CA6FC0052C1E231F5B1CFB /* libPods-pivotculinarylatest.a in Frameworks */,
+				B0F1C45EA6CB75DE0A6CF3B0 /* libPods-PivotCulinary.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		13B07FAE1A68108700A75B9A /* pivotculinarylatest */ = {
+		13B07FAE1A68108700A75B9A /* PivotCulinary */ = {
 			isa = PBXGroup;
 			children = (
 				F11748412D0307B40044C1D9 /* AppDelegate.swift */,
-				F11748442D0722820044C1D9 /* pivotculinarylatest-Bridging-Header.h */,
+				F11748442D0722820044C1D9 /* PivotCulinary-Bridging-Header.h */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				9E128F09D249419E87BA64F9 /* GoogleService-Info.plist */,
-				DF37E30360A7B5F20D7C7F5C /* PrivacyInfo.xcprivacy */,
+				BB049B6E39274E07A519A860 /* GoogleService-Info.plist */,
+				78F445503F4F7CD8EFBB1FC4 /* PrivacyInfo.xcprivacy */,
 			);
-			name = pivotculinarylatest;
+			name = PivotCulinary;
+			sourceTree = "<group>";
+		};
+		2739366B55352CB485C3F64F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				31C8C66CBFA39E2FED7119E4 /* Pods-PivotCulinary.debug.xcconfig */,
+				F6B3B5AC7A2DEEC9EE21FDCE /* Pods-PivotCulinary.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				D324A812777BEA514A59A435 /* libPods-pivotculinarylatest.a */,
+				78C39EEC17A1EF2479B8EF84 /* libPods-PivotCulinary.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		438B459BCC6BB75CF33683F6 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				F0E1D804B240EFBB53D94A55 /* Pods-pivotculinarylatest.debug.xcconfig */,
-				1B74A3B105AA8A4B4BA67D9D /* Pods-pivotculinarylatest.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		60D8A74B7F1B345278A8F279 /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				AF0D39C1BF0BFB928B334F68 /* pivotculinarylatest */,
-			);
-			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -98,12 +90,12 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* pivotculinarylatest */,
+				13B07FAE1A68108700A75B9A /* PivotCulinary */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				60D8A74B7F1B345278A8F279 /* ExpoModulesProviders */,
-				438B459BCC6BB75CF33683F6 /* Pods */,
+				2739366B55352CB485C3F64F /* Pods */,
+				C73D9A1B633E2A8CB8F7FAA6 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -113,17 +105,17 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* pivotculinarylatest.app */,
+				13B07F961A680F5B00A75B9A /* PivotCulinary.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AF0D39C1BF0BFB928B334F68 /* pivotculinarylatest */ = {
+		B54C567D2125B4C43F5C70CC /* PivotCulinary */ = {
 			isa = PBXGroup;
 			children = (
-				11DFFFB171BE865F30D5390D /* ExpoModulesProvider.swift */,
+				313AA10EF9CA2C15D7EC88A7 /* ExpoModulesProvider.swift */,
 			);
-			name = pivotculinarylatest;
+			name = PivotCulinary;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -132,32 +124,40 @@
 				BB2F792C24A3F905000567C9 /* Expo.plist */,
 			);
 			name = Supporting;
-			path = pivotculinarylatest/Supporting;
+			path = PivotCulinary/Supporting;
+			sourceTree = "<group>";
+		};
+		C73D9A1B633E2A8CB8F7FAA6 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				B54C567D2125B4C43F5C70CC /* PivotCulinary */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* pivotculinarylatest */ = {
+		13B07F861A680F5B00A75B9A /* PivotCulinary */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "pivotculinarylatest" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PivotCulinary" */;
 			buildPhases = (
-				1D67050FF0F3744A5CB4AEB2 /* [CP] Check Pods Manifest.lock */,
-				730B84A5CAA037E8FB2EACCA /* [Expo] Configure project */,
+				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
+				0448DDD1F8451CD251F5AFE4 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				781EAE55F17F650BC793C1ED /* [CP] Embed Pods Frameworks */,
-				5B36817702317822BFA45338 /* [CP] Copy Pods Resources */,
+				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
+				D68C9B9B322EA886F69675C9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = pivotculinarylatest;
-			productName = pivotculinarylatest;
-			productReference = 13B07F961A680F5B00A75B9A /* pivotculinarylatest.app */;
+			name = PivotCulinary;
+			productName = PivotCulinary;
+			productReference = 13B07F961A680F5B00A75B9A /* PivotCulinary.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -173,7 +173,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "pivotculinarylatest" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "PivotCulinary" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -186,7 +186,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* pivotculinarylatest */,
+				13B07F861A680F5B00A75B9A /* PivotCulinary */,
 			);
 		};
 /* End PBXProject section */
@@ -199,8 +199,8 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				17D085A8ACDC4D1E81564519 /* GoogleService-Info.plist in Resources */,
-				A7E361029DDF239D3B18C5F7 /* PrivacyInfo.xcprivacy in Resources */,
+				44A668691B154E3C92F4AEFF /* GoogleService-Info.plist in Resources */,
+				CF174D139AC4402CDD0F0597 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +222,26 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.updates\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
 		};
-		1D67050FF0F3744A5CB4AEB2 /* [CP] Check Pods Manifest.lock */ = {
+		0448DDD1F8451CD251F5AFE4 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-PivotCulinary/expo-configure-project.sh\"\n";
+		};
+		08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -237,20 +256,20 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-pivotculinarylatest-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-PivotCulinary-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5B36817702317822BFA45338 /* [CP] Copy Pods Resources */ = {
+		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-pivotculinarylatest/Pods-pivotculinarylatest-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
@@ -279,35 +298,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-pivotculinarylatest/Pods-pivotculinarylatest-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		730B84A5CAA037E8FB2EACCA /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-pivotculinarylatest/expo-configure-project.sh\"\n";
-		};
-		781EAE55F17F650BC793C1ED /* [CP] Embed Pods Frameworks */ = {
+		D68C9B9B322EA886F69675C9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-pivotculinarylatest/Pods-pivotculinarylatest-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -316,7 +316,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-pivotculinarylatest/Pods-pivotculinarylatest-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PivotCulinary/Pods-PivotCulinary-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -327,7 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				42B99D09BF765242F141202C /* ExpoModulesProvider.swift in Sources */,
+				19EC87ED7FB29FF7BDE3F599 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,18 +336,18 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F0E1D804B240EFBB53D94A55 /* Pods-pivotculinarylatest.debug.xcconfig */;
+			baseConfigurationReference = 31C8C66CBFA39E2FED7119E4 /* Pods-PivotCulinary.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = pivotculinarylatest/pivotculinarylatest.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PivotCulinary/PivotCulinary.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
 				);
-				INFOPLIST_FILE = pivotculinarylatest/Info.plist;
+				INFOPLIST_FILE = PivotCulinary/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -362,7 +362,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pivotculinary.mobile;
 				PRODUCT_NAME = PivotCulinary;
-				SWIFT_OBJC_BRIDGING_HEADER = "pivotculinarylatest/pivotculinarylatest-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "PivotCulinary/PivotCulinary-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -372,13 +372,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B74A3B105AA8A4B4BA67D9D /* Pods-pivotculinarylatest.release.xcconfig */;
+			baseConfigurationReference = F6B3B5AC7A2DEEC9EE21FDCE /* Pods-PivotCulinary.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = pivotculinarylatest/pivotculinarylatest.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PivotCulinary/PivotCulinary.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = pivotculinarylatest/Info.plist;
+				INFOPLIST_FILE = PivotCulinary/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -393,7 +393,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pivotculinary.mobile;
 				PRODUCT_NAME = PivotCulinary;
-				SWIFT_OBJC_BRIDGING_HEADER = "pivotculinarylatest/pivotculinarylatest-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "PivotCulinary/PivotCulinary-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -527,7 +527,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "pivotculinarylatest" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PivotCulinary" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -536,7 +536,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "pivotculinarylatest" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "PivotCulinary" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
