@@ -13,16 +13,9 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
-import {
-  onlineManager,
-  focusManager,
-  QueryClientProvider,
-  QueryClient,
-} from "@tanstack/react-query";
-import * as Network from "expo-network";
-
-import { AppState, Platform } from "react-native";
-import type { AppStateStatus } from "react-native";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
+import { AuthProvider } from "@/services/auth/AuthProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,10 +44,6 @@ export default function RootLayout() {
   else return <RootLayoutNav />;
 }
 
-import { AuthProvider } from "@/services/auth/AuthProvider";
-import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
-
-// Create context for color mode
 interface ColorModeContextType {
   colorMode: ModeType;
   setColorMode: (mode: ModeType) => void;
@@ -73,8 +62,6 @@ export const useColorMode = () => {
     throw new Error("useColorMode must be used within a ColorModeProvider");
   return context;
 };
-
-export const MockAccountSwitch = () => {};
 
 const DEFAULT_COLOR_MODE = "light";
 
