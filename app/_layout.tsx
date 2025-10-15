@@ -1,6 +1,9 @@
 import "@/global.css";
 
-import { GluestackUIProvider, ModeType } from "@/components/ui/gluestack-ui-provider";
+import {
+  GluestackUIProvider,
+  ModeType,
+} from "@/components/ui/gluestack-ui-provider";
 import ThemedLoaderScreen from "@/components/LoadingIndicator/ThemedLoadingScreen";
 
 import { useEffect, useState, createContext, useContext, useRef } from "react";
@@ -10,7 +13,17 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
-
+import { AppState, Platform } from "react-native";
+import type { AppStateStatus } from "react-native";
+import {
+  onlineManager,
+  focusManager,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import * as Network from "expo-network";
+import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
+import { AuthProvider } from "@/services/auth/AuthProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -19,6 +32,20 @@ export {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+// add online manager for Online status management
+onlineManager.setEventListener((setOnline) => {
+  const eventSubscription = Network.addNetworkStateListener((state) => {
+    setOnline(!!state.isConnected);
+  });
+  return eventSubscription.remove;
+});
+
+function onAppStateChange(status: AppStateStatus) {
+  if (Platform.OS !== "web") {
+    focusManager.setFocused(status === "active");
+  }
+}
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -48,16 +75,15 @@ const ColorModeContext = createContext<ColorModeContextType | undefined>(
   undefined
 );
 
+const queryClient = new QueryClient();
+
 // Hook to use the color mode context
 export const useColorMode = () => {
   const context = useContext(ColorModeContext);
-  if (context === undefined) throw new Error("useColorMode must be used within a ColorModeProvider");
+  if (context === undefined)
+    throw new Error("useColorMode must be used within a ColorModeProvider");
   return context;
 };
-
-export const MockAccountSwitch = () => {
-
-}
 
 const DEFAULT_COLOR_MODE = "light";
 
@@ -70,10 +96,11 @@ function RootLayoutNav() {
   const [isCompleted, setIsCompleted] = useState(false);
   const mockAccount = {
     name: "Raccoons FC",
-    avatar: "https://plus.unsplash.com/premium_photo-1723600867732-a925c995c888?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHNxdWFyZSUyMHBvcnRyYWl0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=900",
+    avatar:
+      "https://plus.unsplash.com/premium_photo-1723600867732-a925c995c888?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHNxdWFyZSUyMHBvcnRyYWl0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=900",
     theme: "Pivot Culinary & Gameday",
-    alias: "RFC"
-  }
+    alias: "RFC",
+  };
   useEffect(() => {
     if (prevColorMode.current === colorMode) return;
     prevColorMode.current = colorMode;
@@ -86,23 +113,47 @@ function RootLayoutNav() {
     }, 4000);
   }, [colorMode]);
   //** IMPLEMENTATION FOR THEMED LOADER SCREEN */
+
+  // TODO: Polish this screen
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", onAppStateChange);
+
+    return () => subscription.remove();
+  }, []);
   return (
-    <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
-      <GestureHandlerRootView className="flex-1">
-        <GluestackUIProvider mode={colorMode}>
-          {/** //* THEMED LOADER SCREEN */}
-          <ThemedLoaderScreen theme={colorMode} switching={isSwitchingApp} completed={isCompleted} account={mockAccount}>
-            <Stack>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="(application)"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="landing" options={{ headerShown: false }} />
-            </Stack>
-          </ThemedLoaderScreen>          
-        </GluestackUIProvider>
-      </GestureHandlerRootView>
-    </ColorModeContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
+        <GestureHandlerRootView className="flex-1">
+          <GluestackUIProvider mode={colorMode}>
+            <AuthProvider>
+              <AccountModalProvider>
+                {/** //* THEMED LOADER SCREEN */}
+                <ThemedLoaderScreen
+                  theme={colorMode}
+                  switching={isSwitchingApp}
+                  completed={isCompleted}
+                  account={mockAccount}
+                >
+                  <Stack>
+                    <Stack.Screen
+                      name="(auth)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(application)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="landing"
+                      options={{ headerShown: false }}
+                    />
+                  </Stack>
+                </ThemedLoaderScreen>
+              </AccountModalProvider>
+            </AuthProvider>
+          </GluestackUIProvider>
+        </GestureHandlerRootView>
+      </ColorModeContext.Provider>
+    </QueryClientProvider>
   );
 }

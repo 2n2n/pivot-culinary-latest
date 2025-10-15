@@ -18,13 +18,9 @@ const ThemeSwitchMap: Record<string, ModeType> = {
 
 function LandingPage() {
   const [selectedSegment, setSelectedSegment] = useState("pivot");
-  const [isEnabled, setIsEnabled] = useState(false);
-
   const { setColorMode } = useColorMode();
 
   const router = useRouter();
-
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
     <Box className="flex-1 bg-blue-900 relative">
@@ -81,7 +77,7 @@ function LandingPage() {
             <Button
               className="w-full rounded-full"
               onPress={() => {
-                router.replace("/(auth)");
+                router.replace("/(auth)/auth");
               }}
             >
               <ButtonText className="text-white font-semibold text-lg">
