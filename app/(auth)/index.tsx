@@ -28,9 +28,9 @@ function AuthLoginScreen() {
           headerShown: false,
         }}
       />
-      <Box className="flex-1 justify-center items-center px-6 bg-gameday-blue">
-        <GamedayLoadingIndicator size={100} />
-        {/* <VStack className="w-full max-w-sm gap-12">
+      <Box className="flex-1 justify-center items-center px-6 ">
+       
+        <VStack className="w-full max-w-sm gap-12">
           <VStack className="items-center gap-4">
             <Icon as={PivotIcon} className="h-14 w-14" />
             <Text size="md" className="font-bold text-center">
@@ -61,7 +61,7 @@ function AuthLoginScreen() {
               <ButtonText>Sign In</ButtonText>
             </Button>
           </VStack>
-        </VStack> */}
+        </VStack>
       </Box>
     </>
   );
