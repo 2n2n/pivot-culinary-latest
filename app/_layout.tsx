@@ -122,16 +122,6 @@ function RootLayoutNav() {
     }, 4000);
   }, [colorMode]);
 
-  useEffect(() => {
-    console.log(
-      "isCompleted",
-      isCompleted,
-      " isSwitchingApp",
-      isSwitchingApp,
-      "colorMode",
-      colorMode
-    );
-  }, [isCompleted, isSwitchingApp, colorMode]);
   //** IMPLEMENTATION FOR THEMED LOADER SCREEN */
 
   // TODO: Polish this screen
