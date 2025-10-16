@@ -81,7 +81,7 @@ function LandingPage() {
             <Button
               className="w-full rounded-full"
               onPress={() => {
-                router.replace("/(auth)");
+                router.replace("/(auth)/auth");
               }}
             >
               <ButtonText className="text-white font-semibold text-lg">

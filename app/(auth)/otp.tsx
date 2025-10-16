@@ -36,8 +36,7 @@ export default function AuthOTPScreen() {
 
   const handleVerifyOTP = () => {
     const otpString = otp.join("");
-    console.log("OTP verification attempted with:", otpString);
-    router.replace("/(application)/agenda");
+    router.replace("/agenda");
   };
 
   const isOtpComplete = otp.every((digit) => digit !== "");
