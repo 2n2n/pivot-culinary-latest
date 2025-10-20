@@ -1,30 +1,17 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { AuthContext } from "@/services/auth/AuthProvider";
-// Use TanStack Query to cache the getContactInfo function from contact.request.ts
-import { useQuery } from "@tanstack/react-query";
-import { getContactInfo } from "@/requests/contact.request";
+import { createContext, useEffect, useState } from "react";
+import useAccounts from "@/hooks/useAccounts";
+import { getAuth } from "@react-native-firebase/auth";
 
 export const AccountModalContext = createContext<{
   showModal: boolean;
   setShowModal: (isOpen: boolean) => void;
   selectedAccount: Account | null;
   setSelectedAccount: (account: Account | null) => void;
-  accounts: Account[];
-  setAccounts: (accounts: Account[]) => void;
 }>({
   showModal: false,
   setShowModal: () => {},
   selectedAccount: null,
   setSelectedAccount: (account: Account | null) => {},
-  accounts: [],
-  setAccounts: () => {},
 });
 
 export const AccountModalProvider = ({
@@ -32,44 +19,25 @@ export const AccountModalProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { user } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
+
+  // this will identify which account was selected all througout the app.
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
-  const [accounts, setAccounts] = useState<Account[]>([]);
 
-  // TODO: improve implementation using tanstack useQuery for caching the accounts.
-
-  // Call useQuery at the top level of  the component
-  const {
-    data: contactInfo,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["contactInfo", user?.phoneNumber],
-    queryFn: () =>
-      user?.phoneNumber ? getContactInfo(user.phoneNumber) : null,
-    // This means the query will only run if user?.phoneNumber is truthy (not null/undefined/empty string)
-    enabled: !!user?.phoneNumber,
-    staleTime: 1000 * 60 * 5, // cache for 5 minutes
-  });
+  // DOCS: Get the currently logged-in Firebase user (for account-related queries/context)
+  const user = getAuth().currentUser;
+  const { isLoading: userAccountsIsLoading } = useAccounts(user);
 
   useEffect(() => {
-    if (accounts.length > 0) {
-      setSelectedAccount(accounts[0]);
+    // when accounts are loaded, try to close the loading state.
+    if (!userAccountsIsLoading) {
+      // close the loading state
     }
-  }, [accounts]);
+  }, [userAccountsIsLoading]);
 
-  useEffect(() => {
-    if (contactInfo && contactInfo?.accounts) {
-      const { accounts }: { accounts: Account[] } = contactInfo;
-      setAccounts(accounts);
-    }
-  }, [contactInfo]);
   return (
     <AccountModalContext.Provider
       value={{
-        accounts,
-        setAccounts,
         showModal,
         setShowModal,
         selectedAccount,

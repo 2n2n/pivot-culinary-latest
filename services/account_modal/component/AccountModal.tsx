@@ -17,17 +17,38 @@ import { useModal } from "@/services/account_modal/hooks/useModal";
 import AccountModalItem from "./AccountModalItem";
 import { HStack } from "@/components/ui/hstack";
 import { router } from "expo-router";
+import { FirebaseAuthTypes, getAuth } from "@react-native-firebase/auth";
+import useAccounts from "@/hooks/useAccounts";
+import { useEffect, useState } from "react";
+import { getAccountLocation } from "@/helpers";
 
+const groupByAccount = (accounts: Account[]) => {
+  const pivotAccounts: Account[] = [];
+  const gamedayAccounts: Account[] = [];
+
+  accounts.forEach((_account: Account) => {
+    if (getAccountLocation(_account) === "PIVOT") {
+      pivotAccounts.push(_account);
+    } else {
+      gamedayAccounts.push(_account);
+    }
+  });
+
+  return [...pivotAccounts, ...gamedayAccounts];
+};
 const AccountModal = () => {
-  const {
-    show,
-    setShow,
-    accounts,
-    selectedAccount,
-    setSelectedAccount,
-    signOut,
-  } = useModal();
+  const [accounts, setAccounts] = useState<Account[]>([]);
 
+  const user = getAuth().currentUser;
+
+  const { show, setShow, selectedAccount, setSelectedAccount, signOut } =
+    useModal();
+
+  const { data: userAccounts } = useAccounts(user as FirebaseAuthTypes.User);
+
+  useEffect(() => {
+    setAccounts(groupByAccount(userAccounts) || []);
+  }, [userAccounts]);
   return (
     <Modal
       isOpen={show}
@@ -47,9 +68,9 @@ const AccountModal = () => {
         <ModalBody className="py-4">
           {accounts.map((account: Account) => (
             <AccountModalItem
-              key={account.account_id}
+              key={account.id}
               account={account}
-              isSelected={account.account_id === selectedAccount?.account_id}
+              isSelected={account.id === selectedAccount?.id}
               onPress={() => setSelectedAccount(account)}
             />
           ))}
@@ -76,10 +97,13 @@ const AccountModal = () => {
                 </Avatar>
                 <Box className="flex flex-col">
                   <Text className="text-lg font-bold text-black">
-                    Kali Mary
+                    {user?.displayName}
                   </Text>
-                  <Text className="text-sm text-black">kali@gmail.com</Text>
-                  <Text className="text-sm text-black">+63 965 913 0375</Text>
+                  {/* TODO: how to get the role of the user in this account? */}
+                  {/* <Text className="text-sm text-black">{selectedAccount.role}</Text> */}
+                  <Text className="text-sm text-black">
+                    {user?.phoneNumber}
+                  </Text>
                 </Box>
               </HStack>
               <Icon as={ChevronRight} className="text-gray-600" size={20} />

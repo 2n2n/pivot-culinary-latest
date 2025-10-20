@@ -13,7 +13,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
 import { AuthProvider } from "@/services/auth/AuthProvider";
 
