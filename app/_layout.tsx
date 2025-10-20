@@ -13,7 +13,6 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
-<<<<<<< HEAD
 import { AppState, Platform } from "react-native";
 import type { AppStateStatus } from "react-native";
 import {
@@ -25,8 +24,6 @@ import {
 import * as Network from "expo-network";
 import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
 import { AuthProvider } from "@/services/auth/AuthProvider";
-=======
->>>>>>> b07f567 (refactored loading screen)
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -88,11 +85,6 @@ export const useColorMode = () => {
   return context;
 };
 
-<<<<<<< HEAD
-=======
-export const MockAccountSwitch = () => {};
-
->>>>>>> b07f567 (refactored loading screen)
 const DEFAULT_COLOR_MODE = "light";
 
 function RootLayoutNav() {

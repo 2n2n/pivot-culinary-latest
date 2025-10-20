@@ -23,7 +23,7 @@ type EmailAddress = {
   id: number;
 };
 
-type Account = {
+type Contact = {
   account_id: number;
   custom_fields: CustomField[];
   show_financial: boolean;
@@ -35,16 +35,16 @@ type Account = {
   owned_by: number;
 };
 
-type UserObject = {
-  tokens: string[];
-  site_id: number;
-  last_name: string;
-  accounts: Account[];
+type ContactResponse = {
+  accounts?: Contact[];
   first_name: string;
+  last_name: string;
   main_phone_number: string;
+  site_id: number;
+  tokens: string[];
 };
 
-type AccountObject = {
+type Account = {
   id: number;
   name: string;
   description: string;
