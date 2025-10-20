@@ -19,36 +19,61 @@ import { HStack } from "@/components/ui/hstack";
 import { router } from "expo-router";
 import { FirebaseAuthTypes, getAuth } from "@react-native-firebase/auth";
 import useAccounts from "@/hooks/useAccounts";
-import { useEffect, useState } from "react";
-import { getAccountLocation } from "@/helpers";
+import { useContext, useEffect, useState } from "react";
+import { getAccountLocation, groupByAccount } from "@/helpers";
+import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
+import { ModeType } from "@/components/ui/gluestack-ui-provider";
+import { useColorMode } from "@/app/_layout";
 
-const groupByAccount = (accounts: Account[]) => {
-  const pivotAccounts: Account[] = [];
-  const gamedayAccounts: Account[] = [];
-
-  accounts.forEach((_account: Account) => {
-    if (getAccountLocation(_account) === "PIVOT") {
-      pivotAccounts.push(_account);
-    } else {
-      gamedayAccounts.push(_account);
-    }
-  });
-
-  return [...pivotAccounts, ...gamedayAccounts];
+const colorModeMap: Record<string, string> = {
+  light: "PIVOT",
+  dark: "GAME DAY",
 };
 const AccountModal = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const { colorMode, setIsSwitchingApp, setIsCompleted } = useContext(
+    ThemeLoaderScreenContext
+  );
+
+  const { setColorMode } = useColorMode();
 
   const user = getAuth().currentUser;
 
   const { show, setShow, selectedAccount, setSelectedAccount, signOut } =
     useModal();
 
-  const { data: userAccounts } = useAccounts(user as FirebaseAuthTypes.User);
+  const { data: userAccounts, isLoading: userAccountsIsLoading } = useAccounts(
+    user as FirebaseAuthTypes.User
+  );
+
+  const accountSwitchHandler = (account: Account) => {
+    const accountLocation = getAccountLocation(account);
+    if (colorModeMap[colorMode] !== accountLocation) {
+      setColorMode(accountLocation === "PIVOT" ? "light" : "dark");
+    }
+
+    setShow(false);
+    setIsSwitchingApp(true);
+    setIsCompleted(false);
+    setTimeout(() => {
+      setIsCompleted(true);
+    }, 2000);
+    setTimeout(() => {
+      setIsSwitchingApp(false);
+    }, 4000);
+
+    setSelectedAccount(account);
+  };
 
   useEffect(() => {
-    setAccounts(groupByAccount(userAccounts) || []);
-  }, [userAccounts]);
+    if (userAccountsIsLoading) {
+    }
+
+    if (Array.isArray(userAccounts)) {
+      setAccounts(groupByAccount(userAccounts) || []);
+    }
+  }, [userAccounts, userAccountsIsLoading]);
+
   return (
     <Modal
       isOpen={show}
@@ -71,7 +96,7 @@ const AccountModal = () => {
               key={account.id}
               account={account}
               isSelected={account.id === selectedAccount?.id}
-              onPress={() => setSelectedAccount(account)}
+              onPress={accountSwitchHandler}
             />
           ))}
         </ModalBody>
@@ -81,7 +106,7 @@ const AccountModal = () => {
             variant="link"
             className="flex flex-row items-center justify-between w-full mt-4"
             onPress={() => {
-              signOut().finally(() => router.replace("/(auth)/auth"));
+              signOut().finally(() => router.replace("/landing"));
             }}
           >
             <HStack className="flex-1 justify-between items-center">
@@ -106,7 +131,7 @@ const AccountModal = () => {
                   </Text>
                 </Box>
               </HStack>
-              <Icon as={ChevronRight} className="text-gray-600" size={20} />
+              <Icon as={ChevronRight} className="text-gray-600" size="md" />
             </HStack>
           </Button>
         </ModalFooter>

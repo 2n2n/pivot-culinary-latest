@@ -15,14 +15,14 @@ const AccountModalItem = ({
 }: {
   account: Account;
   isSelected: boolean;
-  onPress: (account_id: number) => void;
+  onPress: (account: Account) => void;
 }) => {
   return (
     <Button
       key={account.id}
-      className="w-full h-auto flex flex-row items-center justify-between py-2 my-1"
+      className="w-full h-auto flex flex-row items-center justify-between py-3 my-1"
       variant="link"
-      onPress={() => onPress(account.id)}
+      onPress={() => onPress(account)}
     >
       <HStack className="gap-2 flex flex-row items-center">
         <Avatar
@@ -38,17 +38,19 @@ const AccountModalItem = ({
         </Avatar>
         <Box className="flex flex-col flex-1">
           <Text
-            className="text-lg font-bold break-words whitespace-pre-line flex-shrink flex-wrap"
+            className="text-sm font-bold break-words whitespace-pre-line flex-shrink flex-wrap"
             numberOfLines={2}
           >
             {account?.name}
           </Text>
           <Text className="text-sm text-gray-500">
-            {getAccountLocation(account)}
+            {getAccountLocation(account) === "PIVOT"
+              ? "Pivot Culinary"
+              : "Game day"}
           </Text>
         </Box>
         {isSelected && (
-          <Icon as={Check} className="text-orange-500" size={20} />
+          <Icon as={Check} className="text-orange-500" size="md" />
         )}
       </HStack>
     </Button>
