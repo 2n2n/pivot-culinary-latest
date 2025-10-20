@@ -6,3 +6,18 @@ export const getAccountLocation = (account: Account) => {
     )?.value || "PIVOT"
   ).trim();
 };
+
+export const groupByAccount = (accounts: Account[]) => {
+  const pivotAccounts: Account[] = [];
+  const gamedayAccounts: Account[] = [];
+
+  accounts.forEach((_account: Account) => {
+    if (getAccountLocation(_account) === "PIVOT") {
+      pivotAccounts.push(_account);
+    } else {
+      gamedayAccounts.push(_account);
+    }
+  });
+
+  return [...pivotAccounts, ...gamedayAccounts];
+};

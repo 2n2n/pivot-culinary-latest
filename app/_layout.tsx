@@ -4,7 +4,6 @@ import {
   GluestackUIProvider,
   ModeType,
 } from "@/components/ui/gluestack-ui-provider";
-import ThemedLoaderScreen from "@/components/LoadingIndicator/ThemedLoadingScreen";
 
 import { useEffect, useState, createContext, useContext, useRef } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -24,6 +23,7 @@ import {
 import * as Network from "expo-network";
 import { AccountModalProvider } from "@/services/account_modal/AccountModalProvider";
 import { AuthProvider } from "@/services/auth/AuthProvider";
+import ThemeLoaderScreenProvider from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -85,43 +85,16 @@ export const useColorMode = () => {
   return context;
 };
 
-const DEFAULT_COLOR_MODE = "light";
+export const DEFAULT_COLOR_MODE = "light";
 
 function RootLayoutNav() {
   const [colorMode, setColorMode] = useState<ModeType>(DEFAULT_COLOR_MODE);
-  //** IMPLEMENTATION FOR THEMED LOADER SCREEN */
-  // TODO: Match implementation to actual acc and theme switching logic
-  const prevColorMode = useRef<ModeType>(DEFAULT_COLOR_MODE); // Placeholder ref for preventing unnecessary re-renders on colorMode
-  const [isSwitchingApp, setIsSwitchingApp] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
-  const mockAccount = {
-    name: "Raccoons FC",
-    avatar:
-      "https://plus.unsplash.com/premium_photo-1723600867732-a925c995c888?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHNxdWFyZSUyMHBvcnRyYWl0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=900",
-    theme: "Pivot Culinary & Gameday",
-    alias: "RFC",
-  };
-  useEffect(() => {
-    if (prevColorMode.current === colorMode) return;
-    prevColorMode.current = colorMode;
-    setIsCompleted(false); // Triggers Fade out of the themed loader screen
-    setIsSwitchingApp(true); // Triggers Fade in of the themed loader screen
-    setTimeout(() => {
-      setIsCompleted(true); // Triggers display of the current theme
-    }, 2000);
-    setTimeout(() => {
-      setIsSwitchingApp(false);
-    }, 4000);
-  }, [colorMode]);
-
-  //** IMPLEMENTATION FOR THEMED LOADER SCREEN */
-
-  // TODO: Polish this screen
   useEffect(() => {
     const subscription = AppState.addEventListener("change", onAppStateChange);
 
     return () => subscription.remove();
   }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ColorModeContext.Provider value={{ colorMode, setColorMode }}>
@@ -130,13 +103,12 @@ function RootLayoutNav() {
             <AuthProvider>
               <AccountModalProvider>
                 {/** //* THEMED LOADER SCREEN */}
-                <ThemedLoaderScreen
-                  theme={colorMode}
-                  switching={isSwitchingApp}
-                  completed={isCompleted}
-                  account={mockAccount}
-                >
+                <ThemeLoaderScreenProvider colorMode={colorMode}>
                   <Stack>
+                    <Stack.Screen
+                      name="landing"
+                      options={{ headerShown: false }}
+                    />
                     <Stack.Screen
                       name="(auth)"
                       options={{ headerShown: false }}
@@ -145,12 +117,8 @@ function RootLayoutNav() {
                       name="(application)"
                       options={{ headerShown: false }}
                     />
-                    <Stack.Screen
-                      name="landing"
-                      options={{ headerShown: false }}
-                    />
                   </Stack>
-                </ThemedLoaderScreen>
+                </ThemeLoaderScreenProvider>
               </AccountModalProvider>
             </AuthProvider>
           </GluestackUIProvider>

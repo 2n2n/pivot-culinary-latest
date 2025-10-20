@@ -1,7 +1,7 @@
 import type { ModeType } from "@/components/ui/gluestack-ui-provider";
-import LoadingIndicatorOverlayContainer from "@/components/LoadingIndicator/LoadingIndicatorOverlayContainer";
-import PivotCulinaryLoadingIndicator from "@/components/LoadingIndicator/PivotCulinaryLoadingIndicator.";
-import GamedayLoadingIndicator from "@/components/LoadingIndicator/GamedayLoadingIndicator";
+import LoadingIndicatorOverlayContainer from "./LoadingIndicatorOverlayContainer";
+import PivotCulinaryLoadingIndicator from "./PivotCulinaryLoadingIndicator";
+import GamedayLoadingIndicator from "./GamedayLoadingIndicator";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
@@ -22,6 +22,7 @@ const LOADING_INDICATOR_SIZE = 64;
 cssInterop(Image, { className: "style" });
 
 const getOtherTheme = (theme: ModeType) => {
+  console.log("🚀 ~ getOtherTheme ~ theme:", theme);
   return theme === "light" ? "dark" : "light";
 };
 
