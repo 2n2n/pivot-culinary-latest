@@ -27,6 +27,7 @@ const getOtherTheme = (theme: ModeType) => {
 };
 
 export default function ThemedLoaderScreen(props: ThemedLoaderScreenProps) {
+  console.log(props.completed);
   return (
     <>
       {props.children}

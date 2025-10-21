@@ -1,4 +1,3 @@
-import { getContactInfo } from "@/requests/contact.request";
 import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
 import { useRouter, useSegments } from "expo-router";
 import { createContext, useEffect } from "react";
@@ -42,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         if (!isGuest(pathSegments || [])) {
           // Redirect unauthenticated users to auth screen if not on guest routes
-          router.replace("/(auth)/auth");
+          router.replace("/landing");
         }
       }
     });

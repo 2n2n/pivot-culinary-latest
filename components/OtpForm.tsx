@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Icon } from "@/components/ui/icon";
 import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { VStack } from "@/components/ui/vstack";
+import AppAdaptiveLogo from "./shared/AppAdaptiveLogo";
 
 interface AuthOTPFormProps {
   onSubmitHandler: (otp: string) => void;
@@ -60,18 +61,21 @@ export default function AuthOTPForm({
 
       {/* Main Content */}
       <Box className="flex-1 justify-center items-center px-6">
-        <VStack className="w-full max-w-sm gap-6 items-center">
-          <Icon as={PivotIcon} className="h-14 w-14" />
+        <VStack className="w-full max-w-sm gap-8 items-center">
+          <VStack className="items-center gap-4">
+            <AppAdaptiveLogo size="lg" />
+            <VStack className="items-center gap-2">
+              <Text bold className="text-typography-900">
+                Verify Phone
+              </Text>
 
-          <Text bold className="text-typography-900">
-            Verify Phone
-          </Text>
+              <Text size="md" className="text-typography-600 text-center">
+                Enter the 6-digit code sent to {phoneNumber}
+              </Text>
+            </VStack>
+          </VStack>
 
-          <Text size="md" className="text-typography-600 text-center">
-            Enter the 6-digit code sent to {phoneNumber}
-          </Text>
-
-          <Box className="w-full flex-row justify-between mb-8">
+          <Box className="w-full flex-row justify-between">
             {otp.map((digit, index) => (
               <Input
                 key={index}
