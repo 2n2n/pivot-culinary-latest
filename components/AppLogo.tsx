@@ -5,20 +5,23 @@ import type { ModeType } from "@/components/ui/gluestack-ui-provider";
 const GAMEDAY_PRIMARY = require("@/assets/images/primaries/gameday-primary.png");
 const PIVOT_PRIMARY = require("@/assets/images/primaries/pivot-primary.png");
 
-// The main issue: TypeScript's type signature for forwardRef is incorrect here.
-// Instead of `forwardRef<Image, Props>`, you should use `forwardRef<Props, RefType>(...)`
-// (or use generics as `forwardRef<Props, RefType>` if using the latest versions),
-// but in practice, you should use `forwardRef((props, ref: React.Ref<Image>) => ...`
-// *and* annotate the props separately, not as a generic in forwardRef.
-// See: https://react.dev/reference/react/forwardRef#usage-with-typescript
-
 type AppLogoProps = {
   theme: ModeType;
   className?: string;
 };
 
-const AppLogo = forwardRef<Image, AppLogoProps>((props, ref) => {
-  // <-- wrong usage (this is not how forwardRef is typed)
+/**
+ * AppLogo - Displays the application's primary logo depending on theme.
+ *
+ * @param props.theme - Current color mode ('light'|'dark')
+ * @param props.className - Additional Tailwind/Nativewind className string for styling
+ * @param ref - Forwarded ref to the underlying Image component
+ */
+// DOCS: Add JSDoc comments for this function explaining parameters and return value
+const AppLogo = forwardRef(function AppLogo(
+  props: AppLogoProps,
+  ref: React.Ref<Image>
+) {
   return (
     <Image
       ref={ref}
@@ -31,17 +34,3 @@ const AppLogo = forwardRef<Image, AppLogoProps>((props, ref) => {
 });
 
 export default AppLogo;
-
-// The correct version would look like this:
-//
-// const AppLogo = forwardRef<Image, AppLogoProps>( // WRONG typing!
-//   (props, ref) => ( ... )
-// );
-//
-// Should be:
-// const AppLogo = forwardRef(
-//   (props: AppLogoProps, ref: React.Ref<Image>) => ( ... )
-// );
-//
-// Or, if you want to type the component:
-// const AppLogo = forwardRef<Image, AppLogoProps>(...) as ForwardRefExoticComponent<AppLogoProps & RefAttributes<Image>>;

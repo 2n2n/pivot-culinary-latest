@@ -1,15 +1,24 @@
 import React, { useState, useRef } from "react";
-import { Input, InputField } from "../../components/ui/input";
-import { Button, ButtonText } from "../../components/ui/button";
-import { Box } from "../../components/ui/box";
-import { Text } from "../../components/ui/text";
+import { Input, InputField } from "@/components/ui/input";
+import { Button, ButtonText } from "@/components/ui/button";
+import { Box } from "@/components/ui/box";
+import { Text } from "@/components/ui/text";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Icon } from "@/components/ui/icon";
 import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { VStack } from "@/components/ui/vstack";
+import AppAdaptiveLogo from "./shared/AppAdaptiveLogo";
 
-export default function AuthOTPScreen() {
+interface AuthOTPFormProps {
+  onSubmitHandler: (otp: string) => void;
+  onResendHandler: () => void;
+}
+
+export default function AuthOTPForm({
+  onSubmitHandler,
+  onResendHandler,
+}: AuthOTPFormProps) {
   const { phoneNumber } = useLocalSearchParams();
 
   const router = useRouter();
@@ -34,16 +43,10 @@ export default function AuthOTPScreen() {
     }
   };
 
-  const handleVerifyOTP = () => {
-    const otpString = otp.join("");
-    router.replace("/agenda");
-  };
-
   const isOtpComplete = otp.every((digit) => digit !== "");
 
   return (
     <Box className="flex-1">
-      {/* Back Button */}
       <Box className="absolute top-12 left-6 z-10">
         <Button
           size="sm"
@@ -58,18 +61,21 @@ export default function AuthOTPScreen() {
 
       {/* Main Content */}
       <Box className="flex-1 justify-center items-center px-6">
-        <VStack className="w-full max-w-sm gap-6 items-center">
-          <Icon as={PivotIcon} className="h-14 w-14" />
+        <VStack className="w-full max-w-sm gap-8 items-center">
+          <VStack className="items-center gap-4">
+            <AppAdaptiveLogo size="lg" />
+            <VStack className="items-center gap-2">
+              <Text bold className="text-typography-900">
+                Verify Phone
+              </Text>
 
-          <Text bold className="text-typography-900">
-            Verify Phone
-          </Text>
+              <Text size="md" className="text-typography-600 text-center">
+                Enter the 6-digit code sent to {phoneNumber}
+              </Text>
+            </VStack>
+          </VStack>
 
-          <Text size="md" className="text-typography-600 text-center">
-            Enter the 6-digit code sent to {phoneNumber}
-          </Text>
-
-          <Box className="w-full flex-row justify-between mb-8">
+          <Box className="w-full flex-row justify-between">
             {otp.map((digit, index) => (
               <Input
                 key={index}
@@ -98,7 +104,7 @@ export default function AuthOTPScreen() {
             size="lg"
             variant="solid"
             action="primary"
-            onPress={handleVerifyOTP}
+            onPress={() => onSubmitHandler(otp.join(""))}
             className="w-full rounded-full"
             isDisabled={!isOtpComplete}
           >
@@ -113,7 +119,7 @@ export default function AuthOTPScreen() {
               size="sm"
               variant="link"
               action="primary"
-              onPress={() => console.log("Resend OTP")}
+              onPress={onResendHandler}
             >
               <ButtonText>Resend</ButtonText>
             </Button>
