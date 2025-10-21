@@ -7,6 +7,7 @@ import { Check } from "lucide-react-native";
 import { HStack } from "@/components/ui/hstack";
 
 import { getAccountLocation } from "@/helpers";
+import { useColorScheme } from "nativewind/dist/stylesheet";
 
 const AccountModalItem = ({
   account,
@@ -17,6 +18,9 @@ const AccountModalItem = ({
   isSelected: boolean;
   onPress: (account: Account) => void;
 }) => {
+  // DOCS: Get the current theme mode (light or dark) via React Native context
+  // NOTE: The recommended approach in Expo/React Native is to use the useColorScheme hook from 'react-native'
+  const theme = useColorScheme().colorScheme; // 'light' | 'dark' | null
   return (
     <Button
       key={account.id}
@@ -28,8 +32,8 @@ const AccountModalItem = ({
         <Avatar
           className={`w-12 h-12 mr-3 bg-green-800 ${
             getAccountLocation(account) === "PIVOT"
-              ? "bg-primary-500"
-              : "bg-green-800"
+              ? "bg-tertiary-500"
+              : "bg-success-200"
           }`}
         >
           <AvatarFallbackText>
@@ -50,7 +54,13 @@ const AccountModalItem = ({
           </Text>
         </Box>
         {isSelected && (
-          <Icon as={Check} className="text-orange-500" size="md" />
+          <Icon
+            as={Check}
+            className={
+              theme === "light" ? "text-tertiary-500" : "text-success-200"
+            }
+            size="md"
+          />
         )}
       </HStack>
     </Button>
