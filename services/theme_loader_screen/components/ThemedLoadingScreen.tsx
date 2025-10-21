@@ -10,24 +10,15 @@ import Animated, { FadeIn, FadeOut, FadeOutUp } from "react-native-reanimated";
 import { StyleSheet } from "react-native";
 import { cssInterop } from "nativewind";
 import { Image } from "expo-image";
-import {
-  Avatar,
-  AvatarFallbackText,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
 import AppLogo from "@/components/AppLogo";
+import { getAccountLocation, getOtherTheme } from "@/helpers";
 
 const LOADING_INDICATOR_SIZE = 64;
 
 cssInterop(Image, { className: "style" });
 
-const getOtherTheme = (theme: ModeType) => {
-  console.log("🚀 ~ getOtherTheme ~ theme:", theme);
-  return theme === "light" ? "dark" : "light";
-};
-
 export default function ThemedLoaderScreen(props: ThemedLoaderScreenProps) {
-  console.log(props.completed);
   return (
     <>
       {props.children}
@@ -59,9 +50,9 @@ export default function ThemedLoaderScreen(props: ThemedLoaderScreenProps) {
                 <Text className="text-white">Switching to...</Text>
                 <HStack className="gap-3 py-3 px-4 bg-white rounded-xl items-center">
                   <Avatar size="lg">
-                    <AvatarImage source={{ uri: props.account.avatar }} />
+                    {/* <AvatarImage source={{ uri: props.account.avatar }} /> */}
                     <AvatarFallbackText>
-                      {props.account.alias}
+                      {(props.account.name || "").replace("-", "")}
                     </AvatarFallbackText>
                   </Avatar>
                   <VStack className="gap-1">
@@ -69,7 +60,9 @@ export default function ThemedLoaderScreen(props: ThemedLoaderScreenProps) {
                       {props.account.name}
                     </Text>
                     <Text className="text-black text-sm">
-                      {props.account.theme}
+                      {getAccountLocation(props.account) === "PIVOT"
+                        ? "Pivot Culinary"
+                        : "Game Day"}
                     </Text>
                   </VStack>
                 </HStack>
@@ -96,12 +89,7 @@ export default function ThemedLoaderScreen(props: ThemedLoaderScreenProps) {
 
 type ThemedLoaderScreenProps = React.PropsWithChildren<{
   theme: ModeType;
-  account?: {
-    name: string;
-    avatar: string;
-    theme: string;
-    alias: string;
-  };
+  account?: Account;
   switching: boolean;
   completed: boolean;
 }>;

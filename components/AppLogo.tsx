@@ -28,7 +28,7 @@ const AppLogo = forwardRef(function AppLogo(
       source={props.theme === "light" ? PIVOT_PRIMARY : GAMEDAY_PRIMARY}
       contentFit="contain"
       alt="Application Primary"
-      className={props.className}
+      className="w-[80%] h-[200px]"
     />
   );
 });

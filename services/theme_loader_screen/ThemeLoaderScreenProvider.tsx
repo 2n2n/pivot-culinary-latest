@@ -2,14 +2,7 @@ import { ModeType } from "@/components/ui/gluestack-ui-provider";
 import { createContext, useState } from "react";
 import ThemedLoaderScreen from "./components/ThemedLoadingScreen";
 import { DEFAULT_COLOR_MODE } from "@/app/_layout";
-
-const mockAccount = {
-  name: "Raccoons FC",
-  avatar:
-    "https://plus.unsplash.com/premium_photo-1723600867732-a925c995c888?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHNxdWFyZSUyMHBvcnRyYWl0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=900",
-  theme: "Pivot Culinary & Gameday",
-  alias: "RFC",
-};
+import { useModal } from "../account_modal/hooks/useModal";
 
 export const ThemeLoaderScreenContext = createContext<{
   colorMode: ModeType;
@@ -35,6 +28,7 @@ const ThemeLoaderScreenProvider = ({
   const [isSwitchingApp, setIsSwitchingApp] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
 
+  const { selectedAccount } = useModal();
   return (
     <ThemeLoaderScreenContext.Provider
       value={{
@@ -49,7 +43,7 @@ const ThemeLoaderScreenProvider = ({
         theme={colorMode}
         switching={isSwitchingApp}
         completed={isCompleted}
-        account={mockAccount}
+        account={selectedAccount as Account}
       >
         {children}
       </ThemedLoaderScreen>

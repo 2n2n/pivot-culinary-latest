@@ -36,7 +36,7 @@ const defaultTheme = {
   "--color-tertiary-200": "254 209 170",
   "--color-tertiary-300": "253 180 116",
   "--color-tertiary-400": "251 157 75",
-  "--color-tertiary-500": "231 129 40",
+  "--color-tertiary-500": "244 124 32",
   "--color-tertiary-600": "215 117 31",
   "--color-tertiary-700": "180 98 26",
   "--color-tertiary-800": "130 73 23",
@@ -154,10 +154,11 @@ const defaultTheme = {
   "--color-indicator-error": "185 28 28",
 };
 export const config = {
-  light: vars({ ...defaultTheme }),
+  light: vars({ ...defaultTheme, "--color-success-200": "0 157 81" }),
   dark: vars({
     ...defaultTheme,
     "--color-primary-500": "0 157 81",
     "--color-primary-700": "0 122 61",
+    "--color-success-200": "0 157 81",
   }),
 };

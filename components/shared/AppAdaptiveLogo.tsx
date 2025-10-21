@@ -77,7 +77,6 @@ const AppAdaptiveLogo = forwardRef(function AppAdaptiveLogo(
     className,
   });
 
-  console.log(computedClassName, props.size);
   return (
     <Image
       ref={ref}
