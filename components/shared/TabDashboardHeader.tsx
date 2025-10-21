@@ -9,6 +9,7 @@ import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
 import AccountModal from "@/services/account_modal/component/AccountModal";
 import { useModal } from "@/services/account_modal/hooks/useModal";
+import AppAdaptiveLogo from "./AppAdaptiveLogo";
 
 const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
   const { setShow, selectedAccount } = useModal();
@@ -20,13 +21,9 @@ const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
           title: "",
           headerShown: true,
           headerShadowVisible: false,
-          headerLeft: () => (
-            <Text className="ml-5">
-              <Icon as={PivotIcon} className="w-8 h-8" color="#F9832B" />
-            </Text>
-          ),
+          headerLeft: () => <AppAdaptiveLogo className="ml-4" size="xs" />,
           headerRight: () => (
-            <Box className="flex flex-row mr-5">
+            <Box className="flex flex-row mr-4">
               <Button
                 variant="link"
                 onPress={() => {

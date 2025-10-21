@@ -10,6 +10,7 @@ import { VStack } from "@/components/ui/vstack";
 import useAuth from "@/services/auth/hooks/useAuth";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import AuthOTPForm from "@/components/OtpForm";
+import AppAdaptiveLogo from "@/components/shared/AppAdaptiveLogo";
 
 /**
  * AUTHENTICATION FLOW OVERVIEW
@@ -116,9 +117,9 @@ function AuthLoginScreen() {
           }}
         />
         <Box className="flex-1 justify-center items-center px-6">
-          <VStack className="w-full max-w-sm gap-12">
+          <VStack className="w-full max-w-sm gap-8">
             <VStack className="items-center gap-4">
-              <Icon as={PivotIcon} className="h-14 w-14" />
+              <AppAdaptiveLogo size="lg" />
               <Text size="md" className="font-bold text-center">
                 Login to your account
               </Text>
