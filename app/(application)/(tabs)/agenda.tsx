@@ -1,38 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import TabDashboardHeader from "@/components/shared/TabDashboardHeader";
 import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
-import Agenda from "@/components/Agenda";
+import Agenda from "@/components/Agenda/Agenda";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 
+const mockData = [
+  { date: new Date("2025-10-18"), items: [-3, -2, -1] },
+  { date: new Date("2025-10-21"), items: [0, 1, 2] },
+  { date: new Date("2025-10-22"), items: [1, 2, 3] },
+  { date: new Date("2025-10-24"), items: [4, 5, 6] },
+  { date: new Date("2025-10-25"), items: [7, 8, 9] },
+  { date: new Date("2025-10-28"), items: [16, 17, 18] },
+  { date: new Date("2025-10-29"), items: [19, 20, 21] },
+  { date: new Date("2025-10-30"), items: [25, 26, 27] },
+]
+
 export default function ApplicationAgendaScreen() {
+  const [items, setItems] = useState(mockData);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoadingMoreItems, setIsLoadingMoreItems] = useState(false);
+  const [hasOutdatedItems, setHasOutdatedItems] = useState(false);
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    console.log("refreshing")
+    // TODO: implement refresh logic
+    setTimeout(() => {
+      setIsRefreshing(false);
+      setHasOutdatedItems(false);
+    }, 2500);
+  }
+  const handleLoadMore = () => {
+    setIsLoadingMoreItems(true);
+    setTimeout(() => {
+      // TODO: implement infinite query for loading more items
+      setItems([...mockData, { date: new Date("2025-11-07"), items: [28, 29, 30] }])
+      setIsLoadingMoreItems(false);
+    }, 2500);
+  }
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      // TODO: implement fetching and loading of data
+      setIsLoading(false);
+    }, 2500);
+    return () => clearTimeout(timeout);
+  }, []);
+  useEffect(() => {
+    if (hasOutdatedItems) return;
+    // TODO: Change with implementation for listening outdated or stale data
+    const timeout = setTimeout(() => setHasOutdatedItems(true), 60000);
+    return () => clearTimeout(timeout);
+  }, [hasOutdatedItems])
   return (
     <TabSafeAreaView >
       <TabDashboardHeader title="Calendar of Activities" />
       <Agenda 
-        items={[
-          { date: new Date("2025-10-14"), items: [-3, -2, -1] },
-          { date: new Date("2025-10-15"), items: [0, 1, 2] },
-          { date: new Date("2025-10-16"), items: [1, 2, 3] },
-          { date: new Date("2025-10-17"), items: [4, 5, 6] },
-          { date: new Date("2025-10-18"), items: [7, 8, 9] },
-          { date: new Date("2025-10-21"), items: [16, 17, 18] },
-          { date: new Date("2025-10-22"), items: [19, 20, 21] },
-          { date: new Date("2025-10-24"), items: [25, 26, 27] },
-        ]}
-        dateRangeStart={new Date("2025-10-15")}
-        dateRangeEnd={new Date("2025-11-22")}
-        // TODO: loading and refresh state
-        isLoading={true} 
-        isRefreshing={false}
-        onRefresh={() => {}}
-        options={
-          {
-            displayedStartingWeekDay: "monday", // dictates where the week should start from
-          }
-        }
-        renderItem={(item, date, index) => <VStack className="bg-white rounded-lg p-2 w-full h-[100px] justify-center items-center" key={`${date}-${index}`}>
+        items={items}
+        dateRangeStart={new Date("2025-10-16")}
+        initialDateRangeEnd={new Date("2025-11-05")}
+        // initialSelectedDate={new Date("2025-10-20")}
+        isLoading={isLoading} // initial loading, displays ui skeleton
+        isRefreshing={isRefreshing}
+        onRefresh={handleRefresh}
+        isLoadingMoreItems={isLoadingMoreItems}
+        onLoadMoreItems={handleLoadMore}
+        options={{
+          displayedStartingWeekDay: "monday", // dictates where the week should start from
+        }}
+        renderItem={item => <VStack 
+          className="bg-white rounded-lg p-2 w-full h-[100px] justify-center items-center"
+        >
           <Text>Item #</Text>
           <Text>{item}</Text>
         </VStack>}
