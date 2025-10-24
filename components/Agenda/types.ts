@@ -11,8 +11,6 @@ export type AgendaOptions = {
 export type AgendaStyles = {
     /** The spacing between the item group section */
     paddingHorizontal: "sm" | "md" | "lg" | number,
-    /** The color of the agenda items */
-    color: string,
     /** The spacing between the agenda items */
     itemsSpacing: "sm" | "md" | "lg",
     /** The spacing between the agenda item groups */

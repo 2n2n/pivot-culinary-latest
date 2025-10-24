@@ -15,7 +15,6 @@ export const AgendaComponentContext = createContext<AgendaComponentContextType>(
         averageGestureIntervalMs: 350,
     },
     styles: {
-        color: "primary",
         itemsSpacing: "sm",
         itemGroupSpacing: "sm",
         dateSelectionSpacing: "sm",

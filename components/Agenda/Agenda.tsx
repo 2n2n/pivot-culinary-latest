@@ -79,7 +79,6 @@ export default function Agenda<T extends any>(
         }, options),
         styles: Object.assign({
             paddingHorizontal: "md",
-            color: "primary",
             itemsSpacing: "md",
             itemGroupSpacing: "md",
             dateSelectionSpacing: "even",
