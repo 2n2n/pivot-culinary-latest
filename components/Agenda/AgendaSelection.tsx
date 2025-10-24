@@ -12,8 +12,8 @@ import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 
 import { addDays, addWeeks, differenceInWeeks, endOfWeek, format, isAfter, isBefore, isSameDay, isSameMonth, isSameWeek, startOfMonth, startOfWeek, subDays } from "date-fns";
-import Animated, { FadeInUp, FadeOutUp, LinearTransition, SharedTransition } from "react-native-reanimated";
-import { use, useEffect, useMemo, useRef, useState } from "react";
+import Animated, { FadeInUp, FadeOutUp, LinearTransition } from "react-native-reanimated";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { LegendList as FlatList } from "@legendapp/list";
 import { Dimensions, Pressable } from "react-native";
 import { twMerge } from "tailwind-merge";
@@ -42,7 +42,7 @@ const CONSTANTS_WEEKDAYS_MAP: Record<WeekDayString, Day> = {
 // TODO: skeleton ui
 
 export default function AgendaDateSelection() {
-    const { selectedDate, setSelectedDate, dateRangeStart, dateRangeEnd, agendaOptions } = use(AgendaComponentContext);
+    const { selectedDate, setSelectedDate, dateRangeStart, dateRangeEnd, agendaOptions } = useContext(AgendaComponentContext);
     const [activeWeek, setActiveWeek] = useState<Date>(new Date());
     const agendaSelectionFlatListRef = useRef<LegendListRef>(null);
     const agendaSelectionHasBeenDraggedRef = useRef(false);
@@ -123,15 +123,63 @@ export default function AgendaDateSelection() {
     </VStack>
 }
 
+const agendaMonthIndicatorStyles = tva({
+    base: "flex-row justify-between items-center px-4",
+    variants: {
+        padding: {
+            sm: 'px-2',
+            md: 'px-4',
+            lg: 'px-6'
+        }
+    },
+});
+
+const agendaMonthIndicatorTextStyles = tva({
+    base: "uppercase text-gray-400 text-xs",
+    variants: {
+        fontCase: {
+            uppercase: "uppercase",
+            lowercase: "lowercase",
+            capitalize: "capitalize",
+        },
+        fontWeight: {
+            light: "font-light",
+            normal: "font-normal",
+            bold: "font-bold",
+            extrablack: "font-extrablack",
+        },
+        size: {
+            xs: "text-xs",
+            sm: "text-xs",
+            md: "text-xs",
+            lg: "text-sm",
+            xl: "text-base",
+            "2xl": "text-lg",
+            "3xl": "text-xl",
+            "4xl": "text-2xl",
+        }
+    },
+});
+
 const AgendaMonthIndicator = ({ activeWeek }: AgendaMonthIndicatorProps) => {
+    const { styles } = useContext(AgendaComponentContext);
     const activeMonths = useMemo<[string, string | null]>(() => {
         const activeMonth = format(activeWeek, CONSTANT_MONTH_STRING_FORMAT);
         const endOfActiveWeek = endOfWeek(activeWeek);
         if (isSameMonth(activeWeek, endOfActiveWeek)) return [activeMonth, null];
         else return [activeMonth, format(endOfActiveWeek, CONSTANT_MONTH_STRING_FORMAT)];
     }, [activeWeek]);
-    return <VStack className="flex-row justify-between items-center px-4">
-        {activeMonths.map((month) => <Animated.Text key={month} layout={LinearTransition} entering={FadeInUp} exiting={FadeOutUp} className="uppercase text-gray-400 text-xs">{month}</Animated.Text>)}
+    return <VStack className={agendaMonthIndicatorStyles({ padding: styles.paddingHorizontal })}>
+        {activeMonths.map((month) => <Animated.Text 
+                key={month} 
+                layout={LinearTransition} 
+                entering={FadeInUp} 
+                exiting={FadeOutUp} 
+                className={agendaMonthIndicatorTextStyles({ size: styles.selectionDateFontSize })}
+            >
+                {month}
+            </Animated.Text>
+        )}
     </VStack>
 };
 
@@ -150,30 +198,41 @@ const AgendaWeekItem = ({ date }: AgendaWeekItemProps) => {
 
 cssInterop(Animated.View, { className: 'style' });
 
-const AgendaWeekDayItem = ({ date }: AgendaWeekDayItemProps) => {
-    const { selectedDate, setSelectedDate, dateRangeStart, dateRangeEnd, dateSetWithAgendaItems } = use(AgendaComponentContext);
-    const isBeyondDateRange = isBefore(date, subDays(dateRangeStart, 1)) || isAfter(date, dateRangeEnd);
-    const containsItems = dateSetWithAgendaItems.has(getDateIdentity(date));
-    const isSelected = isSameDay(date, selectedDate);
-    const isCurrentDay = isSameDay(date, new Date());
-    const isFirstDayOfMonth = isSameDay(date, startOfMonth(date));
-    const handleDaySelection = () => {
-        if (!isBeyondDateRange) setSelectedDate(date);
-    }
-    return <Pressable onPress={handleDaySelection}>
-        <VStack className={twMerge("flex-col items-center justify-center gap-1 my-2", isFirstDayOfMonth && "pl-2 border-l border-gray-300")}>
-            <Text className="text-xs text-gray-400 uppercase w-full text-center">
-                {format(date, "EEE")}
-            </Text>
-            <VStack className={agendaWeekDayItemButtonStyle({ isCurrentDay, selected: isSelected })}>
-                <Text className={agendaWeekDayItemTextStyle({ selected: isSelected, disabled: isBeyondDateRange})}>
-                    {format(date, "dd")}
-                </Text>
-                <Box className={agendaWeekDayItemDotStyle({ selected: isSelected, active: containsItems })}></Box>
-            </VStack>
-        </VStack>
-    </Pressable>
-};
+const agendaWeekDayItemContainerStyles = tva({
+    base: "flex-col items-center justify-center gap-1 my-2",
+    variants: {
+        isFirstDayOfMonth: {
+            true: "pl-2 border-l border-gray-300",
+        },
+    },
+});
+
+const agendaWeekDayItemTextStyles = tva({
+    base: "text-xs text-gray-400 uppercase w-full text-center",
+    variants: {
+        fontCase: {
+            uppercase: "uppercase",
+            lowercase: "lowercase",
+            capitalize: "capitalize",
+        },
+        fontWeight: {
+            light: "font-light",
+            normal: "font-normal",
+            bold: "font-bold",
+            extrablack: "font-extrablack",
+        },
+        size: {
+            xs: "text-xs",
+            sm: "text-xs",
+            md: "text-xs",
+            lg: "text-sm",
+            xl: "text-base",
+            "2xl": "text-lg",
+            "3xl": "text-xl",
+            "4xl": "text-2xl",
+        }
+    },
+});
 
 const agendaWeekDayItemButtonStyle = tva({
     base: "relative aspect-square items-center justify-center rounded-full border",
@@ -189,7 +248,7 @@ const agendaWeekDayItemButtonStyle = tva({
     },
 });
 
-const agendaWeekDayItemTextStyle = tva({
+const agendaWeekDayItemDigitStyles = tva({
     base: "font-medium text-center mt-2 mb-3",
     variants: {
         selected: {
@@ -198,11 +257,27 @@ const agendaWeekDayItemTextStyle = tva({
         disabled: {
             true: "text-gray-400",
         },
+        fontWeight: {
+            light: "font-light",
+            normal: "font-medium",
+            bold: "font-bold",
+            extrablack: "font-extrablack",
+        },
+        size: {
+            xs: "text-sm",
+            sm: "text-md",
+            md: "text-base",
+            lg: "text-lg",
+            xl: "text-xl",
+            "2xl": "text-2xl",
+            "3xl": "text-3xl",
+            "4xl": "text-4xl",
+        }
     },
 });
 
 const agendaWeekDayItemDotStyle = tva({
-    base: "w-[6px] h-[6px] rounded-full mb-1 bg-primary-500 absolute bottom-[2px] right-1/2 translate-x-1/2",
+    base: "w-[6px] h-[6px] rounded-full mb-1 bg-primary-500 absolute bottom-[1.75px] right-1/2 translate-x-1/2",
     variants: {
         selected: {
             true: "bg-white",
@@ -210,12 +285,45 @@ const agendaWeekDayItemDotStyle = tva({
         active: {
             true: "block",
             false: "hidden"
+        },
+        fontSizeAdjustment: {
+            xs: "bottom-[2px]",
+            sm: "bottom-[1.75px]",
+            md: "bottom-[1.5px]",
+            lg: "bottom-[1.5px]",
+            xl: "bottom-[1px]",
+            "2xl": "bottom-[0.5px]",
         }
     },
     defaultVariants: {
         selected: false,
     },
 }); 
+
+const AgendaWeekDayItem = ({ date }: AgendaWeekDayItemProps) => {
+    const { selectedDate, setSelectedDate, dateRangeStart, dateRangeEnd, dateSetWithAgendaItems, styles } = useContext(AgendaComponentContext);
+    const isBeyondDateRange = isBefore(date, subDays(dateRangeStart, 1)) || isAfter(date, dateRangeEnd);
+    const containsItems = dateSetWithAgendaItems.has(getDateIdentity(date));
+    const isSelected = isSameDay(date, selectedDate);
+    const isCurrentDay = isSameDay(date, new Date());
+    const isFirstDayOfMonth = isSameDay(date, startOfMonth(date));
+    const handleDaySelection = () => {
+        if (!isBeyondDateRange) setSelectedDate(date);
+    }
+    return <Pressable onPress={handleDaySelection}>
+        <VStack className={agendaWeekDayItemContainerStyles({ isFirstDayOfMonth })}>
+            <Text className={agendaWeekDayItemTextStyles({ size: styles.selectionDateFontSize, fontCase: styles.selectionDateFontCase, fontWeight: styles.selectionDateFontWeight })}>
+                {format(date, "EEE")}
+            </Text>
+            <VStack className={agendaWeekDayItemButtonStyle({ isCurrentDay, selected: isSelected })}>
+                <Text className={agendaWeekDayItemDigitStyles({ selected: isSelected, disabled: isBeyondDateRange, fontWeight: styles.selectionDateFontWeight, size: styles.selectionDateFontSize })}>
+                    {format(date, "dd")}
+                </Text>
+                <Box className={agendaWeekDayItemDotStyle({ selected: isSelected, active: containsItems, fontSizeAdjustment: styles.selectionDateFontSize })}></Box>
+            </VStack>
+        </VStack>
+    </Pressable>
+};
 
 type AgendaMonthIndicatorProps = {
     activeWeek: Date,

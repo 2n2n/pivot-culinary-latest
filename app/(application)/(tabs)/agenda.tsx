@@ -22,10 +22,12 @@ export default function ApplicationAgendaScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoadingMoreItems, setIsLoadingMoreItems] = useState(false);
+  const [hasLoadedAllItems, setHasLoadedAllItems] = useState(false);
   const [hasOutdatedItems, setHasOutdatedItems] = useState(false);
+  const [dateRangeStart, setDateRangeStart] = useState(new Date("2025-10-16"));
+  const [dateRangeEnd, setDateRangeEnd] = useState(new Date("2025-11-05"));
   const handleRefresh = () => {
     setIsRefreshing(true);
-    console.log("refreshing")
     // TODO: implement refresh logic
     setTimeout(() => {
       setIsRefreshing(false);
@@ -36,8 +38,9 @@ export default function ApplicationAgendaScreen() {
     setIsLoadingMoreItems(true);
     setTimeout(() => {
       // TODO: implement infinite query for loading more items
-      setItems([...mockData, { date: new Date("2025-11-07"), items: [28, 29, 30] }])
+      setItems([...mockData, { date: new Date("2025-11-02"), items: [28, 29, 30] }])
       setIsLoadingMoreItems(false);
+      setHasLoadedAllItems(true);
     }, 2500);
   }
   useEffect(() => {
@@ -58,14 +61,16 @@ export default function ApplicationAgendaScreen() {
       <TabDashboardHeader title="Calendar of Activities" />
       <Agenda 
         items={items}
-        dateRangeStart={new Date("2025-10-16")}
-        initialDateRangeEnd={new Date("2025-11-05")}
+        dateRangeStart={dateRangeStart}
+        initialDateRangeEnd={dateRangeEnd}
         // initialSelectedDate={new Date("2025-10-20")}
         isLoading={isLoading} // initial loading, displays ui skeleton
+        hasOutdatedItems={hasOutdatedItems}
         isRefreshing={isRefreshing}
         onRefresh={handleRefresh}
         isLoadingMoreItems={isLoadingMoreItems}
         onLoadMoreItems={handleLoadMore}
+        hasLoadedAllItems={hasLoadedAllItems}
         options={{
           displayedStartingWeekDay: "monday", // dictates where the week should start from
         }}

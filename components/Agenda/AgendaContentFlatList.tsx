@@ -5,15 +5,59 @@ import AgendaContentItemDateDetails from "@/components/Agenda/AgendaContentItemD
 import { fillGapsInDateGroups, getDateIdentity } from "@/components/Agenda/helpers";
 import { AgendaItem, RenderItemFunction } from "@/components/Agenda/types";
 import { AgendaComponentContext } from "@/components/Agenda/context";
+import { tva } from "@gluestack-ui/utils/nativewind-utils";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Center } from "@/components/ui/center";
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 
-import React, { useContext, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { LegendList as FlatList } from "@legendapp/list";
 import { isAfter, isSameDay, isToday } from "date-fns";
+
+const itemGroupSectionStyles = tva({
+    base: 'w-full px-4',
+    variants: {
+        space: {
+            sm: 'gap-1',
+            md: 'gap-2',
+            lg: 'gap-4',
+        },
+        padding: {
+            sm: 'px-2',
+            md: 'px-4',
+            lg: 'px-6'
+        }
+    },
+});
+
+const itemGroupStyles = tva({
+    base: 'flex-1 gap-2',
+    variants: {
+        space: {
+            sm: 'gap-1',
+            md: 'gap-2',
+            lg: 'gap-4',
+        }
+    },
+});
+
+const itemGroupSeparatorStyles = tva({
+    base: 'w-[calc(100%-32px)] h-[1px] bg-slate-300 my-6 mx-4',
+    variants: {
+        space: {
+            sm: 'my-4',
+            md: 'my-6',
+            lg: 'my-8',
+        },
+        padding: {
+            sm: 'mx-2',
+            md: 'mx-4',
+            lg: 'mx-6'
+        }
+    },
+});
 
 export default function AgendaContentFlatList<T extends any>({ 
     items,
@@ -23,9 +67,10 @@ export default function AgendaContentFlatList<T extends any>({
     onPresentDateItemVisiblityChange = () => {},
     onLoadMoreItems
 }: AgendaContentFlatListProps<T>){
-    const { selectedDate, setSelectedDate } = useContext(AgendaComponentContext);
+    const { selectedDate, setSelectedDate, agendaOptions, styles } = useContext(AgendaComponentContext);
     const agendaContentFlatListRef = useRef<LegendListRef>(null);
     const autoScrollUnlockDebounceRef = useRef<number>(null);
+    const handleOnChangeVisibleItemIndexesDebounceRef = useRef<number>(null);
     const itemsWithFilledGapsRef = useRef<typeof items>([]);
     const autoScrollIsLockedRef = useRef(false);
     const autoScrollIsReadyRef = useRef(false);
@@ -40,25 +85,24 @@ export default function AgendaContentFlatList<T extends any>({
     }, [items]);
     const derivedSelectedDateIndex = useMemo(() => {
         return itemsWithFilledGapsRef.current.findIndex(item => isSameDay(item.date, selectedDate));
+        // rely on the date's string representation instead of Date object reference
+        // TODO: Make a unit test to see if getDateIdentity is consistent
     }, [getDateIdentity(selectedDate)]);
-    const handleOnChangeVisibleItemIndexes = (firstViewableIndex: number, lastViewableIndex: number) => {
-        console.log("🚀 ~ handleOnChangeVisibleItemIndexes ~ lastViewableIndex:", lastViewableIndex)
-        console.log("🚀 ~ handleOnChangeVisibleItemIndexes ~ firstViewableIndex:", firstViewableIndex)
-        if (presentDateItemIndex >= firstViewableIndex && presentDateItemIndex <= lastViewableIndex) {
-            onPresentDateItemVisiblityChange(true);
-            console.log("visible")
-        } else {
+    const handleOnChangeVisibleItemIndexes = useCallback((firstViewableIndex: number, lastViewableIndex: number) => {
+        if (handleOnChangeVisibleItemIndexesDebounceRef.current != null) clearTimeout(handleOnChangeVisibleItemIndexesDebounceRef.current);
+        if (!firstViewableIndex && typeof lastViewableIndex !== "number" || !lastViewableIndex && typeof firstViewableIndex !== "number") return;
+        if (presentDateItemIndex >= firstViewableIndex && presentDateItemIndex <= lastViewableIndex) onPresentDateItemVisiblityChange(true);
+        else handleOnChangeVisibleItemIndexesDebounceRef.current = setTimeout(() => {
             onPresentDateItemVisiblityChange(false);
-            console.log("invisible")
-        };
-    }
-    const handleViewableItemDateChange: NonNullable<OnViewableItemsChanged<AgendaItem<T>>> = ({ changed, viewableItems }) => {
+        }, agendaOptions.averageGestureIntervalMs);
+    }, [presentDateItemIndex, onPresentDateItemVisiblityChange, agendaOptions.averageGestureIntervalMs]);
+    const handleViewableItemDateChange: NonNullable<OnViewableItemsChanged<AgendaItem<T>>> = useCallback(({ changed, viewableItems }) => {
         if(!autoScrollIsReadyRef.current) return;
-        handleOnChangeVisibleItemIndexes(viewableItems[0].index, viewableItems[viewableItems.length - 1].index);
+        handleOnChangeVisibleItemIndexes(viewableItems[0]?.index, viewableItems[viewableItems.length - 1]?.index);
         if (!autoScrollIsLockedRef.current) return;
         const firstViewable = changed.find(item => item.isViewable);
         if (firstViewable) setSelectedDate(firstViewable.item.date);
-    };
+    }, [handleOnChangeVisibleItemIndexes]);
     useEffect(() => {
         if (autoScrollIsLockedRef.current || !itemsWithFilledGapsRef.current.length || !agendaContentFlatListRef.current) return;
         if (derivedSelectedDateIndex === -1) {
@@ -73,21 +117,19 @@ export default function AgendaContentFlatList<T extends any>({
             const timeout = setTimeout(() => {
                 agendaContentFlatListRef?.current?.scrollToIndex({ index: derivedSelectedDateIndex, animated: true });
                 autoScrollIsReadyRef.current = true;
-            }, 500);
+            }, agendaOptions.averageGestureIntervalMs);
             return () => clearTimeout(timeout);
-        } else {
-            agendaContentFlatListRef.current.scrollToIndex({ index: derivedSelectedDateIndex, animated: true });
-        }
+        } else agendaContentFlatListRef.current.scrollToIndex({ index: derivedSelectedDateIndex, animated: true });
     }, [derivedSelectedDateIndex]);
     return <FlatList
         ref={agendaContentFlatListRef}
         data={itemsWithFilledGaps}
         keyExtractor={(item) => getDateIdentity(item.date)}
-        renderItem={({ item: itemGroup }) => <HStack className="w-full gap-2 px-4">
+        renderItem={({ item: itemGroup }) => <HStack className={itemGroupSectionStyles({ space: styles.itemsSpacing, padding: styles.paddingHorizontal })}>
             <AgendaContentItemDateDetails date={itemGroup.date} />
             {
                 itemGroup.items.length ? 
-                <VStack className="flex-1 gap-2">
+                <VStack className={itemGroupStyles({ space: styles.itemsSpacing })}>
                     {itemGroup.items.map((item, itemIndex) => <React.Fragment key={`${itemGroup.date}-${itemIndex}`}>
                         {renderItem(item, itemGroup.date)}
                     </React.Fragment>)}
@@ -97,15 +139,24 @@ export default function AgendaContentFlatList<T extends any>({
                 </Center>
             }
         </HStack>}
-        ItemSeparatorComponent={() => <Box className="w-[calc(100%-32px)] h-[1px] bg-slate-300 my-6 mx-4" />}
-        ListFooterComponent={() => isLoadingMoreItems && <ContentItemSkeleton>
-            <ContentItemSubSkeleton/>
-        </ContentItemSkeleton>}
+        ItemSeparatorComponent={() => <Box className={itemGroupSeparatorStyles({ space: styles.itemGroupSpacing, padding: styles.paddingHorizontal })} />}
+        ListFooterComponent={() => <>
+            {
+                isLoadingMoreItems && <ContentItemSkeleton>
+                    <ContentItemSubSkeleton/>
+                </ContentItemSkeleton>
+            }
+            {
+                hasLoadedAllItems && <Center className="flex-1">
+                    <Text className="text-center text-gray-500">No further activities yet.</Text>
+                </Center>
+            }
+        </>}
         ListFooterComponentStyle={{ 
-            height: isLoadingMoreItems ? 250 : 0, 
-            paddingTop: 16,
+            height: isLoadingMoreItems ? 250 : hasLoadedAllItems ? 100 : 0, 
+            paddingTop: isLoadingMoreItems || hasLoadedAllItems ? 16 : 0,
             paddingHorizontal: 16,
-            justifyContent: "flex-start", 
+            justifyContent: isLoadingMoreItems || hasLoadedAllItems ? "flex-start" : "center", 
             overflow: "hidden"
         }}
         decelerationRate="fast"
@@ -119,7 +170,7 @@ export default function AgendaContentFlatList<T extends any>({
         onScrollEndDrag={() => { 
             autoScrollUnlockDebounceRef.current = setTimeout(() => {
                 if (autoScrollIsLockedRef.current) autoScrollIsLockedRef.current = false;
-            }, 350);
+            }, agendaOptions.averageGestureIntervalMs);
         }}
         onViewableItemsChanged={handleViewableItemDateChange}
         viewabilityConfig={{
@@ -128,7 +179,7 @@ export default function AgendaContentFlatList<T extends any>({
         onEndReached={onLoadMoreItems}
         onEndReachedThreshold={0.5}
         className="flex-1"
-        scrollEventThrottle={250} 
+        scrollEventThrottle={agendaOptions.averageGestureIntervalMs} 
     />
 }
 

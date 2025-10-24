@@ -1,25 +1,25 @@
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+import { AgendaComponentContext } from "@/components/Agenda/context";
 
-import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { useEffect } from "react";
+import Animated, { FadeIn } from "react-native-reanimated";
+import { ChevronsUpDownIcon } from "lucide-react-native";
+import { cssInterop } from "nativewind";
+import { useContext } from "react";
+
+cssInterop(Animated.View, { className: 'style' });
 
 export default function AgendaContentReturnToPresentButton({ hasOutdatedItems, isPresentDateVisible, onPress }: ReturnToPresentButtonProps) {
-    const transition = useSharedValue(0);
-    const returnToPresentButtonStyle = useAnimatedStyle(() => ({
-        position: "absolute", 
-        top: "0%",
-        left: "50%",
-        opacity: interpolate(transition.value, [0, 1], [0, 1], Extrapolation.CLAMP),
-        transform: [
-            { translateX: "-50%" },
-            { translateY: interpolate(transition.value, [-1, 0, 1], [15, 0, -50]) }
-        ]
-    }), [transition.value]);
-    useEffect(() => {
-        transition.value = withTiming(!hasOutdatedItems && !isPresentDateVisible ? 1 : 0);
-    }, [hasOutdatedItems, isPresentDateVisible])
-    return <Animated.View style={returnToPresentButtonStyle}>
-        <Button onPress={onPress} size="sm" className="rounded-full"> 
+    const { styles } = useContext(AgendaComponentContext);
+    if (hasOutdatedItems || isPresentDateVisible) return null;
+    return <Animated.View key="return-to-present-button" entering={FadeIn} style={{
+        position: "absolute",
+        top: styles.overheadButtonInset,
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+    }}>
+        <Button onPress={onPress} size={styles.overheadButtonSize} className="rounded-full"> 
+            <ButtonIcon as={ChevronsUpDownIcon} size={18} stroke="white" />
             <ButtonText>Return to present</ButtonText>
         </Button>
     </Animated.View>
