@@ -183,7 +183,29 @@ const AgendaMonthIndicator = ({ activeWeek }: AgendaMonthIndicatorProps) => {
     </VStack>
 };
 
+const agendaWeekItemStyles = tva({
+    base: "justify-evenly items-start",
+    variants: {
+        padding: {
+            sm: 'px-2',
+            md: 'px-4',
+            lg: 'px-6'
+        },
+        space: {
+            sm: "justify-center gap-2",
+            md: "justify-center gap-4",
+            lg: "justify-center gap-6",
+            even: "justify-evenly",
+        }
+    },
+    defaultVariants: {
+        padding: "md",
+        space: "even",
+    }
+});
+
 const AgendaWeekItem = ({ date }: AgendaWeekItemProps) => {
+    const { styles } = useContext(AgendaComponentContext);
     const weekDays = useMemo(() => {
         const weekDays: Array<Date> = [date];
         for (let incrementedDay = 1; incrementedDay < CONSTANT_DAYS_IN_WEEK; incrementedDay++) {
@@ -191,7 +213,7 @@ const AgendaWeekItem = ({ date }: AgendaWeekItemProps) => {
         }
         return weekDays;
     }, [date]);
-    return <HStack className="justify-evenly items-start" style={{ width: Dimensions.get("window").width }}>
+    return <HStack className={agendaWeekItemStyles({ padding: styles.paddingHorizontal || "sm", space: styles.dateSelectionSpacing })} style={{ width: Dimensions.get("window").width }}>
         {weekDays.map((weekDay) => <AgendaWeekDayItem key={getDateIdentity(weekDay)} date={weekDay} />)}
     </HStack>
 };

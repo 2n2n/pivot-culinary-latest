@@ -23,6 +23,7 @@ const itemGroupSectionStyles = tva({
             sm: 'gap-1',
             md: 'gap-2',
             lg: 'gap-4',
+
         },
         padding: {
             sm: 'px-2',
@@ -139,7 +140,7 @@ export default function AgendaContentFlatList<T extends any>({
                 </Center>
             }
         </HStack>}
-        ItemSeparatorComponent={() => <Box className={itemGroupSeparatorStyles({ space: styles.itemGroupSpacing, padding: styles.paddingHorizontal })} />}
+        ItemSeparatorComponent={() => <Box className={itemGroupSeparatorStyles({ space: styles.itemGroupSpacing, padding: styles.paddingHorizontal || "md" })} />}
         ListFooterComponent={() => <>
             {
                 isLoadingMoreItems && <ContentItemSkeleton>
