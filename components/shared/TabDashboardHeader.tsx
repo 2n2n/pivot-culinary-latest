@@ -11,7 +11,7 @@ import AccountModal from "@/services/account_modal/component/AccountModal";
 import { useModal } from "@/services/account_modal/hooks/useModal";
 import AppAdaptiveLogo from "./AppAdaptiveLogo";
 
-const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
+const TabDashboardHeader = ({ title = "" }: { title?: string }) => {
   const { setShow, selectedAccount } = useModal();
 
   return (
@@ -54,11 +54,11 @@ const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
           ),
         }}
       />
-      <Box className="py-2 bg-white">
-        <Text className="text-4xl font-bold text-gray-900 px-4 mb-2">
+      {title && <Box className="py-2 bg-white">
+        <Text className="text-lg font-bold text-gray-900 px-4 mb-2">
           {title}
         </Text>
-      </Box>
+      </Box>}
       <AccountModal />
     </>
   );
