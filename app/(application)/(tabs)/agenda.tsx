@@ -8,7 +8,7 @@ import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
 export default function ApplicationAgendaScreen() {
   return (
     <TabSafeAreaView>
-      <TabDashboardHeader />
+      <TabDashboardHeader title="Agenda" />
       <Text>Agenda Screen</Text>
     </TabSafeAreaView>
   );

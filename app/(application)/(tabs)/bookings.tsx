@@ -1,112 +1,59 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { FlatList, View, StyleSheet, Pressable } from "react-native";
 import TabDashboardHeader from "@/components/shared/TabDashboardHeader";
 import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
-import { Text } from "@/components/Themed";
+import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
-import { Calendar, Calendar1, MapPin } from "lucide-react-native";
+import { Calendar1, MapPin } from "lucide-react-native";
 import { Link } from "expo-router";
 import TextWithIcon from "@/components/shared/TextWithIcon";
+import useBookings from "@/hooks/useBookings";
+import { useModal } from "@/services/account_modal/hooks/useModal";
+import { Box } from "@/components/ui/box";
 // Sample data for bookings
-interface BookingItem {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  status: "confirmed" | "pending" | "cancelled";
-  clientName: string;
-  service: string;
-}
-
-const generateSampleBookings = (): BookingItem[] => {
-  const services = [
-    "Private Chef",
-    "Catering",
-    "Cooking Class",
-    "Meal Prep",
-    "Wine Tasting",
-  ];
-  const statuses: ("confirmed" | "pending" | "cancelled")[] = [
-    "confirmed",
-    "pending",
-    "cancelled",
-  ];
-  const clients = [
-    "John Smith",
-    "Sarah Johnson",
-    "Mike Davis",
-    "Emily Wilson",
-    "David Brown",
-  ];
-
-  return Array.from({ length: 50 }, (_, index) => ({
-    id: `booking-${index + 1}`,
-    title: `Booking #${index + 1}`,
-    date: new Date(Date.now() + index * 24 * 60 * 60 * 1000).toDateString(),
-    time: `${9 + (index % 12)}:${index % 2 === 0 ? "00" : "30"}`,
-    status: statuses[index % statuses.length],
-    clientName: clients[index % clients.length],
-    service: services[index % services.length],
-  }));
-};
 
 export default function ApplicationBookingsScreen() {
-  const [bookings, setBookings] = useState<BookingItem[]>(
-    generateSampleBookings()
-  );
-  const [isLoading, setIsLoading] = useState(false);
+  const { selectedAccount } = useModal();
 
-  // Function to load more data for continuous scroll
-  const loadMoreBookings = useCallback(() => {
-    if (isLoading) return;
-    setIsLoading(true);
-    // Simulate API call delay
-    setTimeout(() => {
-      const newBookings = generateSampleBookings().map((booking, index) => ({
-        ...booking,
-        id: `booking-${bookings.length + index + 1}`,
-        title: `Booking #${bookings.length + index + 1}`,
-      }));
+  const { data: userBookings, isLoading: bookingIsLoading } =
+    useBookings(selectedAccount);
 
-      setBookings((prevBookings) => [...prevBookings, ...newBookings]);
-      setIsLoading(false);
-    }, 1000);
-  }, [bookings.length, isLoading]);
+  const renderBookingCard = ({ item }: { item: Booking }) => {
+    return (
+      <Link push href={`/booking-details/${item.id}`} asChild>
+        <Pressable>
+          <Card
+            size="md"
+            variant="elevated"
+            className="mb-4 mx-4 shadow-sm rounded-[8px]"
+          >
+            <Box className="flex-row justify-between items-start mb-2">
+              <Text className="text-xl font-semibold text-gray-900">
+                {item.name}
+              </Text>
+            </Box>
 
-  const renderBookingCard = ({ item }: { item: BookingItem }) => (
-    <Link push href={`/booking-details/${item.id}`} asChild>
-      <Pressable>
-        <Card
-          size="md"
-          variant="elevated"
-          className="mb-4 mx-4 shadow-sm rounded-[8px]"
-        >
-          <View className="flex-row justify-between items-start mb-2">
-            <Text className="text-xl font-semibold text-gray-900">
-              Chicago Bulls @ Kansas City, MO
-            </Text>
-          </View>
+            <Box>
+              <TextWithIcon
+                icon={Calendar1}
+                text={`${item.start_date} – ${item.end_date}`}
+              />
+            </Box>
 
-          <View>
-            <TextWithIcon
-              icon={Calendar1}
-              text={`${item.date} – ${item.date}`}
-            />
-          </View>
-
-          <View className="flex-row justify-between items-center">
-            <TextWithIcon
-              icon={MapPin}
-              text="Kauffman Stadium: 1 Royal Way, Kansas City, MO 64129"
-            />
-          </View>
-        </Card>
-      </Pressable>
-    </Link>
-  );
+            <Box className="flex-row justify-between items-center">
+              <TextWithIcon
+                icon={MapPin}
+                text="Kauffman Stadium: 1 Royal Way, Kansas City, MO 64129"
+              />
+            </Box>
+          </Card>
+        </Pressable>
+      </Link>
+    );
+  };
 
   const renderFooter = () => {
-    if (!isLoading) return null;
+    if (!bookingIsLoading) return null;
 
     return (
       <View className="py-4 items-center">
@@ -120,10 +67,9 @@ export default function ApplicationBookingsScreen() {
       <TabDashboardHeader title="Bookings" />
       <FlatList
         className="pt-5"
-        data={bookings}
+        data={userBookings || []}
         renderItem={renderBookingCard}
-        keyExtractor={(item) => item.id}
-        onEndReached={loadMoreBookings}
+        keyExtractor={(item) => item.id?.toString() ?? ""}
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
         showsVerticalScrollIndicator={false}

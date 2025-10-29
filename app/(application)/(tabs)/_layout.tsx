@@ -1,6 +1,12 @@
 // @ts-nocheck
 import { Icon } from "@/components/ui/icon";
-import { Inbox, Bell, CalendarCheck, CalendarDays } from "lucide-react-native";
+import {
+  Inbox,
+  Bell,
+  CalendarCheck,
+  CalendarDays,
+  Notebook,
+} from "lucide-react-native";
 import { createIcon } from "@gluestack-ui/core/icon/creator";
 import { Tabs } from "expo-router";
 // REVIEW: Understand why we are calling the Svg component directly instead of calling it via the Icon component <Icon as={BookingsIcon} />
@@ -26,9 +32,9 @@ export default function TabsLayout() {
         name="bookings"
         options={{
           title: "Bookings",
-          tabBarIcon: ({ color }) => (
-            <Icon as={CalendarCheck} style={{ color }} />
-          ),
+          headerBackVisible: true,
+          headerTitleAlign: "center",
+          tabBarIcon: ({ color }) => <Icon as={Notebook} style={{ color }} />,
         }}
       />
       <Tabs.Screen
