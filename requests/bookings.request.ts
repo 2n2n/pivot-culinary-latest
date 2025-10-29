@@ -23,13 +23,12 @@ export const getBookings = async (
   const endDate = format(addWeeks(now, 6), "P");
   const params = {
     site_id: SITE_ID.toString(),
-    location_id:
+    location_ids:
       LOCATION_ID_MAPPING[
         getAccountLocation(_account)
           .replace(" ", "")
           .toLocaleLowerCase() as keyof typeof LOCATION_ID_MAPPING
       ],
-    account_id: _account.id.toString(),
     page: page.toString(),
     order: "booking_start_date",
     sort_direction: "desc",
@@ -46,9 +45,7 @@ export const getBookings = async (
   const urlParams = new URLSearchParams(paramsForSearch).toString();
   let bookings: AxiosResponse<TripleseatResponse<Booking>>;
   try {
-    console.log("~requesting ", `v1/bookings/search.json?${urlParams}`);
     bookings = await request.get(`v1/bookings/search.json?${urlParams}`);
-
     return bookings.data;
   } catch (err) {
     console.error(err);
@@ -123,7 +120,6 @@ export const getAccountBookings = async (
   const firstBookings = await getBookings(account, 1, request);
   bookings.push(...firstBookings.results);
   // if booking batch pages is more than 1, call getBookingsFromOtherPages
-  console.log("~firstBookings ", firstBookings);
   if (firstBookings.total_pages > 1) {
     const otherBookings = await getBookingsFromOtherPages(
       request,
@@ -140,5 +136,5 @@ export const getAccountBookings = async (
       }),
     ].flat() as Booking[];
   }
-  return bookings;
+  return bookings.filter((booking) => booking.account.id === account.id);
 };
