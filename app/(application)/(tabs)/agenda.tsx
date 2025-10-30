@@ -15,7 +15,7 @@ const mockData = [
   { date: new Date("2025-10-28"), items: [16, 17, 18] },
   { date: new Date("2025-10-29"), items: [19, 20, 21] },
   { date: new Date("2025-10-30"), items: [25, 26, 27] },
-]
+];
 
 export default function ApplicationAgendaScreen() {
   const [items, setItems] = useState(mockData);
@@ -31,16 +31,19 @@ export default function ApplicationAgendaScreen() {
       setIsRefreshing(false);
       setHasOutdatedItems(false);
     }, 2500);
-  }
+  };
   const handleLoadMore = () => {
     setIsLoadingMoreItems(true);
     setTimeout(() => {
       // TODO: implement infinite query for loading more items
-      setItems([...mockData, { date: new Date("2025-11-02"), items: [28, 29, 30] }])
+      setItems([
+        ...mockData,
+        { date: new Date("2025-11-02"), items: [28, 29, 30] },
+      ]);
       setIsLoadingMoreItems(false);
       setHasLoadedAllItems(true);
     }, 2500);
-  }
+  };
   useEffect(() => {
     const timeout = setTimeout(() => {
       // TODO: implement fetching and loading of data
@@ -53,11 +56,11 @@ export default function ApplicationAgendaScreen() {
     // TODO: Change with implementation for listening outdated or stale data
     const timeout = setTimeout(() => setHasOutdatedItems(true), 60000);
     return () => clearTimeout(timeout);
-  }, [hasOutdatedItems])
+  }, [hasOutdatedItems]);
   return (
-    <TabSafeAreaView >
+    <TabSafeAreaView>
       <TabDashboardHeader title="Calendar of Activities" />
-      <Agenda 
+      <Agenda
         items={items}
         // dateRangeStart={dateRangeStart}
         // initialDateRangeEnd={dateRangeEnd}
@@ -72,12 +75,12 @@ export default function ApplicationAgendaScreen() {
         options={{
           displayedStartingWeekDay: "monday", // dictates where the week should start from
         }}
-        renderItem={item => <VStack 
-          className="bg-white rounded-lg p-2 w-full h-[100px] justify-center items-center"
-        >
-          <Text>Item #</Text>
-          <Text>{item}</Text>
-        </VStack>}
+        renderItem={(item) => (
+          <VStack className="bg-white rounded-lg p-2 w-full h-[100px] justify-center items-center">
+            <Text>Item #</Text>
+            <Text>{item}</Text>
+          </VStack>
+        )}
       />
     </TabSafeAreaView>
   );

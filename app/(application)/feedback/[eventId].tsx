@@ -1,5 +1,3 @@
-import type { BookingEvent } from "@/types/event";
-
 import FeedbackStarRatingSection from "@/components/FeedbackStarRatingSection";
 import LoadingIndicator from "@/services/theme_loader_screen/components/LoadingIndicator";
 import ReviewSubmittedIndicator from "@/components/ReviewSubmittedIndicator";
