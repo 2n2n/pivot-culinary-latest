@@ -11,7 +11,7 @@ const TextWithIcon = ({
 }) => {
   return (
     <View className="flex-row items-center py-1">
-      <Icon as={icon} className="w-5 h-5 text-orange-500 mr-2" />
+      <Icon as={icon} className="w-5 h-5 text-primary-500 mr-2" />
       <Text className="text-sm font-medium">{text}</Text>
     </View>
   );

@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import useAccounts from "@/hooks/useAccounts";
 import { getAuth } from "@react-native-firebase/auth";
+import useBookings from "@/hooks/useBookings";
 
 export const AccountModalContext = createContext<{
   showModal: boolean;
@@ -24,16 +25,8 @@ export const AccountModalProvider = ({
   // this will identify which account was selected all througout the app.
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
-  // DOCS: Get the currently logged-in Firebase user (for account-related queries/context)
-  const user = getAuth().currentUser;
-  const { isLoading: userAccountsIsLoading } = useAccounts(user);
-
-  useEffect(() => {
-    // when accounts are loaded, try to close the loading state.
-    if (!userAccountsIsLoading) {
-      // close the loading state
-    }
-  }, [userAccountsIsLoading]);
+  const { data: bookings, isLoading: bookingIsLoading } =
+    useBookings(selectedAccount);
 
   return (
     <AccountModalContext.Provider

@@ -1,16 +1,23 @@
 // @ts-nocheck
 import { Icon } from "@/components/ui/icon";
-import { Inbox, Bell, CalendarCheck, CalendarDays } from "lucide-react-native";
+import {
+  Inbox,
+  Bell,
+  CalendarCheck,
+  CalendarDays,
+  Notebook,
+} from "lucide-react-native";
 import { createIcon } from "@gluestack-ui/core/icon/creator";
 import { Tabs } from "expo-router";
+import { useColorMode } from "@/app/_layout";
 // REVIEW: Understand why we are calling the Svg component directly instead of calling it via the Icon component <Icon as={BookingsIcon} />
 export default function TabsLayout() {
-  // BUG: the label of the active icons are disappearing on the tab bar.
+  const { colorMode } = useColorMode(); // Get current theme mode (e.g., "light" or "dark")
   return (
     <Tabs
       screenOptions={{
         headerShown: true,
-        tabBarActiveTintColor: "#F47C20",
+        tabBarActiveTintColor: colorMode === "light" ? "#E07C20" : "#009D51",
       }}
     >
       <Tabs.Screen
@@ -26,9 +33,9 @@ export default function TabsLayout() {
         name="bookings"
         options={{
           title: "Bookings",
-          tabBarIcon: ({ color }) => (
-            <Icon as={CalendarCheck} style={{ color }} />
-          ),
+          headerBackVisible: true,
+          headerTitleAlign: "center",
+          tabBarIcon: ({ color }) => <Icon as={Notebook} style={{ color }} />,
         }}
       />
       <Tabs.Screen

@@ -4,8 +4,6 @@ import { Button, ButtonText } from "../../components/ui/button";
 import { Box } from "../../components/ui/box";
 import { Text } from "../../components/ui/text";
 import { Stack } from "expo-router";
-import { Icon } from "@/components/ui/icon";
-import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { VStack } from "@/components/ui/vstack";
 import useAuth from "@/services/auth/hooks/useAuth";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";

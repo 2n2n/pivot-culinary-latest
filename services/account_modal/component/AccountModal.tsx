@@ -22,8 +22,8 @@ import useAccounts from "@/hooks/useAccounts";
 import { useContext, useEffect, useState } from "react";
 import { getAccountLocation, groupByAccount } from "@/helpers";
 import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
-import { ModeType } from "@/components/ui/gluestack-ui-provider";
 import { useColorMode } from "@/app/_layout";
+import useEvents from "@/hooks/useEvents";
 
 const colorModeMap: Record<string, string> = {
   light: "PIVOT",
@@ -31,9 +31,8 @@ const colorModeMap: Record<string, string> = {
 };
 const AccountModal = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const { colorMode, setIsSwitchingApp, setIsCompleted } = useContext(
-    ThemeLoaderScreenContext
-  );
+  const { colorMode, setIsSwitchingApp, isSwitchingApp, setIsCompleted } =
+    useContext(ThemeLoaderScreenContext);
 
   const { setColorMode } = useColorMode();
 
@@ -46,21 +45,36 @@ const AccountModal = () => {
     user as FirebaseAuthTypes.User
   );
 
+  const {
+    data: eventData,
+    isFetching: eventIsFetching,
+    isStale: eventIsStale,
+  } = useEvents(selectedAccount?.id ?? null);
+
+  useEffect(() => {
+    if (!eventIsFetching || eventIsStale) {
+      setTimeout(() => {
+        setIsSwitchingApp(false);
+      }, 2000);
+    }
+  }, [eventIsFetching, eventIsStale, eventData]);
+
   const accountSwitchHandler = (account: Account) => {
+    setShow(false);
     const accountLocation = getAccountLocation(account);
     if (colorModeMap[colorMode] !== accountLocation) {
+      // if we switch to another location
       setColorMode(accountLocation === "PIVOT" ? "light" : "dark");
-    }
-
-    setShow(false);
-    setIsSwitchingApp(true);
-    setIsCompleted(false);
-    setTimeout(() => {
+      setIsSwitchingApp(true);
+      setIsCompleted(false);
+      setTimeout(() => {
+        setIsCompleted(true);
+      }, 2000);
+    } else {
+      // if we are in the same location after switching.
       setIsCompleted(true);
-    }, 2000);
-    setTimeout(() => {
-      setIsSwitchingApp(false);
-    }, 4000);
+      setIsSwitchingApp(true);
+    }
 
     setSelectedAccount(account);
   };
