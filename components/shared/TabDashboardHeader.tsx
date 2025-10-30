@@ -7,7 +7,7 @@ import AccountModal from "@/services/account_modal/component/AccountModal";
 import { useModal } from "@/services/account_modal/hooks/useModal";
 import AppAdaptiveLogo from "./AppAdaptiveLogo";
 
-const TabDashboardHeader = ({ title = " " }: { title?: string }) => {
+const TabDashboardHeader = ({ title = "" }: { title?: string }) => {
   const { setShow, selectedAccount } = useModal();
 
   return (
