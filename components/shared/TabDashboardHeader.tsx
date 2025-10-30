@@ -14,7 +14,6 @@ const TabDashboardHeader = ({ title = "" }: { title?: string }) => {
     <>
       <Tabs.Screen
         options={{
-          title: "",
           headerShown: true,
           headerShadowVisible: false,
           headerLeft: () => <AppAdaptiveLogo className="ml-4" size="xs" />,
