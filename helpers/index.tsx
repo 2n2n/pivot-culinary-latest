@@ -21,3 +21,8 @@ export const groupByAccount = (accounts: Account[]) => {
 
   return [...pivotAccounts, ...gamedayAccounts];
 };
+
+// get the inverse theme of the current app.
+export const getOtherTheme = (theme: ModeType) => {
+  return theme === "light" ? "dark" : "light";
+};
