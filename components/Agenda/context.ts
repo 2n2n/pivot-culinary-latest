@@ -3,7 +3,7 @@ import type { Dispatch, SetStateAction } from "react";
 
 import { createContext } from "react";
 
-// TODO: Eliminate context use
+// Note: Agenda component is too large to justify not using a context
 export const AgendaComponentContext = createContext<AgendaComponentContextType>({
     selectedDate: new Date(),
     setSelectedDate: () => {},
@@ -24,7 +24,7 @@ export const AgendaComponentContext = createContext<AgendaComponentContextType>(
         paddingHorizontal: "md",
         selectionDateFontCase: "uppercase",
         selectionDateFontWeight: "normal",
-    },
+    }
 });
 
 type AgendaComponentContextType = {

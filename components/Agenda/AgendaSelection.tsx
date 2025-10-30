@@ -11,18 +11,12 @@ import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 
-import { addDays, addWeeks, differenceInWeeks, endOfWeek, format, isAfter, isBefore, isSameDay, isSameMonth, isSameWeek, startOfMonth, startOfWeek, subDays } from "date-fns";
-import Animated, { FadeInUp, FadeOutUp, LinearTransition } from "react-native-reanimated";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { addDays, addWeeks, differenceInWeeks, endOfWeek, format, isAfter, isBefore, isSameDay, isSameWeek, startOfMonth, startOfWeek, subDays } from "date-fns";
+import { useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { LegendList as FlatList } from "@legendapp/list";
 import { Dimensions, Pressable } from "react-native";
-import { twMerge } from "tailwind-merge";
-import { cssInterop } from "nativewind";
-
-cssInterop(Animated.Text, { className: 'style' });
 
 const CONSTANT_DAYS_IN_WEEK = 7;
-const CONSTANT_MONTH_STRING_FORMAT = "MMMM";
 const CONSTANTS_WEEKDAYS_MAP: Record<WeekDayString, Day> = {
     "sunday": 0,
     "monday": 1,
@@ -33,17 +27,8 @@ const CONSTANTS_WEEKDAYS_MAP: Record<WeekDayString, Day> = {
     "saturday": 6,
 }
 
-
-
-// TODO: list common ui tokens for the agenda, i.e. colors, fonts, sizes, etc.
-// TODO: scrolling on the items should update selectedDate to the current viewed item date
-// TODO: update of the selected date should scroll the items to the selected date
-// TODO: update of the selected date should update the active week to the selected date's week
-// TODO: skeleton ui
-
 export default function AgendaDateSelection() {
     const { selectedDate, setSelectedDate, dateRangeStart, dateRangeEnd, agendaOptions } = useContext(AgendaComponentContext);
-    const [activeWeek, setActiveWeek] = useState<Date>(new Date());
     const agendaSelectionFlatListRef = useRef<LegendListRef>(null);
     const agendaSelectionHasBeenDraggedRef = useRef(false);
     const firstScrollToCurrentWeekIsInitalizedRef = useRef(false);
@@ -68,120 +53,51 @@ export default function AgendaDateSelection() {
         // consistent recalculation regardless what instance of Date 
         // the dateRangeStart and dateRangeEnd is
     }, [getDateIdentity(dateRangeStart), getDateIdentity(dateRangeEnd), agendaOptions.displayedStartingWeekDay]);
-        
-    const autoScrollToCurrentWeek = () => {
+    const autoScrollToCurrentWeek = useCallback(() => {
         if (!firstScrollToCurrentWeekIsInitalizedRef.current) {
             agendaSelectionFlatListRef?.current?.scrollToIndex({ index: initialActiveWeekIndex, animated: false });
             firstScrollToCurrentWeekIsInitalizedRef.current = true;
         }
-    };
+    }, [initialActiveWeekIndex]);
     // Viewable Week refers to the current week visible from the selection
-    const autoSelectDayFromViewableWeek = (week: ViewToken<Date>) => {
+    const autoSelectDayFromViewableWeek = useCallback((week: ViewToken<Date>) => {
         if (!week || !firstScrollToCurrentWeekIsInitalizedRef.current) return;
         if (week.index > prevActiveWeekIndexRef.current) setSelectedDate(week.item);
         else setSelectedDate(endOfWeek(week.item, { weekStartsOn: CONSTANTS_WEEKDAYS_MAP[agendaOptions.displayedStartingWeekDay] }));
-    }
-    const handleViewableWeekChange: NonNullable<OnViewableItemsChanged<Date>> = ({ changed }) => {
+    }, [agendaOptions.displayedStartingWeekDay]);
+    const handleViewableWeekChange: NonNullable<OnViewableItemsChanged<Date>> = useCallback(({ changed }) => {
         const newViewableWeek = changed.find((item) => item.isViewable);
         if (!newViewableWeek || newViewableWeek.index === prevActiveWeekIndexRef.current) return;
-        setActiveWeek(newViewableWeek.item);
         if (agendaSelectionHasBeenDraggedRef.current) autoSelectDayFromViewableWeek(newViewableWeek);
         prevActiveWeekIndexRef.current = newViewableWeek.index;
-    };
+    }, [autoSelectDayFromViewableWeek]);
     useEffect(() => {
         if (!firstScrollToCurrentWeekIsInitalizedRef.current) return;
         const weekIndexFromSelectedDate = weeksRef.current.findIndex(week => isSameWeek(week, selectedDate, { weekStartsOn: CONSTANTS_WEEKDAYS_MAP[agendaOptions.displayedStartingWeekDay] }));
         if (weekIndexFromSelectedDate === -1 || weekIndexFromSelectedDate === prevActiveWeekIndexRef.current) return;
         agendaSelectionFlatListRef.current?.scrollToIndex({ index: weekIndexFromSelectedDate, animated: true });
     }, [getDateIdentity(selectedDate)]);
-    return <VStack className="bg-white gap-2 pb-3">
-        <AgendaMonthIndicator activeWeek={activeWeek}/>
-        <FlatList 
-            ref={agendaSelectionFlatListRef}
-            data={weeks}
-            renderItem={({ item }) => <AgendaWeekItem date={item} />}
-            snapToAlignment="start"
-            snapToInterval={Dimensions.get("window").width}
-            decelerationRate="fast"
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => getDateIdentity(item)}
-            onLayout={autoScrollToCurrentWeek}
-            onScrollBeginDrag={() => {
-                if (!agendaSelectionHasBeenDraggedRef.current) agendaSelectionHasBeenDraggedRef.current = true;
-            }}
-            onMomentumScrollEnd={() => {
-                if (agendaSelectionHasBeenDraggedRef.current) agendaSelectionHasBeenDraggedRef.current = false;
-            }}
-            onViewableItemsChanged={handleViewableWeekChange}
-            viewabilityConfig={{
-                itemVisiblePercentThreshold: 70
-            }}
-            horizontal
-            scrollEventThrottle={500}
-        />
-    </VStack>
+    return <FlatList 
+        ref={agendaSelectionFlatListRef}
+        data={weeks}
+        renderItem={({ item }) => <AgendaWeekItem date={item} />}
+        snapToAlignment="start"
+        snapToInterval={Dimensions.get("window").width}
+        decelerationRate="fast"
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item) => getDateIdentity(item)}
+        onLayout={autoScrollToCurrentWeek}
+        onScrollBeginDrag={() => agendaSelectionHasBeenDraggedRef.current = true}
+        onMomentumScrollEnd={() => agendaSelectionHasBeenDraggedRef.current = false}
+        onViewableItemsChanged={handleViewableWeekChange}
+        viewabilityConfig={{
+            itemVisiblePercentThreshold: 70
+        }}
+        horizontal
+        scrollEventThrottle={500}
+    />
 }
-
-const agendaMonthIndicatorStyles = tva({
-    base: "flex-row justify-between items-center px-4",
-    variants: {
-        padding: {
-            sm: 'px-2',
-            md: 'px-4',
-            lg: 'px-6'
-        }
-    },
-});
-
-const agendaMonthIndicatorTextStyles = tva({
-    base: "uppercase text-gray-400 text-xs",
-    variants: {
-        fontCase: {
-            uppercase: "uppercase",
-            lowercase: "lowercase",
-            capitalize: "capitalize",
-        },
-        fontWeight: {
-            light: "font-light",
-            normal: "font-normal",
-            bold: "font-bold",
-            extrablack: "font-extrablack",
-        },
-        size: {
-            xs: "text-xs",
-            sm: "text-xs",
-            md: "text-xs",
-            lg: "text-sm",
-            xl: "text-base",
-            "2xl": "text-lg",
-            "3xl": "text-xl",
-            "4xl": "text-2xl",
-        }
-    },
-});
-
-const AgendaMonthIndicator = ({ activeWeek }: AgendaMonthIndicatorProps) => {
-    const { styles } = useContext(AgendaComponentContext);
-    const activeMonths = useMemo<[string, string | null]>(() => {
-        const activeMonth = format(activeWeek, CONSTANT_MONTH_STRING_FORMAT);
-        const endOfActiveWeek = endOfWeek(activeWeek);
-        if (isSameMonth(activeWeek, endOfActiveWeek)) return [activeMonth, null];
-        else return [activeMonth, format(endOfActiveWeek, CONSTANT_MONTH_STRING_FORMAT)];
-    }, [activeWeek]);
-    return <VStack className={agendaMonthIndicatorStyles({ padding: styles.paddingHorizontal })}>
-        {activeMonths.map((month) => <Animated.Text 
-                key={month} 
-                layout={LinearTransition} 
-                entering={FadeInUp} 
-                exiting={FadeOutUp} 
-                className={agendaMonthIndicatorTextStyles({ size: styles.selectionDateFontSize })}
-            >
-                {month}
-            </Animated.Text>
-        )}
-    </VStack>
-};
 
 const agendaWeekItemStyles = tva({
     base: "justify-evenly items-start",
@@ -217,8 +133,6 @@ const AgendaWeekItem = ({ date }: AgendaWeekItemProps) => {
         {weekDays.map((weekDay) => <AgendaWeekDayItem key={getDateIdentity(weekDay)} date={weekDay} />)}
     </HStack>
 };
-
-cssInterop(Animated.View, { className: 'style' });
 
 const agendaWeekDayItemContainerStyles = tva({
     base: "flex-col items-center justify-center gap-1 my-2",
@@ -324,14 +238,16 @@ const agendaWeekDayItemDotStyle = tva({
 
 const AgendaWeekDayItem = ({ date }: AgendaWeekDayItemProps) => {
     const { selectedDate, setSelectedDate, dateRangeStart, dateRangeEnd, dateSetWithAgendaItems, styles } = useContext(AgendaComponentContext);
-    const isBeyondDateRange = isBefore(date, subDays(dateRangeStart, 1)) || isAfter(date, dateRangeEnd);
-    const containsItems = dateSetWithAgendaItems.has(getDateIdentity(date));
-    const isSelected = isSameDay(date, selectedDate);
-    const isCurrentDay = isSameDay(date, new Date());
-    const isFirstDayOfMonth = isSameDay(date, startOfMonth(date));
-    const handleDaySelection = () => {
+    const dateItemIdentity = getDateIdentity(date);
+    const selectedDateIdentity = getDateIdentity(selectedDate);
+    const isBeyondDateRange = useMemo(() => isBefore(date, subDays(dateRangeStart, 1)) || isAfter(date, dateRangeEnd), [dateItemIdentity, getDateIdentity(dateRangeStart), getDateIdentity(dateRangeEnd)]);
+    const containsItems = useMemo(() => dateSetWithAgendaItems.has(dateItemIdentity), [dateItemIdentity, dateSetWithAgendaItems]);
+    const isSelected = useMemo(() => isSameDay(date, selectedDate), [dateItemIdentity, selectedDateIdentity]);
+    const isCurrentDay = useMemo(() => isSameDay(date, new Date()), [dateItemIdentity]);
+    const isFirstDayOfMonth = useMemo(() => isSameDay(date, startOfMonth(date)), [dateItemIdentity]);
+    const handleDaySelection = useCallback(() => {
         if (!isBeyondDateRange) setSelectedDate(date);
-    }
+    }, [isBeyondDateRange, getDateIdentity(date)]);
     return <Pressable onPress={handleDaySelection}>
         <VStack className={agendaWeekDayItemContainerStyles({ isFirstDayOfMonth })}>
             <Text className={agendaWeekDayItemTextStyles({ size: styles.selectionDateFontSize, fontCase: styles.selectionDateFontCase, fontWeight: styles.selectionDateFontWeight })}>
@@ -346,12 +262,6 @@ const AgendaWeekDayItem = ({ date }: AgendaWeekDayItemProps) => {
         </VStack>
     </Pressable>
 };
-
-type AgendaMonthIndicatorProps = {
-    activeWeek: Date,
-};
-
-
 
 type AgendaWeekItemProps = {
     date: Date,

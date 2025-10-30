@@ -24,8 +24,6 @@ export default function ApplicationAgendaScreen() {
   const [isLoadingMoreItems, setIsLoadingMoreItems] = useState(false);
   const [hasLoadedAllItems, setHasLoadedAllItems] = useState(false);
   const [hasOutdatedItems, setHasOutdatedItems] = useState(false);
-  const [dateRangeStart, setDateRangeStart] = useState(new Date("2025-10-16"));
-  const [dateRangeEnd, setDateRangeEnd] = useState(new Date("2025-11-05"));
   const handleRefresh = () => {
     setIsRefreshing(true);
     // TODO: implement refresh logic
@@ -61,8 +59,8 @@ export default function ApplicationAgendaScreen() {
       <TabDashboardHeader title="Calendar of Activities" />
       <Agenda 
         items={items}
-        dateRangeStart={dateRangeStart}
-        initialDateRangeEnd={dateRangeEnd}
+        // dateRangeStart={dateRangeStart}
+        // initialDateRangeEnd={dateRangeEnd}
         // initialSelectedDate={new Date("2025-10-20")}
         isLoading={isLoading} // initial loading, displays ui skeleton
         hasOutdatedItems={hasOutdatedItems}

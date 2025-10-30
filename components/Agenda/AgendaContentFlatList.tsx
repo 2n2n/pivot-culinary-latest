@@ -87,7 +87,6 @@ export default function AgendaContentFlatList<T extends any>({
     const derivedSelectedDateIndex = useMemo(() => {
         return itemsWithFilledGapsRef.current.findIndex(item => isSameDay(item.date, selectedDate));
         // rely on the date's string representation instead of Date object reference
-        // TODO: Make a unit test to see if getDateIdentity is consistent
     }, [getDateIdentity(selectedDate)]);
     const handleOnChangeVisibleItemIndexes = useCallback((firstViewableIndex: number, lastViewableIndex: number) => {
         if (handleOnChangeVisibleItemIndexesDebounceRef.current != null) clearTimeout(handleOnChangeVisibleItemIndexesDebounceRef.current);

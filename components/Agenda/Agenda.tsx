@@ -4,6 +4,7 @@ import { getDateIdentity, getSafeDateRangeEnd, getSafeDateRangeStart } from "@/c
 import AgendaContentReturnToPresentButton from "@/components/Agenda/AgendaContentReturnToPresentButton";
 import AgendaContentRefreshButton from "@/components/Agenda/AgendaContentRefreshButton";
 import AgendaContentFlatList from "@/components/Agenda/AgendaContentFlatList";
+import AgendaMonthIndicator from "@/components/Agenda/AgendaMonthIndicator";
 import AgendaDateSelection from "@/components/Agenda/AgendaSelection";
 import { AgendaComponentContext } from "@/components/Agenda/context";
 import AgendaUISkeleton from "@/components/Agenda/AgendaUISkeleton";
@@ -12,13 +13,8 @@ import { VStack } from "@/components/ui/vstack";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Animated  from "react-native-reanimated";
 import { addDays, subDays } from "date-fns";
-import { cssInterop } from "nativewind";
+import { StyleSheet } from "react-native";
 
-const DEFAULT_STARTING_WEEK_DAY = "monday";
-const DEFAULT_AVERAGE_GESTURE_INTERVAL_MS = 350;
-const DEFAULT_DATE_RANGE_START = subDays(new Date(), 7);
-const DEFAULT_DATE_RANGE_END = addDays(new Date(), 7);
-cssInterop(Animated.View, { className: 'style' });
 
 export default function Agenda<T extends any>(
     { 
@@ -31,38 +27,35 @@ export default function Agenda<T extends any>(
         isLoadingMoreItems = false,
         onLoadMoreItems = () => {},
         renderItem, 
-        dateRangeStart = DEFAULT_DATE_RANGE_START, 
-        initialDateRangeEnd = DEFAULT_DATE_RANGE_END,
+        dateRangeStart = subDays(new Date(), 7), 
+        initialDateRangeEnd = addDays(new Date(), 7),
         options,
         styles,
     }: AgendaProps<T>
 ) {
+    const prevHasOutdatedItemsValueRef = useRef(hasOutdatedItems);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [isPresentDateVisible, setIsPresentDateVisible] = useState(true);
-    const prevHasOutdatedItemsValueRef = useRef(hasOutdatedItems);
     const dateSetWithAgendaItems = useMemo(() => {
         const updatedDateSet: Set<string> = new Set();
-        for (let index = 0; index < items.length; index++) {
-            const itemDate = items[index].date;
-            updatedDateSet.add(getDateIdentity(itemDate));
-        }
+        items.forEach((item) => updatedDateSet.add(getDateIdentity(item.date)));
         return updatedDateSet;
     }, [items]);
     // ensures that when the items that are beyond the date range are still selectable
-    const safeDateRangeStart = getSafeDateRangeStart(items, dateRangeStart);
-    const safeDateRangeEnd = getSafeDateRangeEnd(items, initialDateRangeEnd);
+    const safeDateRangeStart = useMemo(() => getSafeDateRangeStart(items, dateRangeStart), [items, dateRangeStart]);
+    const safeDateRangeEnd = useMemo(() => getSafeDateRangeEnd(items, initialDateRangeEnd), [items, initialDateRangeEnd]);
     const handleRefresh = useCallback(() => {
-        if (isRefreshing) return;
-        onRefresh();
-    }, [isRefreshing, onRefresh]);
+        if (!isRefreshing) onRefresh();
+    }, [isRefreshing, onRefresh]); 
     const handleLoadMoreItems = useCallback(() => {
-        if (isLoadingMoreItems || hasLoadedAllItems) return;
-        onLoadMoreItems(safeDateRangeEnd)
+        if (!isLoadingMoreItems && !hasLoadedAllItems) onLoadMoreItems(safeDateRangeEnd);
     }, [isLoadingMoreItems, hasLoadedAllItems, onLoadMoreItems, safeDateRangeEnd]);
     const handleReturnToPresent = useCallback(() => {
         setSelectedDate(new Date());
         setIsPresentDateVisible(true);
     }, []);
+    const agendaOptions = useMemo(() => Object.assign(DEFAULT_OPTIONS, options), [options]);
+    const computedStyles = useMemo(() => Object.assign(DEFAULT_STYLES, styles), [styles]);
     useEffect(() => {
         if (!hasOutdatedItems && prevHasOutdatedItemsValueRef.current !== hasOutdatedItems) handleReturnToPresent();
         prevHasOutdatedItemsValueRef.current = hasOutdatedItems;
@@ -73,53 +66,71 @@ export default function Agenda<T extends any>(
         dateSetWithAgendaItems,
         dateRangeStart: safeDateRangeStart,
         dateRangeEnd: safeDateRangeEnd,
-        agendaOptions: Object.assign({
-            displayedStartingWeekDay: DEFAULT_STARTING_WEEK_DAY,
-            averageGestureIntervalMs: DEFAULT_AVERAGE_GESTURE_INTERVAL_MS,
-        }, options),
-        styles: Object.assign({
-            paddingHorizontal: "md",
-            itemsSpacing: "md",
-            itemGroupSpacing: "md",
-            dateSelectionSpacing: "even",
-            overheadButtonInset: 15,
-            overheadButtonSize: "sm",
-            selectionDateFontSize: "sm",
-            selectionDateFontCase: "uppercase",
-            selectionDateFontWeight: "normal",
-        }, styles),
+        agendaOptions,
+        styles: computedStyles,
     }}>
-        <VStack className="flex-1 bg-[#F5F5F5]">
-            {
-                isLoading ? 
-                <AgendaUISkeleton /> 
-                : <>
-                    {/* TODO: Break down AgendaDateSelection */}
+        <VStack style={AgendaStyles.container}>
+            { isLoading && <AgendaUISkeleton /> }
+            { !isLoading && <>
+                <VStack className="bg-white gap-2 pb-3">
+                    <AgendaMonthIndicator activeWeek={selectedDate} />
                     <AgendaDateSelection />
-                    <Animated.View className="flex-1 bg-[#F5F5F5] overflow-hidden relative">
-                        <AgendaContentFlatList 
-                            items={items} 
-                            renderItem={renderItem}
-                            hasLoadedAllItems={hasLoadedAllItems}
-                            isLoadingMoreItems={isLoadingMoreItems}
-                            onLoadMoreItems={handleLoadMoreItems}
-                            onPresentDateItemVisiblityChange={setIsPresentDateVisible}
-                        /> 
-                        <AgendaContentReturnToPresentButton 
-                            hasOutdatedItems={hasOutdatedItems}
-                            isPresentDateVisible={isPresentDateVisible}
-                            onPress={handleReturnToPresent}
-                        />
-                        <AgendaContentRefreshButton 
-                            hasOutdatedItems={hasOutdatedItems}
-                            refreshing={isRefreshing}
-                            onPress={handleRefresh} 
-                        />
-                    </Animated.View>
-                </>
-            }
+                </VStack>
+                <Animated.View style={AgendaStyles.contentContainer}>
+                    <AgendaContentFlatList 
+                        items={items} 
+                        renderItem={renderItem}
+                        hasLoadedAllItems={hasLoadedAllItems}
+                        isLoadingMoreItems={isLoadingMoreItems}
+                        onLoadMoreItems={handleLoadMoreItems}
+                        onPresentDateItemVisiblityChange={setIsPresentDateVisible}
+                    /> 
+                    <AgendaContentReturnToPresentButton 
+                        hasOutdatedItems={hasOutdatedItems}
+                        isPresentDateVisible={isPresentDateVisible}
+                        onPress={handleReturnToPresent}
+                    />
+                    <AgendaContentRefreshButton 
+                        hasOutdatedItems={hasOutdatedItems}
+                        refreshing={isRefreshing}
+                        onPress={handleRefresh} 
+                    />
+                </Animated.View>
+            </>} 
         </VStack>
     </AgendaComponentContext.Provider>
+};
+
+const AgendaStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#F5F5F5",
+        position: "relative"
+    },
+    contentContainer: {
+        flex: 1,
+        backgroundColor: "#F5F5F5",
+        overflow: "hidden",
+        position: "relative"
+    }
+});
+
+const DEFAULT_STARTING_WEEK_DAY = "monday";
+const DEFAULT_AVERAGE_GESTURE_INTERVAL_MS = 350;
+const DEFAULT_OPTIONS = {
+    displayedStartingWeekDay: DEFAULT_STARTING_WEEK_DAY,
+    averageGestureIntervalMs: DEFAULT_AVERAGE_GESTURE_INTERVAL_MS,
+};
+const DEFAULT_STYLES = {
+    paddingHorizontal: "md",
+    itemsSpacing: "md",
+    itemGroupSpacing: "md",
+    dateSelectionSpacing: "even",
+    overheadButtonInset: 15,
+    overheadButtonSize: "sm",
+    selectionDateFontSize: "sm",
+    selectionDateFontCase: "uppercase",
+    selectionDateFontWeight: "normal",
 };
 
 /**
@@ -154,7 +165,6 @@ type AgendaProps<T extends any> = {
     /** **Required** - Function to render each individual agenda item */
     renderItem: RenderItemFunction<T>,
     /** Configuration options for agenda behavior and display
-     * @property {string} color - The color of the agenda items (defaults to "#000000")
      * @property {AgendaItemSpacing} itemsSpacing - The spacing between the agenda items (defaults to "sm")
      * @property {AgendaItemSpacing} itemGroupSpacing - The spacing between the agenda item groups (defaults to "sm")
      * @property {AgendaItemSpacing} dateSelectionSpacing - The spacing between the date selection (defaults to "sm")
