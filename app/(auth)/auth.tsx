@@ -101,7 +101,13 @@ function AuthLoginScreen() {
   }
 
   async function onSubmitOTP(code: string) {
-    authResponse?.confirm(code);
+    try {
+      const credentials = await authResponse?.confirm(code);
+      console.log("🚀 ~ onSubmitOTP ~ credentials:", credentials);
+    } catch (err) {
+      // TODO: add error message [auth/invalid-verification-code] The multifactor verification code used to create the auth credential is invalid.
+      console.log(err);
+    }
   }
 
   async function onResendOTP() {}

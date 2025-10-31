@@ -23,7 +23,6 @@ import { useContext, useEffect, useState } from "react";
 import { getAccountLocation, groupByAccount } from "@/helpers";
 import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
 import { useColorMode } from "@/app/_layout";
-import useEvents from "@/hooks/useEvents";
 
 const colorModeMap: Record<string, string> = {
   light: "PIVOT",
@@ -31,8 +30,9 @@ const colorModeMap: Record<string, string> = {
 };
 const AccountModal = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const { colorMode, setIsSwitchingApp, isSwitchingApp, setIsCompleted } =
-    useContext(ThemeLoaderScreenContext);
+  const { colorMode, setIsSwitchingApp, setIsCompleted } = useContext(
+    ThemeLoaderScreenContext
+  );
 
   const { setColorMode } = useColorMode();
 
@@ -44,20 +44,6 @@ const AccountModal = () => {
   const { data: userAccounts, isLoading: userAccountsIsLoading } = useAccounts(
     user as FirebaseAuthTypes.User
   );
-
-  const {
-    data: eventData,
-    isFetching: eventIsFetching,
-    isStale: eventIsStale,
-  } = useEvents(selectedAccount?.id ?? null);
-
-  useEffect(() => {
-    if (!eventIsFetching || eventIsStale) {
-      setTimeout(() => {
-        setIsSwitchingApp(false);
-      }, 2000);
-    }
-  }, [eventIsFetching, eventIsStale, eventData]);
 
   const accountSwitchHandler = (account: Account) => {
     setShow(false);

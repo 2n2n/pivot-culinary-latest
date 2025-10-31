@@ -1,7 +1,6 @@
-import { createContext, useEffect, useState } from "react";
-import useAccounts from "@/hooks/useAccounts";
-import { getAuth } from "@react-native-firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
 import useBookings from "@/hooks/useBookings";
+import { ThemeLoaderScreenContext } from "../theme_loader_screen/ThemeLoaderScreenProvider";
 
 export const AccountModalContext = createContext<{
   showModal: boolean;
@@ -25,8 +24,7 @@ export const AccountModalProvider = ({
   // this will identify which account was selected all througout the app.
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
-  const { data: bookings, isLoading: bookingIsLoading } =
-    useBookings(selectedAccount);
+  useBookings(selectedAccount);
 
   return (
     <AccountModalContext.Provider

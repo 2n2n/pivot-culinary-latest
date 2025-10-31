@@ -1,8 +1,9 @@
 import { ModeType } from "@/components/ui/gluestack-ui-provider";
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import ThemedLoaderScreen from "./components/ThemedLoadingScreen";
 import { DEFAULT_COLOR_MODE } from "@/app/_layout";
-import { useModal } from "../account_modal/hooks/useModal";
+import { AccountModalContext } from "../account_modal/AccountModalProvider";
+import useBookings from "@/hooks/useBookings";
 
 export const ThemeLoaderScreenContext = createContext<{
   colorMode: ModeType;
@@ -27,8 +28,30 @@ const ThemeLoaderScreenProvider = ({
 }) => {
   const [isSwitchingApp, setIsSwitchingApp] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const { selectedAccount } = useContext(AccountModalContext);
 
-  const { selectedAccount } = useModal();
+  const {
+    data: bookings,
+    isFetching: bookingsIsFetching,
+    isStale: bookingsIsStale,
+    isLoading: bookingsIsLoading,
+  } = useBookings(selectedAccount);
+
+  useEffect(() => {
+    if (!(bookingsIsFetching && bookingsIsStale && bookingsIsLoading)) {
+      setTimeout(() => {
+        setIsSwitchingApp(false);
+      }, 1000);
+    }
+    console.log(
+      "🚀 ~ AccountModalProvider ~ bookingsIsFetching, bookingsIsStale, bookingsIsLoading:",
+      bookingsIsFetching,
+      bookingsIsStale,
+      bookingsIsLoading,
+      bookings
+    );
+  }, [bookingsIsFetching, bookingsIsStale, bookingsIsLoading, bookings]);
+
   return (
     <ThemeLoaderScreenContext.Provider
       value={{
@@ -43,7 +66,6 @@ const ThemeLoaderScreenProvider = ({
         theme={colorMode}
         switching={isSwitchingApp}
         completed={isCompleted}
-        account={selectedAccount as Account}
       >
         {children}
       </ThemedLoaderScreen>

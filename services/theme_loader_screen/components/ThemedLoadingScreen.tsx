@@ -13,12 +13,16 @@ import { Image } from "expo-image";
 import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
 import AppLogo from "@/components/AppLogo";
 import { getAccountLocation, getOtherTheme } from "@/helpers";
+import { useContext, useEffect } from "react";
+import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
 
 const LOADING_INDICATOR_SIZE = 64;
 
 cssInterop(Image, { className: "style" });
 
 export default function ThemedLoaderScreen(props: ThemedLoaderScreenProps) {
+  const { selectedAccount: account } = useContext(AccountModalContext);
+
   return (
     <>
       {props.children}
@@ -45,22 +49,20 @@ export default function ThemedLoaderScreen(props: ThemedLoaderScreenProps) {
                 size={LOADING_INDICATOR_SIZE}
               />
             )}
-            {props.account && (
+            {account && (
               <VStack className="gap-4 items-center">
                 <Text className="text-white">Switching to...</Text>
                 <HStack className="gap-3 py-3 px-4 bg-white rounded-xl items-center">
                   <Avatar size="lg">
                     {/* <AvatarImage source={{ uri: props.account.avatar }} /> */}
                     <AvatarFallbackText>
-                      {(props.account.name || "").replace("-", "")}
+                      {(account.name || "").replace("-", "")}
                     </AvatarFallbackText>
                   </Avatar>
                   <VStack className="gap-1">
-                    <Text className="text-black font-bold">
-                      {props.account.name}
-                    </Text>
+                    <Text className="text-black font-bold">{account.name}</Text>
                     <Text className="text-black text-sm">
-                      {getAccountLocation(props.account) === "PIVOT"
+                      {getAccountLocation(account) === "PIVOT"
                         ? "Pivot Culinary"
                         : "Game Day"}
                     </Text>
@@ -89,7 +91,6 @@ export default function ThemedLoaderScreen(props: ThemedLoaderScreenProps) {
 
 type ThemedLoaderScreenProps = React.PropsWithChildren<{
   theme: ModeType;
-  account?: Account;
   switching: boolean;
   completed: boolean;
 }>;

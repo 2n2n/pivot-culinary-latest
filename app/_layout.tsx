@@ -92,8 +92,9 @@ function RootLayoutNav() {
             {/** //* THEMED LOADER SCREEN */}
             <AuthProvider>
               <AccountModalProvider>
-                {/** //* THEMED LOADER SCREEN */}
                 <ThemeLoaderScreenProvider colorMode={colorMode}>
+                  {/** //* THEMED LOADER SCREEN */}
+
                   <Stack>
                     <Stack.Screen
                       name="landing"
