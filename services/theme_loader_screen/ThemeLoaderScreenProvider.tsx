@@ -41,7 +41,14 @@ const ThemeLoaderScreenProvider = ({
     isLoading: bookingsIsLoading,
   } = useBookings(selectedAccount);
 
-  // time to listen to the selectedAccount state change.
+  /**
+   * Nov. 3, 2025
+   *  IMPORTANT: This is one of the most critical component of the app.
+   *  This component will handle the global change of isSwitchingApp and isComplete
+   *  This will trigger the loading screen to show the correct state.
+   *  In order to use this make sure that where you call setIsComplete is set to false.
+   *  The useEffect below listens to any changes with the isSwitchingApp and selectedAccount.
+   * */
   useEffect(() => {
     if (isSwitchingApp) {
       if (selectedAccount) {
@@ -52,7 +59,7 @@ const ThemeLoaderScreenProvider = ({
           setTimeout(() => {
             // with a brief delay this will trigger the switching state.
             setIsCompleted(true);
-          }, 100);
+          }, 1000);
         } else {
           // enter this statement if the app doesn't need to switch to another location.
           // this will show the current location's switching state.
@@ -62,10 +69,15 @@ const ThemeLoaderScreenProvider = ({
     }
   }, [selectedAccount, isSwitchingApp]);
 
-  // this will trigger the end of the loading screen.
+  /**
+   * Nov 3, 2025
+   * IMPORTANT: This state will manage the closing of the fetching state after
+   * the fetching or loading of the bookings is complete.
+   */
   useEffect(() => {
     if (isSwitchingApp) {
       if (!(bookingsIsFetching && bookingsIsStale && bookingsIsLoading)) {
+        // with a brief delay this will trigger the closing of the fetching state.
         setTimeout(() => {
           setIsSwitchingApp(false);
         }, 2000);

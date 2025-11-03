@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Input, InputField } from "../../components/ui/input";
 import { Button, ButtonText } from "../../components/ui/button";
 import { Box } from "../../components/ui/box";
@@ -11,12 +11,10 @@ import AuthOTPForm from "@/components/OtpForm";
 import AppAdaptiveLogo from "@/components/shared/AppAdaptiveLogo";
 import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
 import { AuthContext } from "@/services/auth/AuthProvider";
-import useAccounts from "@/hooks/useAccounts";
-import { getAccountLocation, groupByAccount } from "@/helpers";
+import { groupByAccount } from "@/helpers";
 import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
 import { getContactInfo } from "@/requests/contact.request";
 import getAccount from "@/requests/acccount.request";
-import { colorModeMap } from "@/services/account_modal/component/AccountModal";
 
 /**
  * AUTHENTICATION FLOW OVERVIEW
@@ -90,6 +88,7 @@ import { colorModeMap } from "@/services/account_modal/component/AccountModal";
 // TODO: Polish this screen, where it should animate the initial state of the phone number into the active state
 function AuthLoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingOTP, setIsSubmittingOTP] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [authResponse, setAuthResponse] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
@@ -119,7 +118,7 @@ function AuthLoginScreen() {
 
   async function onSubmitOTP(code: string) {
     try {
-      // check what is the current mode?
+      setIsSubmittingOTP(true);
       const credentials = await authResponse?.confirm(code);
       let _groupedAccounts: Account[] = [];
       if (credentials) {
@@ -156,6 +155,8 @@ function AuthLoginScreen() {
       setIsSwitchingApp(false);
       // TODO: add error message [auth/invalid-verification-code] The multifactor verification code used to create the auth credential is invalid.
       console.log(err);
+    } finally {
+      setIsSubmittingOTP(false);
     }
   }
 
@@ -209,6 +210,7 @@ function AuthLoginScreen() {
   } else {
     return (
       <AuthOTPForm
+        isSubmitting={isSubmittingOTP}
         onSubmitHandler={onSubmitOTP}
         onResendHandler={onResendOTP}
       />
