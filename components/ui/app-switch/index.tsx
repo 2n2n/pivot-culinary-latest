@@ -15,6 +15,8 @@ import { Icon } from "../icon";
 import PivotCulinaryIcon from "@/components/SvgIcons/PivotIconWhite";
 import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { Image } from "../image";
+import { useColorMode } from "@/app/_layout";
+import { ModeType } from "../gluestack-ui-provider";
 
 const AnimatedBox = Animated.createAnimatedComponent(Box);
 
@@ -31,8 +33,11 @@ const AppSwitch = ({
 
   const [mode, setMode] = useState(initialMode); // pivot or gameday
 
+  const { setColorMode } = useColorMode();
+
   useEffect(() => {
     onChangeMode(mode);
+    setColorMode(mode === "pivot" ? "light" : ("dark" as ModeType));
   }, [mode]);
   // SB means Switch Button this is SBAnimatedStyles
   const SBanimatedStyles = useAnimatedStyle(() => ({

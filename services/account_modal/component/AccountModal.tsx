@@ -19,27 +19,30 @@ import { HStack } from "@/components/ui/hstack";
 import { router } from "expo-router";
 import { FirebaseAuthTypes, getAuth } from "@react-native-firebase/auth";
 import useAccounts from "@/hooks/useAccounts";
-import { useContext, useEffect, useState } from "react";
-import { getAccountLocation, groupByAccount } from "@/helpers";
+import { useContext } from "react";
 import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
-import { useColorMode } from "@/app/_layout";
+import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
 
-const colorModeMap: Record<string, string> = {
+export const colorModeMap: Record<string, string> = {
   light: "PIVOT",
   dark: "GAME DAY",
 };
 const AccountModal = () => {
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  const { colorMode, setIsSwitchingApp, setIsCompleted } = useContext(
+  const { accounts } = useContext(AccountModalContext);
+  const { setIsSwitchingApp, setIsCompleted } = useContext(
     ThemeLoaderScreenContext
   );
 
-  const { setColorMode } = useColorMode();
-
   const user = getAuth().currentUser;
 
-  const { show, setShow, selectedAccount, setSelectedAccount, signOut } =
-    useModal();
+  const {
+    showModal: show,
+    setShowModal: setShow,
+    selectedAccount,
+    setSelectedAccount,
+  } = useContext(AccountModalContext);
+
+  const { signOut } = useModal();
 
   const { data: userAccounts, isLoading: userAccountsIsLoading } = useAccounts(
     user as FirebaseAuthTypes.User
@@ -47,32 +50,19 @@ const AccountModal = () => {
 
   const accountSwitchHandler = (account: Account) => {
     setShow(false);
-    const accountLocation = getAccountLocation(account);
-    if (colorModeMap[colorMode] !== accountLocation) {
-      // if we switch to another location
-      setColorMode(accountLocation === "PIVOT" ? "light" : "dark");
-      setIsSwitchingApp(true);
-      setIsCompleted(false);
-      setTimeout(() => {
-        setIsCompleted(true);
-      }, 2000);
-    } else {
-      // if we are in the same location after switching.
-      setIsCompleted(true);
-      setIsSwitchingApp(true);
-    }
-
+    setIsCompleted(false);
+    setIsSwitchingApp(true);
     setSelectedAccount(account);
   };
 
-  useEffect(() => {
-    if (userAccountsIsLoading) {
-    }
+  // useEffect(() => {
+  //   if (userAccountsIsLoading) {
+  //   }
 
-    if (Array.isArray(userAccounts)) {
-      setAccounts(groupByAccount(userAccounts) || []);
-    }
-  }, [userAccounts, userAccountsIsLoading]);
+  //   if (Array.isArray(userAccounts)) {
+  //     setAccounts(groupByAccount(userAccounts) || []);
+  //   }
+  // }, [userAccounts, userAccountsIsLoading]);
 
   return (
     <Modal

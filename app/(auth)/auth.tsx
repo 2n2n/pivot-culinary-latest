@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Input, InputField } from "../../components/ui/input";
 import { Button, ButtonText } from "../../components/ui/button";
 import { Box } from "../../components/ui/box";
 import { Text } from "../../components/ui/text";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { VStack } from "@/components/ui/vstack";
 import useAuth from "@/services/auth/hooks/useAuth";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import AuthOTPForm from "@/components/OtpForm";
 import AppAdaptiveLogo from "@/components/shared/AppAdaptiveLogo";
+import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
+import { AuthContext } from "@/services/auth/AuthProvider";
+import useAccounts from "@/hooks/useAccounts";
+import { getAccountLocation, groupByAccount } from "@/helpers";
+import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
+import { getContactInfo } from "@/requests/contact.request";
+import getAccount from "@/requests/acccount.request";
+import { colorModeMap } from "@/services/account_modal/component/AccountModal";
 
 /**
  * AUTHENTICATION FLOW OVERVIEW
@@ -87,9 +95,18 @@ function AuthLoginScreen() {
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const { signIn } = useAuth();
 
+  const { user, setUser } = useContext(AuthContext);
+  const { accounts, setAccounts, setSelectedAccount } =
+    useContext(AccountModalContext);
+
+  const { setIsSwitchingApp, setIsCompleted } = useContext(
+    ThemeLoaderScreenContext
+  );
+
   async function handleLogin() {
     try {
       setIsSubmitting(true);
+      // Call signIn with the provided phone number
       const response = await signIn(phoneNumber);
       setAuthResponse(response);
     } catch (error) {
@@ -102,9 +119,41 @@ function AuthLoginScreen() {
 
   async function onSubmitOTP(code: string) {
     try {
+      // check what is the current mode?
       const credentials = await authResponse?.confirm(code);
-      console.log("🚀 ~ onSubmitOTP ~ credentials:", credentials);
+      let _groupedAccounts: Account[] = [];
+      if (credentials) {
+        if (credentials.user) {
+          // set the user directly from authProvider.
+          setUser(credentials.user);
+          // get all contacts attached to the user.
+          if (user?.phoneNumber) {
+            const contactData = await getContactInfo(user.phoneNumber);
+            if (contactData && contactData?.accounts) {
+              // get all the accounts without any cache.
+              const _accounts = await Promise.all(
+                contactData.accounts.map((contact: Contact) => {
+                  return getAccount(contact.account_id);
+                })
+              );
+              _groupedAccounts = groupByAccount(_accounts);
+              setAccounts(_groupedAccounts);
+              // set the first account selected.
+              if (_groupedAccounts.length > 0) {
+                const _selectedAccount = _groupedAccounts[0] as Account;
+                setIsCompleted(false);
+                setSelectedAccount(_selectedAccount);
+              }
+            } else {
+              setAccounts([]);
+            }
+            setIsSwitchingApp(true);
+            router.replace("/(application)/(tabs)/agenda");
+          }
+        }
+      }
     } catch (err) {
+      setIsSwitchingApp(false);
       // TODO: add error message [auth/invalid-verification-code] The multifactor verification code used to create the auth credential is invalid.
       console.log(err);
     }

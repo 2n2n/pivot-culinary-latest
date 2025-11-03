@@ -5,7 +5,7 @@ import {
   ModeType,
 } from "@/components/ui/gluestack-ui-provider";
 
-import { useEffect, useState, createContext, useContext, useRef } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as SplashScreen from "expo-splash-screen";
@@ -21,6 +21,7 @@ import { AccountModalProvider } from "@/services/account_modal/AccountModalProvi
 import { AuthProvider } from "@/services/auth/AuthProvider";
 import ThemeLoaderScreenProvider from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
 import { AppState, AppStateStatus, Platform } from "react-native";
+import { useColorScheme } from "react-native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -77,7 +78,8 @@ export const useColorMode = () => {
 export const DEFAULT_COLOR_MODE = "light";
 
 function RootLayoutNav() {
-  const [colorMode, setColorMode] = useState<ModeType>(DEFAULT_COLOR_MODE);
+  const colorScheme = useColorScheme();
+  const [colorMode, setColorMode] = useState<ModeType>(colorScheme as ModeType);
   useEffect(() => {
     const subscription = AppState.addEventListener("change", onAppStateChange);
 

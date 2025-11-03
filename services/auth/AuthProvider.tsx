@@ -34,15 +34,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const subscriber = onAuthStateChanged(getAuth(), (user) => {
-      if (user) {
-        setUser(user);
-        router.replace("/(application)/(tabs)/agenda");
-      } else {
+    const subscriber = onAuthStateChanged(getAuth(), (_user) => {
+      // check if the authStateChanged returned a _user
+      if (_user?.uid) {
+        // check if the current state user is the same with the _user changes
+        if (user?.uid !== _user.uid) {
+          setUser(_user);
+        }
+        // check upon change of the path segments, if the user is not on a guest route, redirect to the landing page
         if (!isGuest(pathSegments || [])) {
-          // Redirect unauthenticated users to auth screen if not on guest routes
+          setUser(_user);
           router.replace("/landing");
         }
+
+        // // if the app loads the current user on open, and the user is still valid, redirect to the agenda screen
+        // if (user?.uid === _user.uid) {
+        //   router.replace("/(application)/(tabs)/agenda");
+        // }
       }
     });
     return subscriber; // unsubscribe on unmount
