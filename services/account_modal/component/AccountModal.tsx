@@ -17,28 +17,31 @@ import { useModal } from "@/services/account_modal/hooks/useModal";
 import AccountModalItem from "./AccountModalItem";
 import { HStack } from "@/components/ui/hstack";
 import { router } from "expo-router";
-import { FirebaseAuthTypes, getAuth } from "@react-native-firebase/auth";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import useAccounts from "@/hooks/useAccounts";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
 import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
+import { AuthContext } from "@/services/auth/AuthProvider";
+import { groupByAccount } from "@/helpers";
 
 export const colorModeMap: Record<string, string> = {
   light: "PIVOT",
   dark: "GAME DAY",
 };
 const AccountModal = () => {
-  const { accounts } = useContext(AccountModalContext);
   const { setIsSwitchingApp, setIsCompleted } = useContext(
     ThemeLoaderScreenContext
   );
 
-  const user = getAuth().currentUser;
+  const { user } = useContext(AuthContext);
 
   const {
+    accounts,
     showModal: show,
     setShowModal: setShow,
     selectedAccount,
+    setAccounts,
     setSelectedAccount,
   } = useContext(AccountModalContext);
 
@@ -48,21 +51,24 @@ const AccountModal = () => {
     user as FirebaseAuthTypes.User
   );
 
+  // This useEffect is tightly coupled with the AuthProvider.
+  // It is used to set the accounts and the selected account when, the app is re-opened
+  useEffect(() => {
+    // TODO: add a loading screen upon first open.
+    if (userAccounts && Array.isArray(userAccounts)) {
+      setAccounts(groupByAccount(userAccounts));
+      if (userAccounts.length > 0) {
+        setSelectedAccount(userAccounts[0]);
+      }
+    }
+  }, [user, userAccounts, userAccountsIsLoading]);
+
   const accountSwitchHandler = (account: Account) => {
     setShow(false);
     setIsCompleted(false);
     setIsSwitchingApp(true);
     setSelectedAccount(account);
   };
-
-  // useEffect(() => {
-  //   if (userAccountsIsLoading) {
-  //   }
-
-  //   if (Array.isArray(userAccounts)) {
-  //     setAccounts(groupByAccount(userAccounts) || []);
-  //   }
-  // }, [userAccounts, userAccountsIsLoading]);
 
   return (
     <Modal

@@ -4,6 +4,7 @@ import {
   GluestackUIProvider,
   ModeType,
 } from "@/components/ui/gluestack-ui-provider";
+import auth from "@react-native-firebase/auth";
 
 import { useEffect, useState, createContext, useContext } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -22,6 +23,11 @@ import { AuthProvider } from "@/services/auth/AuthProvider";
 import ThemeLoaderScreenProvider from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
 import { AppState, AppStateStatus, Platform } from "react-native";
 import { useColorScheme } from "react-native";
+
+if (__DEV__) {
+  // Only run this in development mode
+  auth().settings.appVerificationDisabledForTesting = true;
+}
 
 export {
   // Catch any errors thrown by the Layout component.

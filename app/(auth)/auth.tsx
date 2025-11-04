@@ -95,8 +95,7 @@ function AuthLoginScreen() {
   const { signIn } = useAuth();
 
   const { user, setUser } = useContext(AuthContext);
-  const { accounts, setAccounts, setSelectedAccount } =
-    useContext(AccountModalContext);
+  const { setAccounts, setSelectedAccount } = useContext(AccountModalContext);
 
   const { setIsSwitchingApp, setIsCompleted } = useContext(
     ThemeLoaderScreenContext
