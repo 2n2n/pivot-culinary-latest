@@ -17,76 +17,58 @@ import { useModal } from "@/services/account_modal/hooks/useModal";
 import AccountModalItem from "./AccountModalItem";
 import { HStack } from "@/components/ui/hstack";
 import { router } from "expo-router";
-import { FirebaseAuthTypes, getAuth } from "@react-native-firebase/auth";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import useAccounts from "@/hooks/useAccounts";
-import { useContext, useEffect, useState } from "react";
-import { getAccountLocation, groupByAccount } from "@/helpers";
+import { useContext, useEffect } from "react";
 import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
-import { useColorMode } from "@/app/_layout";
-import useEvents from "@/hooks/useEvents";
+import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
+import { AuthContext } from "@/services/auth/AuthProvider";
+import { groupByAccount } from "@/helpers";
 
-const colorModeMap: Record<string, string> = {
+export const colorModeMap: Record<string, string> = {
   light: "PIVOT",
   dark: "GAME DAY",
 };
 const AccountModal = () => {
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  const { colorMode, setIsSwitchingApp, isSwitchingApp, setIsCompleted } =
-    useContext(ThemeLoaderScreenContext);
+  const { setIsSwitchingApp, setIsCompleted } = useContext(
+    ThemeLoaderScreenContext
+  );
 
-  const { setColorMode } = useColorMode();
+  const { user } = useContext(AuthContext);
 
-  const user = getAuth().currentUser;
+  const {
+    accounts,
+    showModal: show,
+    setShowModal: setShow,
+    selectedAccount,
+    setAccounts,
+    setSelectedAccount,
+  } = useContext(AccountModalContext);
 
-  const { show, setShow, selectedAccount, setSelectedAccount, signOut } =
-    useModal();
+  const { signOut } = useModal();
 
   const { data: userAccounts, isLoading: userAccountsIsLoading } = useAccounts(
     user as FirebaseAuthTypes.User
   );
 
-  const {
-    data: eventData,
-    isFetching: eventIsFetching,
-    isStale: eventIsStale,
-  } = useEvents(selectedAccount?.id ?? null);
-
+  // This useEffect is tightly coupled with the AuthProvider.
+  // It is used to set the accounts and the selected account when, the app is re-opened
   useEffect(() => {
-    if (!eventIsFetching || eventIsStale) {
-      setTimeout(() => {
-        setIsSwitchingApp(false);
-      }, 2000);
+    // TODO: add a loading screen upon first open.
+    if (userAccounts && Array.isArray(userAccounts)) {
+      setAccounts(groupByAccount(userAccounts));
+      if (userAccounts.length > 0) {
+        setSelectedAccount(userAccounts[0]);
+      }
     }
-  }, [eventIsFetching, eventIsStale, eventData]);
+  }, [user, userAccounts, userAccountsIsLoading]);
 
   const accountSwitchHandler = (account: Account) => {
     setShow(false);
-    const accountLocation = getAccountLocation(account);
-    if (colorModeMap[colorMode] !== accountLocation) {
-      // if we switch to another location
-      setColorMode(accountLocation === "PIVOT" ? "light" : "dark");
-      setIsSwitchingApp(true);
-      setIsCompleted(false);
-      setTimeout(() => {
-        setIsCompleted(true);
-      }, 2000);
-    } else {
-      // if we are in the same location after switching.
-      setIsCompleted(true);
-      setIsSwitchingApp(true);
-    }
-
+    setIsCompleted(false);
+    setIsSwitchingApp(true);
     setSelectedAccount(account);
   };
-
-  useEffect(() => {
-    if (userAccountsIsLoading) {
-    }
-
-    if (Array.isArray(userAccounts)) {
-      setAccounts(groupByAccount(userAccounts) || []);
-    }
-  }, [userAccounts, userAccountsIsLoading]);
 
   return (
     <Modal

@@ -1,5 +1,5 @@
 import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
-import { useRouter, useSegments } from "expo-router";
+import { useRouter } from "expo-router";
 import { createContext, useEffect } from "react";
 import { useState } from "react";
 
@@ -27,25 +27,35 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Record<string, any> | null>(null);
-
-  // useSegments returns an array of the current route's path segments, e.g. ['(auth)', 'otp']
-  const pathSegments = useSegments();
-
   const router = useRouter();
 
   useEffect(() => {
-    const subscriber = onAuthStateChanged(getAuth(), (user) => {
-      if (user) {
-        setUser(user);
-        router.replace("/(application)/(tabs)/agenda");
-      } else {
-        if (!isGuest(pathSegments || [])) {
-          // Redirect unauthenticated users to auth screen if not on guest routes
-          router.replace("/landing");
+    const subscriber = onAuthStateChanged(getAuth(), (_user) => {
+      console.log("~_user has changed", _user);
+      if (_user) {
+        // if there is a user in the current session, check if the app state has a user.
+        if (!user) {
+          setUser(_user);
+          console.log("~user was set to", _user, user);
+        } else {
+          // if the app state has a user, make sure to check if the user is the same with the _user.
+          if (user?.uid !== _user.uid) {
+            console.log(
+              "~user was set to",
+              _user,
+              "because it was different from the current user"
+            );
+            setUser(_user);
+          }
         }
+      } else {
+        // if the authStateChanged state doesn't have any user, redirect to landing page
+        router.replace("/landing");
       }
     });
-    return subscriber; // unsubscribe on unmount
+    return () => {
+      subscriber();
+    }; // unsubscribe on unmount
   }, []);
 
   return (

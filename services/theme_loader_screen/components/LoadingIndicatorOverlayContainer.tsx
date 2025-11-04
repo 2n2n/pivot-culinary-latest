@@ -51,7 +51,7 @@ const LoadingIndicatorOverlayContainer: React.FC<
 
   useEffect(() => {
     if (isSwitching) appearance.value = withTiming(FADE_IN);
-    else appearance.value = withDelay(2000, withTiming(FADE_OUT));
+    else appearance.value = withDelay(100, withTiming(FADE_OUT));
   }, [isSwitching]);
 
   useEffect(() => {
