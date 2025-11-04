@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Input, InputField } from "../../components/ui/input";
 import { Button, ButtonText } from "../../components/ui/button";
 import { Box } from "../../components/ui/box";
 import { Text } from "../../components/ui/text";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { VStack } from "@/components/ui/vstack";
 import useAuth from "@/services/auth/hooks/useAuth";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import AuthOTPForm from "@/components/OtpForm";
 import AppAdaptiveLogo from "@/components/shared/AppAdaptiveLogo";
+import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
+import { AuthContext } from "@/services/auth/AuthProvider";
+import { groupByAccount } from "@/helpers";
+import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
+import { getContactInfo } from "@/requests/contact.request";
+import getAccount from "@/requests/acccount.request";
 
 /**
  * AUTHENTICATION FLOW OVERVIEW
@@ -82,14 +88,23 @@ import AppAdaptiveLogo from "@/components/shared/AppAdaptiveLogo";
 // TODO: Polish this screen, where it should animate the initial state of the phone number into the active state
 function AuthLoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingOTP, setIsSubmittingOTP] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [authResponse, setAuthResponse] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const { signIn } = useAuth();
 
+  const { user, setUser } = useContext(AuthContext);
+  const { setAccounts, setSelectedAccount } = useContext(AccountModalContext);
+
+  const { setIsSwitchingApp, setIsCompleted } = useContext(
+    ThemeLoaderScreenContext
+  );
+
   async function handleLogin() {
     try {
       setIsSubmitting(true);
+      // Call signIn with the provided phone number
       const response = await signIn(phoneNumber);
       setAuthResponse(response);
     } catch (error) {
@@ -101,7 +116,47 @@ function AuthLoginScreen() {
   }
 
   async function onSubmitOTP(code: string) {
-    authResponse?.confirm(code);
+    try {
+      setIsSubmittingOTP(true);
+      const credentials = await authResponse?.confirm(code);
+      let _groupedAccounts: Account[] = [];
+      if (credentials) {
+        if (credentials.user) {
+          // set the user directly from authProvider.
+          setUser(credentials.user);
+          // get all contacts attached to the user.
+          if (user?.phoneNumber) {
+            const contactData = await getContactInfo(user.phoneNumber);
+            if (contactData && contactData?.accounts) {
+              // get all the accounts without any cache.
+              const _accounts = await Promise.all(
+                contactData.accounts.map((contact: Contact) => {
+                  return getAccount(contact.account_id);
+                })
+              );
+              _groupedAccounts = groupByAccount(_accounts);
+              setAccounts(_groupedAccounts);
+              // set the first account selected.
+              if (_groupedAccounts.length > 0) {
+                const _selectedAccount = _groupedAccounts[0] as Account;
+                setIsCompleted(false);
+                setSelectedAccount(_selectedAccount);
+              }
+            } else {
+              setAccounts([]);
+            }
+            setIsSwitchingApp(true);
+            router.replace("/(application)/(tabs)/agenda");
+          }
+        }
+      }
+    } catch (err) {
+      setIsSwitchingApp(false);
+      // TODO: add error message [auth/invalid-verification-code] The multifactor verification code used to create the auth credential is invalid.
+      console.log(err);
+    } finally {
+      setIsSubmittingOTP(false);
+    }
   }
 
   async function onResendOTP() {}
@@ -154,6 +209,7 @@ function AuthLoginScreen() {
   } else {
     return (
       <AuthOTPForm
+        isSubmitting={isSubmittingOTP}
         onSubmitHandler={onSubmitOTP}
         onResendHandler={onResendOTP}
       />

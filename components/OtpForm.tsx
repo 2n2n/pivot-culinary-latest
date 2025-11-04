@@ -11,11 +11,13 @@ import { VStack } from "@/components/ui/vstack";
 import AppAdaptiveLogo from "./shared/AppAdaptiveLogo";
 
 interface AuthOTPFormProps {
+  isSubmitting: boolean;
   onSubmitHandler: (otp: string) => void;
   onResendHandler: () => void;
 }
 
 export default function AuthOTPForm({
+  isSubmitting = false,
   onSubmitHandler,
   onResendHandler,
 }: AuthOTPFormProps) {
@@ -106,7 +108,7 @@ export default function AuthOTPForm({
             action="primary"
             onPress={() => onSubmitHandler(otp.join(""))}
             className="w-full rounded-full"
-            isDisabled={!isOtpComplete}
+            isDisabled={!isOtpComplete || isSubmitting}
           >
             <ButtonText>Verify OTP</ButtonText>
           </Button>
