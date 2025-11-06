@@ -10,9 +10,7 @@ import TextWithIcon from "@/components/shared/TextWithIcon";
 import useBookings from "@/hooks/useBookings";
 import { useModal } from "@/services/account_modal/hooks/useModal";
 import { Box } from "@/components/ui/box";
-import Svg, { Path, Circle as SvgCircle } from "react-native-svg";
 import { VStack } from "@/components/ui/vstack";
-import { Icon } from "@/components/ui/icon";
 // Sample data for bookings
 
 export default function ApplicationBookingsScreen() {
