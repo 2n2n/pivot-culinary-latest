@@ -15,6 +15,7 @@ import { groupByAccount } from "@/helpers";
 import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
 import { getContactInfo } from "@/requests/contact.request";
 import getAccount from "@/requests/acccount.request";
+import { PhoneNumberInput, PHPhoneNumberFormatter, USPhoneNumberFormatter } from "@/components/PhoneNumberInput";
 
 /**
  * AUTHENTICATION FLOW OVERVIEW
@@ -84,12 +85,14 @@ import getAccount from "@/requests/acccount.request";
  * - Invalid OTP codes are handled by Firebase Auth
  * - Network errors during OTP sending are handled gracefully
  */
+const phoneNumberFormatters = [PHPhoneNumberFormatter, USPhoneNumberFormatter];
 
 // TODO: Polish this screen, where it should animate the initial state of the phone number into the active state
 function AuthLoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingOTP, setIsSubmittingOTP] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  console.log("🚀 ~ AuthLoginScreen ~ phoneNumber:", phoneNumber)
   const [authResponse, setAuthResponse] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const { signIn } = useAuth();
@@ -179,17 +182,7 @@ function AuthLoginScreen() {
             </VStack>
 
             <VStack className="flex gap-4">
-              <Input
-                size="lg"
-                variant="outline"
-                className="w-full rounded-full px-4"
-              >
-                <InputField
-                  placeholder="Enter your phone number"
-                  value={phoneNumber}
-                  onChangeText={setPhoneNumber}
-                />
-              </Input>
+              <PhoneNumberInput onChangeValue={setPhoneNumber} formatters={phoneNumberFormatters}/>
               <Button
                 disabled={isSubmitting}
                 size="lg"
