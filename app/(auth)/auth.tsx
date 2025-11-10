@@ -15,7 +15,11 @@ import { groupByAccount } from "@/helpers";
 import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
 import { getContactInfo } from "@/requests/contact.request";
 import getAccount from "@/requests/acccount.request";
-import { PhoneNumberInput, PHPhoneNumberFormatter, USPhoneNumberFormatter } from "@/components/PhoneNumberInput";
+import {
+  PhoneNumberInput,
+  PHPhoneNumberFormatter,
+  USPhoneNumberFormatter,
+} from "@/components/PhoneNumberInput";
 
 /**
  * AUTHENTICATION FLOW OVERVIEW
@@ -92,7 +96,6 @@ function AuthLoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingOTP, setIsSubmittingOTP] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
-  console.log("🚀 ~ AuthLoginScreen ~ phoneNumber:", phoneNumber)
   const [authResponse, setAuthResponse] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const { signIn } = useAuth();
@@ -182,7 +185,10 @@ function AuthLoginScreen() {
             </VStack>
 
             <VStack className="flex gap-4">
-              <PhoneNumberInput onChangeValue={setPhoneNumber} formatters={phoneNumberFormatters}/>
+              <PhoneNumberInput
+                onChangeValue={setPhoneNumber}
+                formatters={phoneNumberFormatters}
+              />
               <Button
                 disabled={isSubmitting}
                 size="lg"
