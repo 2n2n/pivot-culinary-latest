@@ -2,7 +2,7 @@ import { Input, InputField } from "@/components/ui/input";
 import PHFlag from "@/components/SvgIcons/PHFlag";
 import USFlag from "@/components/SvgIcons/USFlag";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const DEFAULT_MAX_LENGTH = 13;
 
@@ -11,11 +11,13 @@ export const PhoneNumberInput = ({ onChangeValue, formatters = [] }: PhoneNumber
     const [activeFormatter, setActiveFormatter] = useState<PhoneNumberFormatter | null>(null);
     const handleChangeText = (value: string) => {
         if (!value.length) {
+            onChangeValue("");
             setPhoneNumber("");
             setActiveFormatter(null);
             return;
         };
-        const sanitizedValue = value.replace(/[- )(+]/g, "");
+        const sanitizedValue = value.replace(/[- )(+a-zA-Z]/g, "");
+        onChangeValue(`+${sanitizedValue}`);
         for (const formatter of formatters) {
             if (sanitizedValue.startsWith(formatter.startingDigit)) {
                 let formattedNumber = formatter.startingDigitFormat;
@@ -34,9 +36,6 @@ export const PhoneNumberInput = ({ onChangeValue, formatters = [] }: PhoneNumber
         setPhoneNumber(value);
         setActiveFormatter(null);
     };
-    useEffect(() => {
-        onChangeValue(phoneNumber.replace(/[- )(]/g, ""));
-    }, [phoneNumber]);
     return <Input
         size="lg"
         variant="outline"
@@ -47,7 +46,7 @@ export const PhoneNumberInput = ({ onChangeValue, formatters = [] }: PhoneNumber
             placeholder="Enter your phone number"
             value={phoneNumber}
             maxLength={activeFormatter?.maxLength || DEFAULT_MAX_LENGTH}
-            keyboardType="number-pad"
+            keyboardType="phone-pad"
             onChangeText={handleChangeText}
         />
     </Input>
