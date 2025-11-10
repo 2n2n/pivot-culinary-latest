@@ -24,6 +24,7 @@ export default function TabsLayout() {
         name="agenda"
         options={{
           title: "Agenda",
+          headerTitleStyle: { opacity: 0 },
           tabBarIcon: ({ focused, color }) => (
             <Icon as={CalendarDays} style={{ color }} />
           ),
@@ -35,6 +36,7 @@ export default function TabsLayout() {
           title: "Bookings",
           headerBackVisible: true,
           headerTitleAlign: "center",
+          headerTitleStyle: { opacity: 0 },
           tabBarIcon: ({ color }) => <Icon as={Notebook} style={{ color }} />,
         }}
       />
@@ -42,6 +44,7 @@ export default function TabsLayout() {
         name="notifications"
         options={{
           title: "Notifications",
+          headerTitleStyle: { opacity: 0 },
           tabBarIcon: ({ color }) => <Icon as={Bell} style={{ color }} />,
         }}
       />

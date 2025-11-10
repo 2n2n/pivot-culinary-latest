@@ -138,3 +138,28 @@ export const getAccountBookings = async (
   }
   return bookings.filter((booking) => booking.account.id === account.id);
 };
+
+export const getBookingsById = async (bookingId: string): Promise<Booking> => {
+  const request = await authenticate();
+  const params = {
+    booking: SITE_ID.toString(),
+  };
+
+  // CHORE: Fix type error by ensuring all params are strings
+  const paramsForSearch = Object.fromEntries(
+    Object.entries(params).map(([k, v]) => [k, String(v)])
+  );
+
+  const urlParams = new URLSearchParams(paramsForSearch).toString();
+
+  try {
+    const response: { data: { booking: Booking } } = await request(
+      `https://api.tripleseat.com/v1/bookings/${bookingId}?${urlParams}`
+    );
+
+    return response.data.booking as Booking;
+  } catch (error) {
+    console.log("🚀 ~ getBookingsById ~ error:", error);
+    return {} as Booking;
+  }
+};

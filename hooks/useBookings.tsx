@@ -1,4 +1,7 @@
-import { getAccountBookings } from "@/requests/bookings.request";
+import {
+  getAccountBookings,
+  getBookingsById,
+} from "@/requests/bookings.request";
 import { useQuery } from "@tanstack/react-query";
 
 const useBookings = (account: Account | null) => {
@@ -17,3 +20,16 @@ const useBookings = (account: Account | null) => {
 };
 
 export default useBookings;
+
+export const useBookingsById = (bookingId: string) => {
+  const bookingsQuery = useQuery({
+    queryKey: ["bookings", bookingId],
+    queryFn: async () => {
+      const booking = await getBookingsById(bookingId);
+      console.log("🚀 ~ useBookingsById ~ booking:", booking);
+      return booking;
+    },
+  });
+
+  return bookingsQuery;
+};
