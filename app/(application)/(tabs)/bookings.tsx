@@ -11,6 +11,7 @@ import useBookings from "@/hooks/useBookings";
 import { useModal } from "@/services/account_modal/hooks/useModal";
 import { Box } from "@/components/ui/box";
 import { VStack } from "@/components/ui/vstack";
+import { findBookingAddress, formatFullDate } from "@/helpers";
 // Sample data for bookings
 
 export default function ApplicationBookingsScreen() {
@@ -21,7 +22,14 @@ export default function ApplicationBookingsScreen() {
 
   const renderBookingCard = ({ item }: { item: Booking }) => {
     return (
-      <Link push href={`/booking-details/${item.id}`} asChild>
+      <Link
+        push
+        href={{
+          pathname: `/booking-details/${item.id.toString()}`,
+          params: { item: JSON.stringify(item) },
+        }}
+        asChild
+      >
         <Pressable>
           <Card
             size="md"
@@ -37,14 +45,16 @@ export default function ApplicationBookingsScreen() {
             <Box>
               <TextWithIcon
                 icon={Calendar1}
-                text={`${item.start_date} – ${item.end_date}`}
+                text={`${formatFullDate(item.start_date)} – ${formatFullDate(
+                  item.end_date || ""
+                )}`}
               />
             </Box>
 
             <Box className="flex-row justify-between items-center">
               <TextWithIcon
                 icon={MapPin}
-                text="Kauffman Stadium: 1 Royal Way, Kansas City, MO 64129"
+                text={findBookingAddress(item.custom_fields || [])}
               />
             </Box>
           </Card>

@@ -8,6 +8,14 @@ declare global {
     custom_field_slug: string;
   };
 
+  type TripleseatDocument = {
+    id: number;
+    title: string;
+    template_document_id: number;
+    deleted_at: string | null;
+    views: any[];
+  };
+
   // CHORE: Create a type for the return value to make results type dynamic
   type TripleseatResponse<T = any> = {
     total_pages: number;
@@ -29,6 +37,7 @@ declare global {
     city?: string | null;
     state?: string | null;
     zip?: string | null;
+    zip_code?: string;
     country?: string | null;
   };
 
@@ -38,6 +47,7 @@ declare global {
     customer_id: number;
     site_id: number;
     addresses: Address[];
+    phone_numbers?: PhoneNumber[];
   };
 
   type EmailAddress = {
@@ -53,6 +63,7 @@ declare global {
   };
 
   type Contact = {
+    id?: number;
     account_id: number;
     custom_fields: CustomField[];
     show_financial: boolean;
@@ -63,6 +74,8 @@ declare global {
     customer_id: number;
     contact_type: string;
     owned_by: number;
+    first_name?: string;
+    last_name?: string;
   };
 
   type EventRequestResponse = {
@@ -141,7 +154,7 @@ declare global {
     status_changes: StatusChange[];
     selected_lead_sources: SelectedLeadSource[];
     custom_fields: CustomField[];
-    documents?: Document[];
+    documents?: TripleseatDocument[];
     events?: BookingEvent[];
     event_ids: number[]; // Note: This appears twice in your type
   };
@@ -191,6 +204,16 @@ declare global {
       phone: string;
       image: string;
     };
+  };
+
+  type CategoryTotal = {
+    name: string;
+    total: string;
+  };
+
+  type BillingTotal = {
+    name: string;
+    total: string;
   };
 }
 

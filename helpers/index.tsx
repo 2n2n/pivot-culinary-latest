@@ -87,3 +87,39 @@ export const groupByBookings = (events: BookingEvent[] = []) => {
   });
   return bookings;
 };
+
+// DOCS: Formats a given date string into the "Sun, Nov 9, 2025" format for display in booking cards
+export const formatFullDate = (date: string) => {
+  if (!date) return "--";
+  const d = new Date(date);
+  // CHORE: Consider moving to date-fns or dayjs for better localization and edge case handling
+  return d.toLocaleDateString(undefined, {
+    weekday: "short", // e.g. "Sun"
+    month: "short", // e.g. "Nov"
+    day: "numeric", // e.g. "9"
+    year: "numeric", // e.g. "2025"
+  });
+};
+
+export const getBEO = (documents: TripleseatDocument[]) => {
+  if (!documents) throw new Error("No documents provided");
+  if (!Array.isArray(documents))
+    throw new Error("The provided documents are not of type Array");
+  const [firstDocument] = documents;
+  if (!firstDocument) return null;
+  const views = firstDocument.views;
+  const viewBEO = views.find((view) =>
+    view.name.includes("Banquet Event Order")
+  );
+  return viewBEO;
+};
+
+export const findBookingAddress: (custom_fields: CustomField[]) => string = (
+  custom_fields: CustomField[]
+) => {
+  return (
+    custom_fields.find((field: CustomField) => {
+      return field.custom_field_slug === "cf_offsite_location";
+    })?.value || "N/A"
+  ).trim();
+};
