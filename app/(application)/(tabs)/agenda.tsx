@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useMemo } from "react";
 
+import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
 import TabDashboardHeader from "@/components/shared/TabDashboardHeader";
 import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
 import Agenda from "@/components/Agenda/Agenda";
@@ -19,69 +20,44 @@ const mockData = [
 ];
 
 export default function ApplicationAgendaScreen() {
-  // TODO: Implement account id from useAccounts hook
-  const { data } = useEvents(1);
-  const [items, setItems] = useState(mockData);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isLoadingMoreItems, setIsLoadingMoreItems] = useState(false);
-  const [hasLoadedAllItems, setHasLoadedAllItems] = useState(false);
-  const [hasOutdatedItems, setHasOutdatedItems] = useState(false);
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    // TODO: implement refresh logic
-    setTimeout(() => {
-      setIsRefreshing(false);
-      setHasOutdatedItems(false);
-    }, 2500);
-  };
-  const handleLoadMore = () => {
-    setIsLoadingMoreItems(true);
-    setTimeout(() => {
-      // TODO: implement infinite query for loading more items
-      setItems([
-        ...mockData,
-        { date: new Date("2025-11-02"), items: [28, 29, 30] },
-      ]);
-      setIsLoadingMoreItems(false);
-      setHasLoadedAllItems(true);
-    }, 2500);
-  };
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      // TODO: implement fetching and loading of data
-      setIsLoading(false);
-    }, 2500);
-    return () => clearTimeout(timeout);
-  }, []);
-  useEffect(() => {
-    if (hasOutdatedItems) return;
-    // TODO: Change with implementation for listening outdated or stale data
-    const timeout = setTimeout(() => setHasOutdatedItems(true), 60000);
-    return () => clearTimeout(timeout);
-  }, [hasOutdatedItems]);
+  // TODO: hook for getting the currently active account
+  const { selectedAccount } = useContext(AccountModalContext);
+  const { data, isPending, isRefetching, refetch, isStale} = useEvents(selectedAccount?.id);
+  const groupedEvents = useMemo(() => {
+    if (!data || !Array.isArray(data) || data.length === 0) return [];
+    const mappedEvents: Map<string, Array<any>> = new Map();
+    for (const event of data) {
+      // TODO: Fix types of events
+      const stringDate = event.event_date;
+      if (!stringDate) continue;
+      if (mappedEvents.has(stringDate)) {
+        mappedEvents.get(stringDate)?.push(event);
+      } else {
+        mappedEvents.set(stringDate, [event]);
+      }
+    };
+    return Array.from(mappedEvents.entries()).map(([, events]) => ({
+      date: new Date(events[0].event_start_utc),
+      items: events,
+    }));
+  }, [data]);
+  console.log("🚀 ~ ApplicationAgendaScreen ~ groupedEvents:", groupedEvents)
   return (
     <TabSafeAreaView>
       <TabDashboardHeader title="Calendar of Activities" />
       <Agenda
-        items={items}
-        // dateRangeStart={dateRangeStart}
-        // initialDateRangeEnd={dateRangeEnd}
-        // initialSelectedDate={new Date("2025-10-20")}
-        isLoading={isLoading} // initial loading, displays ui skeleton
-        hasOutdatedItems={hasOutdatedItems}
-        isRefreshing={isRefreshing}
-        onRefresh={handleRefresh}
-        isLoadingMoreItems={isLoadingMoreItems}
-        onLoadMoreItems={handleLoadMore}
-        hasLoadedAllItems={hasLoadedAllItems}
+        items={groupedEvents}
+        isLoading={isPending} // initial loading, displays ui skeleton
+        hasOutdatedItems={isStale}
+        isRefreshing={isRefetching}
+        onRefresh={refetch}
         options={{
           displayedStartingWeekDay: "monday", // dictates where the week should start from
         }}
         renderItem={(item) => (
           <VStack className="bg-white rounded-lg p-2 w-full h-[100px] justify-center items-center">
             <Text>Item #</Text>
-            <Text>{item}</Text>
+            <Text>{item.name}</Text>
           </VStack>
         )}
       />
