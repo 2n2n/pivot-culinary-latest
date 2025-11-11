@@ -5,6 +5,7 @@ import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
 import Agenda from "@/components/Agenda/Agenda";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import useEvents from "@/hooks/useEvents";
 
 const mockData = [
   { date: new Date("2025-10-18"), items: [-3, -2, -1] },
@@ -18,6 +19,8 @@ const mockData = [
 ];
 
 export default function ApplicationAgendaScreen() {
+  // TODO: Implement account id from useAccounts hook
+  const { data } = useEvents(1);
   const [items, setItems] = useState(mockData);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);

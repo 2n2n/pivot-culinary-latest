@@ -2,7 +2,7 @@ import authenticate from "@/requests";
 import { getEvents, getEventsFromOtherPages } from "@/requests/events.request";
 import { useQuery } from "@tanstack/react-query";
 
-const useEvent = (accountId: number | null) => {
+const useEvents = (accountId: number | null) => {
   // CHORE: Force query to refetch when account?.id changes by including account?.id as part of the queryKey
   // The useQuery hook already listens to queryKey changes. "enabled" ensures the query only runs when account?.id is valid.
   const eventsQuery = useQuery({
@@ -33,4 +33,4 @@ const useEvent = (accountId: number | null) => {
   return eventsQuery;
 };
 
-export default useEvent;
+export default useEvents;
