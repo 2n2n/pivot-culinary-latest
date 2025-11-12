@@ -8,6 +8,7 @@ import AgendaMonthIndicator from "@/components/Agenda/AgendaMonthIndicator";
 import AgendaDateSelection from "@/components/Agenda/AgendaSelection";
 import { AgendaComponentContext } from "@/components/Agenda/context";
 import AgendaUISkeleton from "@/components/Agenda/AgendaUISkeleton";
+import AgendaEmptyList from "@/components/Agenda/AgendaEmptyList";
 import { VStack } from "@/components/ui/vstack";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -71,7 +72,7 @@ export default function Agenda<T extends any>(
     }}>
         <VStack style={AgendaStyles.container}>
             { isLoading && <AgendaUISkeleton /> }
-            { !isLoading && <>
+            { !isLoading && items.length > 0 && <>
                 <VStack className="bg-white gap-2 pb-3">
                     <AgendaMonthIndicator activeWeek={selectedDate} />
                     <AgendaDateSelection />
@@ -97,6 +98,7 @@ export default function Agenda<T extends any>(
                     />
                 </Animated.View>
             </>} 
+            { !isLoading && items.length === 0 && <AgendaEmptyList /> }
         </VStack>
     </AgendaComponentContext.Provider>
 };
