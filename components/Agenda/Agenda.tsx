@@ -72,12 +72,12 @@ export default function Agenda<T extends any>(
     }}>
         <VStack style={AgendaStyles.container}>
             { isLoading && <AgendaUISkeleton /> }
-            { !isLoading && items.length > 0 && <>
+            { !isLoading && <>
                 <VStack className="bg-white gap-2 pb-3">
                     <AgendaMonthIndicator activeWeek={selectedDate} />
                     <AgendaDateSelection />
                 </VStack>
-                <Animated.View style={AgendaStyles.contentContainer}>
+                {items.length > 0 && <Animated.View style={AgendaStyles.contentContainer}>
                     <AgendaContentFlatList 
                         items={items} 
                         renderItem={renderItem}
@@ -96,9 +96,9 @@ export default function Agenda<T extends any>(
                         refreshing={isRefreshing}
                         onPress={handleRefresh} 
                     />
-                </Animated.View>
+                </Animated.View>}
+                {items.length === 0 && <AgendaEmptyList />}
             </>} 
-            { !isLoading && items.length === 0 && <AgendaEmptyList /> }
         </VStack>
     </AgendaComponentContext.Provider>
 };
