@@ -77,7 +77,7 @@ export default function Agenda<T extends any>(
                     <AgendaMonthIndicator activeWeek={selectedDate} />
                     <AgendaDateSelection />
                 </VStack>
-                {items.length > 0 && <Animated.View style={AgendaStyles.contentContainer}>
+                <Animated.View style={AgendaStyles.contentContainer}>
                     <AgendaContentFlatList 
                         items={items} 
                         renderItem={renderItem}
@@ -96,8 +96,7 @@ export default function Agenda<T extends any>(
                         refreshing={isRefreshing}
                         onPress={handleRefresh} 
                     />
-                </Animated.View>}
-                {items.length === 0 && <AgendaEmptyList />}
+                </Animated.View>
             </>} 
         </VStack>
     </AgendaComponentContext.Provider>
