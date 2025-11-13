@@ -68,7 +68,7 @@ export default function AgendaContentFlatList<T extends any>({
     onPresentDateItemVisiblityChange = () => {},
     onLoadMoreItems
 }: AgendaContentFlatListProps<T>){
-    const { selectedDate, setSelectedDate, agendaOptions, styles } = useContext(AgendaComponentContext);
+    const { selectedDate, setSelectedDate, agendaOptions, styles, dateRangeStart, dateRangeEnd } = useContext(AgendaComponentContext);
     const agendaContentFlatListRef = useRef<LegendListRef>(null);
     const autoScrollUnlockDebounceRef = useRef<number>(null);
     const handleOnChangeVisibleItemIndexesDebounceRef = useRef<number>(null);
@@ -76,7 +76,7 @@ export default function AgendaContentFlatList<T extends any>({
     const autoScrollIsLockedRef = useRef(false);
     const autoScrollIsReadyRef = useRef(false);
     const { itemsWithFilledGaps, presentDateItemIndex } = useMemo(() => {
-        const updatedFilledGapsInDateGroups = fillGapsInDateGroups(items);
+        const updatedFilledGapsInDateGroups = fillGapsInDateGroups(items, { dateRangeStart, dateRangeEnd });
         // this allows me to use the items in the useeffect without me adding it as
         // a dependency: i want the useeffect below to only run when and only when 
         // selected date is changed

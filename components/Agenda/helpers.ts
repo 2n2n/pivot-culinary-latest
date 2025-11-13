@@ -33,10 +33,10 @@ export const getDateIdentity = (date: Date) => format(date, CONSTANT_DATE_STRING
  * //   {date: 2024-01-03, items: [...]}
  * // ]
  */
-export const fillGapsInDateGroups = <T extends any>(dateGroups: Array<AgendaItem<T>>) => {
+export const fillGapsInDateGroups = <T extends any>(dateGroups: Array<AgendaItem<T>>, options: { dateRangeStart?: Date, dateRangeEnd?: Date } = {}) => {
     if (!dateGroups.length) return dateGroups;
-    const startDate = dateGroups[0].date;
-    const endDate = dateGroups[dateGroups.length - 1].date;
+    const startDate = options.dateRangeStart || dateGroups[0].date;
+    const endDate = options.dateRangeEnd || dateGroups[dateGroups.length - 1].date;
     if (isSameDay(startDate, endDate)) return dateGroups;
     const updatedItemsWithFilledGaps: Array<AgendaItem<T>> = [];
     const maxNumberOfDays = differenceInDays(endDate, startDate);
