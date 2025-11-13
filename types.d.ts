@@ -171,6 +171,9 @@ declare global {
     total_actual_amount: number;
     total_event_grand_total: number;
     total_grand_total: number;
+    event_start_time: string;
+    event_end_time: string;
+    guest_count: number;
     post_as: string;
     updated_by: number;
     created_by: number;

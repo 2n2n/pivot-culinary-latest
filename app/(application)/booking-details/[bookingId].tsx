@@ -19,7 +19,7 @@ import {
 import { Icon } from "@/components/ui/icon";
 import { useModal } from "@/services/account_modal/hooks/useModal";
 import AccountManagerContact from "@/components/AccountManagerContact";
-import { findBookingAddress, formatFullDate, getBEO } from "@/helpers";
+import { findBookingAddress, formatCurrency, formatFullDate, getBEO } from "@/helpers";
 import { useMemo } from "react";
 
 // REVIEW: Screen should be polished.
@@ -86,15 +86,7 @@ export default function BookingDetails() {
                   <HStack className="gap-4 flex items-center">
                     <Text className="text-l font-bold text-white/90 text-base">
                       {/* Format as USD currency */}
-                      {bookingData?.total_grand_total != null
-                        ? Number(bookingData.total_grand_total).toLocaleString(
-                            "en-US",
-                            {
-                              style: "currency",
-                              currency: "USD",
-                            }
-                          )
-                        : "--"}
+                      {formatCurrency(bookingData?.total_grand_total)}
                     </Text>
                     {/** // TODO: Make this dynamic based on the status */}
                     <Text className="text-2xs text-green-900 bg-green-100 px-2 py-1 rounded-sm text-center">
