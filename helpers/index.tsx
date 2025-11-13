@@ -104,9 +104,8 @@ export const formatFullDate = (date: string) => {
 };
 
 export const formatCurrency = (amount: number, currency: string = 'USD') => {
-  if (!amount) return "--";
-  else if (typeof amount !== 'number') return "--";
-  else return Number(amount).toLocaleString(undefined, {
+  if (!amount && amount !== 0) return "--";
+  else return Number(amount).toLocaleString("en-US", {
     style: "currency",
     currency: currency,
   });

@@ -9,7 +9,7 @@ const useEvents = (accountId?: number | null) => {
     queryKey: ["events", accountId],
     queryFn: async () => {
       // TODO: Fix booking type
-      let events: Booking[] = [];
+      let events: TripleseatEvent[] = [];
       const request = await authenticate();
       const { data, status }: EventRequestResponse = await getEvents(
         accountId as number,

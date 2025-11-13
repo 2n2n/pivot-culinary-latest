@@ -80,7 +80,7 @@ declare global {
 
   type EventRequestResponse = {
     status: number;
-    data: TripleseatResponse<Booking>;
+    data: TripleseatResponse<TripleseatEvent>;
   };
 
   type ContactResponse = {
@@ -187,6 +187,8 @@ declare global {
     updated_at: string;
     deleted_at?: string | null;
     location: Location;
+    booking: Booking;
+    custom_fields: CustomField[];
   };
 
   type BookingEvent = {
