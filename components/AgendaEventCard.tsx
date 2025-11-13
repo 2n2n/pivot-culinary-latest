@@ -22,10 +22,12 @@ export default function AgendaEventCard({ event }: { event: TripleseatEvent }) {
             <Badge action="success">
                 <BadgeText className="text-2xs">{event.status}</BadgeText>
             </Badge>
+            // TODO: add event review star component
         </HStack>
         <HStack className="items-center gap-1">
             <Icon as={MapPinIcon} className="text-primary-500" size="md" />
             <Text className="text-pivot-blue text-sm flex-1">{findBookingAddress(event.custom_fields)}</Text>
         </HStack>
+        // TODO: add post feedback button
     </VStack>)
 }
