@@ -80,7 +80,7 @@ declare global {
 
   type EventRequestResponse = {
     status: number;
-    data: TripleseatResponse<Booking>;
+    data: TripleseatResponse<TripleseatEvent>;
   };
 
   type ContactResponse = {
@@ -171,6 +171,9 @@ declare global {
     total_actual_amount: number;
     total_event_grand_total: number;
     total_grand_total: number;
+    event_start_time: string;
+    event_end_time: string;
+    guest_count: number;
     post_as: string;
     updated_by: number;
     created_by: number;
@@ -184,7 +187,28 @@ declare global {
     updated_at: string;
     deleted_at?: string | null;
     location: Location;
+    booking: Booking;
+    custom_fields: CustomField[];
   };
+
+  type DirectusEvent = {
+    id: number;
+    owned_by: number;
+    created_by: number;
+    updated_by: number;
+    status: string;
+    name: string;
+    description: string;
+    start_date: string;
+    end_date: string;
+    event_start_time: string;
+    event_end_time: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at?: string | null;
+  }
+
+  type GenericEvent = TripleseatEvent & { type: "tripleseat-event" } | DirectusEvent & { type: "directus-event" };
 
   type BookingEvent = {
     id: string;

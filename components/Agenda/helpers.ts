@@ -33,10 +33,9 @@ export const getDateIdentity = (date: Date) => format(date, CONSTANT_DATE_STRING
  * //   {date: 2024-01-03, items: [...]}
  * // ]
  */
-export const fillGapsInDateGroups = <T extends any>(dateGroups: Array<AgendaItem<T>>) => {
-    if (!dateGroups.length) return dateGroups;
-    const startDate = dateGroups[0].date;
-    const endDate = dateGroups[dateGroups.length - 1].date;
+export const fillGapsInDateGroups = <T extends any>(dateGroups: Array<AgendaItem<T>> = [], options: { dateRangeStart?: Date, dateRangeEnd?: Date } = {}) => {
+    const startDate = options.dateRangeStart || dateGroups[0].date;
+    const endDate = options.dateRangeEnd || dateGroups[dateGroups.length - 1].date;
     if (isSameDay(startDate, endDate)) return dateGroups;
     const updatedItemsWithFilledGaps: Array<AgendaItem<T>> = [];
     const maxNumberOfDays = differenceInDays(endDate, startDate);
@@ -70,6 +69,6 @@ export const getSafeDateRangeStart = (items: Array<AgendaItem<any>>, dateRangeSt
  * @returns {Date} The safe minimum start date: the earliest of dateRangeStart, the present date, and the first item's date.
  */
 export const getSafeDateRangeEnd = (items: Array<AgendaItem<any>>, dateRangeEnd: Date) => {
-    const dateToCompare = items.length ? [dateRangeEnd, new Date(), items[items.length - 1].date] : [dateRangeEnd, new Date()];
+    const dateToCompare = items.length ? [dateRangeEnd, new Date(), ...items.map((item) => item.date)] : [dateRangeEnd, new Date()];
     return max(dateToCompare);
 }

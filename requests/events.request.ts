@@ -50,7 +50,7 @@ export const getEventsFromOtherPages = async (
             response.data.data &&
             Array.isArray(response.data.data.results)
           ) {
-            return response.data.data.results as Booking[];
+            return response.data.data.results as TripleseatEvent[];
           }
           // CHORE: Handle edge cases in this function
           return [];

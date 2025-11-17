@@ -1,3 +1,5 @@
+import { format } from "date-fns-tz";
+
 export const getAccountLocation = (account: Account) => {
   // Find the custom field where the name (trimmed) is exactly "LOCATION"
   return (
@@ -101,6 +103,43 @@ export const formatFullDate = (date: string) => {
   });
 };
 
+export const formatCurrency = (amount: number, currency: string = 'USD') => {
+  if (!amount && amount !== 0) return "--";
+  else return Number(amount).toLocaleString("en-US", {
+    style: "currency",
+    currency: currency,
+  });
+}
+
+export const parseDate = (unknownDateLike: unknown = null): Date | undefined => {
+  if (!unknownDateLike) return;
+  if (['number', 'string'].includes(typeof unknownDateLike)) {
+      if (typeof unknownDateLike === 'number' && (unknownDateLike < 0 || isNaN(unknownDateLike))) return;
+      const toDate = new Date(unknownDateLike as number | string);
+      if(isNaN(toDate.getTime())) return;
+      else return toDate;
+  }
+  if (typeof unknownDateLike === 'object') {
+      const { seconds } = unknownDateLike as Timestamp;
+      const { getTime } = unknownDateLike as Date;
+      if (!seconds && !getTime) return;
+      if (seconds) return new Date(seconds * 1000);
+      if (getTime && typeof getTime === 'function') return unknownDateLike as Date;
+  }
+  return;
+}
+
+export const dateToLocalFormat = (
+  date: string | number | Date, 
+  _format: string, 
+  timeZone: string = 'US/Mountain'
+) => {
+  if (!_format) throw new Error('No date format is provided');
+  const parsedDate = parseDate(date);
+  if (!parsedDate) throw new Error('The date provided is not parseable');
+  return format(parsedDate, _format, { timeZone });
+};
+
 export const getBEO = (documents: TripleseatDocument[]) => {
   if (!documents) throw new Error("No documents provided");
   if (!Array.isArray(documents))
@@ -123,3 +162,8 @@ export const findBookingAddress: (custom_fields: CustomField[]) => string = (
     })?.value || "N/A"
   ).trim();
 };
+
+type Timestamp = {
+  seconds: number;
+  nanoseconds: number;
+}

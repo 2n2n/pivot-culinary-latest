@@ -1,87 +1,79 @@
-import React, { useEffect, useState } from "react";
-
+import AgendaEventCardPostFeedbackButton from "@/components/AgendaEventCard/AgendaEventCardPostFeedbackButton";
+import AgendaEventCardStarRating from "@/components/AgendaEventCard/AgendaEventCardStarRating";
+import AgendaDirectusEventCard from "@/components/AgendaEventCard/AgendaDirectusEventCard";
+import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
+import AgendaEventCard from "@/components/AgendaEventCard/AgendaEventCard";
 import TabDashboardHeader from "@/components/shared/TabDashboardHeader";
 import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
 import Agenda from "@/components/Agenda/Agenda";
-import { Text } from "@/components/ui/text";
-import { VStack } from "@/components/ui/vstack";
 
-const mockData = [
-  { date: new Date("2025-10-18"), items: [-3, -2, -1] },
-  { date: new Date("2025-10-21"), items: [0, 1, 2] },
-  { date: new Date("2025-10-22"), items: [1, 2, 3] },
-  { date: new Date("2025-10-24"), items: [4, 5, 6] },
-  { date: new Date("2025-10-25"), items: [7, 8, 9] },
-  { date: new Date("2025-10-28"), items: [16, 17, 18] },
-  { date: new Date("2025-10-29"), items: [19, 20, 21] },
-  { date: new Date("2025-10-30"), items: [25, 26, 27] },
-];
+import useDirectusEvents from "@/hooks/useDirectusEvents";
+import useEvents from "@/hooks/useEvents";
+
+import React, { useContext, useMemo } from "react";
+import { compareDesc, isToday } from "date-fns";
 
 export default function ApplicationAgendaScreen() {
-  const [items, setItems] = useState(mockData);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isLoadingMoreItems, setIsLoadingMoreItems] = useState(false);
-  const [hasLoadedAllItems, setHasLoadedAllItems] = useState(false);
-  const [hasOutdatedItems, setHasOutdatedItems] = useState(false);
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    // TODO: implement refresh logic
-    setTimeout(() => {
-      setIsRefreshing(false);
-      setHasOutdatedItems(false);
-    }, 2500);
+  const { selectedAccount } = useContext(AccountModalContext);
+  const tripleseatEventsQueryResult = useEvents(selectedAccount?.id);
+  const directusEventsQueryResult = useDirectusEvents();
+  const isRefetching = tripleseatEventsQueryResult.isRefetching || directusEventsQueryResult.isRefetching;
+  const isPending = tripleseatEventsQueryResult.isPending || directusEventsQueryResult.isPending;
+  const isStale = tripleseatEventsQueryResult.isStale || directusEventsQueryResult.isStale;
+  const groupedEvents = useMemo(() => {
+    const start = performance.now();
+    const mappedEvents: Map<string, Array<GenericEvent>> = new Map();
+    // type of event implementation
+    const typedTripleseatEvents: GenericEvent[] = tripleseatEventsQueryResult?.data?.map(event => ({ ...event, type: "tripleseat-event" })) ?? [];
+    const typedDirectusEvents: GenericEvent[] = directusEventsQueryResult?.data?.map(event => ({ ...event, type: "directus-event" })) ?? [];
+    //! NOTE: Sorted by start_date, this will break if the directus events do not have a start_date property.`
+    const sortedEvents = [...typedTripleseatEvents, ...typedDirectusEvents].sort((a, b) => compareDesc(new Date(a.start_date), new Date(b.start_date)));
+    insertMappingByStartDate(mappedEvents, sortedEvents);
+    const groupedEvents = Array.from(mappedEvents.entries()).map(([, events]: [string, Array<GenericEvent>]) => ({
+      date: new Date(events[0].start_date),
+      items: events,
+    }));
+    const end = performance.now();
+    console.log(`Grouped events in ${(end - start).toFixed(2)} ms`);
+    return groupedEvents;
+  }, [tripleseatEventsQueryResult.data, directusEventsQueryResult.data]);
+  const refetch = () => {
+    tripleseatEventsQueryResult.refetch();
+    directusEventsQueryResult.refetch();
   };
-  const handleLoadMore = () => {
-    setIsLoadingMoreItems(true);
-    setTimeout(() => {
-      // TODO: implement infinite query for loading more items
-      setItems([
-        ...mockData,
-        { date: new Date("2025-11-02"), items: [28, 29, 30] },
-      ]);
-      setIsLoadingMoreItems(false);
-      setHasLoadedAllItems(true);
-    }, 2500);
-  };
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      // TODO: implement fetching and loading of data
-      setIsLoading(false);
-    }, 2500);
-    return () => clearTimeout(timeout);
-  }, []);
-  useEffect(() => {
-    if (hasOutdatedItems) return;
-    // TODO: Change with implementation for listening outdated or stale data
-    const timeout = setTimeout(() => setHasOutdatedItems(true), 60000);
-    return () => clearTimeout(timeout);
-  }, [hasOutdatedItems]);
   return (
     <TabSafeAreaView>
       <TabDashboardHeader title="Calendar of Activities" />
       <Agenda
-        items={items}
-        // dateRangeStart={dateRangeStart}
-        // initialDateRangeEnd={dateRangeEnd}
-        // initialSelectedDate={new Date("2025-10-20")}
-        isLoading={isLoading} // initial loading, displays ui skeleton
-        hasOutdatedItems={hasOutdatedItems}
-        isRefreshing={isRefreshing}
-        onRefresh={handleRefresh}
-        isLoadingMoreItems={isLoadingMoreItems}
-        onLoadMoreItems={handleLoadMore}
-        hasLoadedAllItems={hasLoadedAllItems}
+        items={groupedEvents}
+        isLoading={isPending} // initial loading, displays ui skeleton
+        hasOutdatedItems={isStale}
+        isRefreshing={isRefetching}
+        onRefresh={refetch}
         options={{
           displayedStartingWeekDay: "monday", // dictates where the week should start from
         }}
-        renderItem={(item) => (
-          <VStack className="bg-white rounded-lg p-2 w-full h-[100px] justify-center items-center">
-            <Text>Item #</Text>
-            <Text>{item}</Text>
-          </VStack>
-        )}
+        // NOTE: renderItem renders the item in the agenda list
+        renderItem={(item, date) => {
+          if (item.type === "tripleseat-event") return <AgendaEventCard event={item}>
+              <AgendaEventCardStarRating eventId={item.id} />
+              {isToday(date) && <AgendaEventCardPostFeedbackButton eventId={item.id} />}
+          </AgendaEventCard> 
+          else if (item.type === "directus-event") return <AgendaDirectusEventCard event={item} />;
+          else return null;
+        }}
       />
     </TabSafeAreaView>
   );
-}
+};
+
+
+
+const insertMappingByStartDate = (mappedEvents: Map<string, Array<GenericEvent>>, events: Array<GenericEvent>) => {
+  for (const event of events) {
+    const stringDate = event.start_date;
+    if (!stringDate) continue;
+    if (mappedEvents.has(stringDate)) mappedEvents.get(stringDate)?.push(event);
+    else mappedEvents.set(stringDate, [event]);
+  }
+};

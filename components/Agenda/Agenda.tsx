@@ -8,6 +8,7 @@ import AgendaMonthIndicator from "@/components/Agenda/AgendaMonthIndicator";
 import AgendaDateSelection from "@/components/Agenda/AgendaSelection";
 import { AgendaComponentContext } from "@/components/Agenda/context";
 import AgendaUISkeleton from "@/components/Agenda/AgendaUISkeleton";
+import AgendaEmptyList from "@/components/Agenda/AgendaEmptyList";
 import { VStack } from "@/components/ui/vstack";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";

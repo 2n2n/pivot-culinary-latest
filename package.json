@@ -29,6 +29,7 @@
     "axios": "^1.12.2",
     "babel-plugin-module-resolver": "^5.0.2",
     "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "expo": "~53.0.22",
     "expo-build-properties": "~0.14.8",
     "expo-font": "~13.3.2",
