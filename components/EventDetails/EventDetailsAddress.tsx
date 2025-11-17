@@ -10,11 +10,16 @@ import { twMerge } from "tailwind-merge";
 import { useContext } from "react";
 
 const Address: React.FC<DetailItemProps> = (props = {}) => {
-    const { event } = useContext(EventDetailsContext);
-    return <HStack className={twMerge("gap-2 items-center", props.stackClassName)}>
-        <Icon as={MapPin} className={twMerge("text-pivot", props.iconClassName)} />
-        <Text className={twMerge(props.textClassName)}>{event?.address}</Text>
+  const { event } = useContext(EventDetailsContext);
+  return (
+    <HStack className={twMerge("gap-2 items-center", props.stackClassName)}>
+      <Icon
+        as={MapPin}
+        className={twMerge("text-primary-500", props.iconClassName)}
+      />
+      <Text className={twMerge(props.textClassName)}>{event?.address}</Text>
     </HStack>
+  );
 };
 
 export default Address;
