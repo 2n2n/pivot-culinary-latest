@@ -191,6 +191,25 @@ declare global {
     custom_fields: CustomField[];
   };
 
+  type DirectusEvent = {
+    id: number;
+    owned_by: number;
+    created_by: number;
+    updated_by: number;
+    status: string;
+    name: string;
+    description: string;
+    start_date: string;
+    end_date: string;
+    event_start_time: string;
+    event_end_time: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at?: string | null;
+  }
+
+  type GenericEvent = TripleseatEvent & { type: "tripleseat-event" } | DirectusEvent & { type: "directus-event" };
+
   type BookingEvent = {
     id: string;
     name: string;

@@ -69,6 +69,6 @@ export const getSafeDateRangeStart = (items: Array<AgendaItem<any>>, dateRangeSt
  * @returns {Date} The safe minimum start date: the earliest of dateRangeStart, the present date, and the first item's date.
  */
 export const getSafeDateRangeEnd = (items: Array<AgendaItem<any>>, dateRangeEnd: Date) => {
-    const dateToCompare = items.length ? [dateRangeEnd, new Date(), items[items.length - 1].date] : [dateRangeEnd, new Date()];
+    const dateToCompare = items.length ? [dateRangeEnd, new Date(), ...items.map((item) => item.date)] : [dateRangeEnd, new Date()];
     return max(dateToCompare);
 }
