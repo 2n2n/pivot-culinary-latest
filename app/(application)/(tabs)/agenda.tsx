@@ -26,7 +26,6 @@ export default function ApplicationAgendaScreen() {
     // type of event implementation
     const typedTripleseatEvents: GenericEvent[] = tripleseatEventsQueryResult?.data?.map(event => ({ ...event, type: "tripleseat-event" })) ?? [];
     const typedDirectusEvents: GenericEvent[] = directusEventsQueryResult?.data?.map(event => ({ ...event, type: "directus-event" })) ?? [];
-    // TODO: Sorting by time needs to be on request
     //! NOTE: Sorted by start_date, this will break if the directus events do not have a start_date property.`
     const sortedEvents = [...typedTripleseatEvents, ...typedDirectusEvents].sort((a, b) => compareDesc(new Date(a.start_date), new Date(b.start_date)));
     insertMappingByStartDate(mappedEvents, sortedEvents);
@@ -45,7 +44,6 @@ export default function ApplicationAgendaScreen() {
   return (
     <TabSafeAreaView>
       <TabDashboardHeader title="Calendar of Activities" />
-      {/** TODO Fix type of items */}
       <Agenda
         items={groupedEvents}
         isLoading={isPending} // initial loading, displays ui skeleton
