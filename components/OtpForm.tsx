@@ -5,18 +5,18 @@ import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Icon } from "@/components/ui/icon";
-import PivotIcon from "@/components/SvgIcons/PivotIcon";
 import { VStack } from "@/components/ui/vstack";
 import AppAdaptiveLogo from "./shared/AppAdaptiveLogo";
 
 interface AuthOTPFormProps {
+  errorMessage: string | null;
   isSubmitting: boolean;
   onSubmitHandler: (otp: string) => void;
   onResendHandler: () => void;
 }
 
 export default function AuthOTPForm({
+  errorMessage,
   isSubmitting = false,
   onSubmitHandler,
   onResendHandler,
@@ -74,6 +74,11 @@ export default function AuthOTPForm({
               <Text size="md" className="text-typography-600 text-center">
                 Enter the 6-digit code sent to {phoneNumber}
               </Text>
+              {errorMessage && (
+                <Text className="text-red-500 font-medium max-w-[300px] text-center">
+                  {errorMessage}
+                </Text>
+              )}
             </VStack>
           </VStack>
 
