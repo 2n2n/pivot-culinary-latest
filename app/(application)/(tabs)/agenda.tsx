@@ -53,8 +53,8 @@ export default function ApplicationAgendaScreen() {
         options={{
           displayedStartingWeekDay: "monday", // dictates where the week should start from
         }}
-        // NOTE: renderItem renders the item in the agenda list
         renderItem={(item, date) => {
+          // NOTE: renderItem renders the item in the agenda list
           if (item.type === "tripleseat-event") return <AgendaEventCard event={item}>
               <AgendaEventCardStarRating eventId={item.id} />
               {isToday(date) && <AgendaEventCardPostFeedbackButton eventId={item.id} />}
@@ -66,8 +66,6 @@ export default function ApplicationAgendaScreen() {
     </TabSafeAreaView>
   );
 };
-
-
 
 const insertMappingByStartDate = (mappedEvents: Map<string, Array<GenericEvent>>, events: Array<GenericEvent>) => {
   for (const event of events) {

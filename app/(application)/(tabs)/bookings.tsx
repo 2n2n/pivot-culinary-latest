@@ -4,7 +4,7 @@ import TabDashboardHeader from "@/components/shared/TabDashboardHeader";
 import TabSafeAreaView from "@/components/shared/TabSafeAreaView";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
-import { Calendar1, Inbox, MapPin, Wifi } from "lucide-react-native";
+import { Calendar1, Inbox, MapPin } from "lucide-react-native";
 import { Link } from "expo-router";
 import TextWithIcon from "@/components/shared/TextWithIcon";
 import useBookings from "@/hooks/useBookings";
@@ -25,8 +25,8 @@ export default function ApplicationBookingsScreen() {
       <Link
         push
         href={{
-          pathname: `/booking-details/${item.id.toString()}`,
-          params: { item: JSON.stringify(item) },
+          pathname: "/(application)/booking-details/[bookingId]",
+          params: { bookingId: item.id.toString(), item: JSON.stringify(item) },
         }}
         asChild
       >

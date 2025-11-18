@@ -167,3 +167,18 @@ type Timestamp = {
   seconds: number;
   nanoseconds: number;
 }
+// list of error messages are found here https://firebase.google.com/docs/reference/node/firebase.auth.Error
+export const translateError = (errorMessage: string) => {
+  switch(errorMessage) {
+      case "auth/app-not-authorized": 
+          return "You're app is not authorized. Please contact the developer."
+      case "auth/too-many-requests":
+          return "Your number was temporarily blocked due to unusual activity. Try again later."
+      case "auth/user-disabled":
+          return "Your account was suspended. Please contact Pivot Culinary."
+      case "auth/invalid-verification-code":
+          return "Invalid code."
+      default: 
+          return "Phone number is invalid."
+  }
+}
