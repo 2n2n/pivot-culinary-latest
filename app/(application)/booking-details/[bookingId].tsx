@@ -37,8 +37,6 @@ export default function BookingDetails() {
     if (bookingData && bookingData.documents) return getBEO(bookingData.documents) || null;
     else return null;
   }, [bookingData]);
-
-  // TODO: Add proper loading for skeleton view.
   return (
     <>
       <Stack.Screen
