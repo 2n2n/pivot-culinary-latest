@@ -13,7 +13,12 @@ declare global {
     title: string;
     template_document_id: number;
     deleted_at: string | null;
-    views: any[];
+    views: TripleseatDocumentView[];
+  };
+
+  type TripleseatDocumentView = {
+    name: string;
+    url: string;
   };
 
   // CHORE: Create a type for the return value to make results type dynamic
@@ -189,6 +194,7 @@ declare global {
     location: Location;
     booking: Booking;
     custom_fields: CustomField[];
+    documents?: TripleseatDocument[];
   };
 
   type DirectusEvent = {

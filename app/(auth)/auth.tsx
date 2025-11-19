@@ -11,7 +11,7 @@ import AuthOTPForm from "@/components/OtpForm";
 import AppAdaptiveLogo from "@/components/shared/AppAdaptiveLogo";
 import { ThemeLoaderScreenContext } from "@/services/theme_loader_screen/ThemeLoaderScreenProvider";
 import { AuthContext } from "@/services/auth/AuthProvider";
-import { groupByAccount } from "@/helpers";
+import { groupByAccount, translateError } from "@/helpers";
 import { AccountModalContext } from "@/services/account_modal/AccountModalProvider";
 import { getContactInfo } from "@/requests/contact.request";
 import getAccount from "@/requests/acccount.request";
@@ -96,6 +96,8 @@ function AuthLoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingOTP, setIsSubmittingOTP] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string | null>(null);
+  const [otpErrorMessage, setOtpErrorMessage] = useState<string | null>(null);
   const [authResponse, setAuthResponse] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const { signIn } = useAuth();
@@ -113,8 +115,8 @@ function AuthLoginScreen() {
       // Call signIn with the provided phone number
       const response = await signIn(phoneNumber);
       setAuthResponse(response);
-    } catch (error) {
-      // TODO: Add handler for error message here.
+    } catch (error: any) {
+      setLoginErrorMessage(translateError(error.code));
       console.log("error when signing in", error);
     } finally {
       setIsSubmitting(false);
@@ -156,16 +158,22 @@ function AuthLoginScreen() {
           }
         }
       }
-    } catch (err) {
+    } catch (error: any) {
       setIsSwitchingApp(false);
-      // TODO: add error message [auth/invalid-verification-code] The multifactor verification code used to create the auth credential is invalid.
-      console.log(err);
+      setOtpErrorMessage(translateError(error.code));
+      console.log(error);
     } finally {
       setIsSubmittingOTP(false);
     }
   }
 
   async function onResendOTP() {}
+
+  const handleChangePhoneNumber = (phoneNumber: string) => {
+    if (loginErrorMessage) setLoginErrorMessage(null);
+    if (otpErrorMessage) setOtpErrorMessage(null);
+    setPhoneNumber(phoneNumber);
+  }
 
   if (!authResponse) {
     return (
@@ -182,11 +190,16 @@ function AuthLoginScreen() {
               <Text size="md" className="font-bold text-center">
                 Login to your account
               </Text>
+              {loginErrorMessage && (
+                <Text className="text-red-500 font-medium text-center">
+                  {loginErrorMessage}
+                </Text>
+              )}
             </VStack>
 
             <VStack className="flex gap-4">
               <PhoneNumberInput
-                onChangeValue={setPhoneNumber}
+                onChangeValue={handleChangePhoneNumber}
                 formatters={phoneNumberFormatters}
               />
               <Button
@@ -208,6 +221,7 @@ function AuthLoginScreen() {
   } else {
     return (
       <AuthOTPForm
+      errorMessage={otpErrorMessage}
         isSubmitting={isSubmittingOTP}
         onSubmitHandler={onSubmitOTP}
         onResendHandler={onResendOTP}
