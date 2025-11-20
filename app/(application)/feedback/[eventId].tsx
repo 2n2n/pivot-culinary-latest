@@ -11,13 +11,13 @@ import SwipeUpView from "@/components/SwipeUpView";
 import { Center } from "@/components/ui/center";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
-import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { ImagePlus, NotepadText, X } from "lucide-react-native";
 import { FlatList, View } from "react-native";
+import { Image } from "expo-image";
 import { useState } from "react";
 
 type ImageUploadItem = Array<{
@@ -152,14 +152,13 @@ function Feedback() {
             <TextareaInput value={comment} onChangeText={setComment} />
           </Textarea>
           <Button size="lg" variant="outline" className="rounded-full">
-            <ButtonIcon as={ImagePlus} />
+            <ButtonIcon as={ImagePlus} className="text-primary-500" />
             <ButtonText>Add Photos</ButtonText>
           </Button>
           <FlatList
             data={imageUploads}
             horizontal
             showsHorizontalScrollIndicator={false}
-            // * NOTE: THERE MIGHT BE A BETTER WAY OF DISPLAYING UPLOADED PHOTOS
             renderItem={({ item }) => (
               <Box
                 key={item.id}
@@ -168,7 +167,11 @@ function Feedback() {
                 <Image
                   source={{ uri: item.uri }}
                   alt="Uploaded Image"
-                  className="h-full min-w-[120px] aspect-auto"
+                  style={{
+                    height: "100%",
+                    minWidth: 120,
+                    aspectRatio: "auto"
+                  }}
                 />
                 {item.complete && (
                   <Button
