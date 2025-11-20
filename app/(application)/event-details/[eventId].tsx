@@ -221,9 +221,9 @@ export default function EventDetailsScreen() {
               <Text className="font-bold">Average Rating</Text>
               <Text className="text-2xl font-semibold">{RATING}</Text>
               <HStack className="gap-1">
-                {/* {Array.from({ length: Math.round(RATING) }).map((_, i) => (
+                {Array.from({ length: Math.round(RATING) }).map((_, i) => (
                   <Icon key={i} as={Star} />
-                ))} */}
+                ))}
               </HStack>
             </Center>
             {FEEDBACK_CATEGORIES.map((category) => (
