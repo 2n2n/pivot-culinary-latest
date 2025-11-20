@@ -3,9 +3,10 @@ import type { LegendListRef, OnViewableItemsChanged } from "@legendapp/list";
 import { ContentItemSkeleton, ContentItemSubSkeleton } from "@/components/Agenda/AgendaUISkeleton";
 import AgendaContentItemDateDetails from "@/components/Agenda/AgendaContentItemDateDetails";
 import { fillGapsInDateGroups, getDateIdentity } from "@/components/Agenda/helpers";
-import { AgendaItem, RenderItemFunction } from "@/components/Agenda/types";
+import AgendaContentCard from "@/components/Agenda/AgendaContentCard";
 import { AgendaComponentContext } from "@/components/Agenda/context";
 import { tva } from "@gluestack-ui/utils/nativewind-utils";
+import { AgendaItem } from "@/components/Agenda/types";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Center } from "@/components/ui/center";
@@ -62,12 +63,11 @@ const itemGroupSeparatorStyles = tva({
 
 export default function AgendaContentFlatList<T extends any>({ 
     items,
-    renderItem,
     isLoadingMoreItems = false,
     hasLoadedAllItems = true,
     onPresentDateItemVisiblityChange = () => {},
     onLoadMoreItems
-}: AgendaContentFlatListProps<T>){
+}: AgendaContentFlatListProps){
     const { selectedDate, setSelectedDate, agendaOptions, styles, dateRangeStart, dateRangeEnd } = useContext(AgendaComponentContext);
     const agendaContentFlatListRef = useRef<LegendListRef>(null);
     const autoScrollUnlockDebounceRef = useRef<number>(null);
@@ -96,7 +96,7 @@ export default function AgendaContentFlatList<T extends any>({
             onPresentDateItemVisiblityChange(false);
         }, agendaOptions.averageGestureIntervalMs);
     }, [presentDateItemIndex, onPresentDateItemVisiblityChange, agendaOptions.averageGestureIntervalMs]);
-    const handleViewableItemDateChange: NonNullable<OnViewableItemsChanged<AgendaItem<T>>> = useCallback(({ changed, viewableItems }) => {
+    const handleViewableItemDateChange: NonNullable<OnViewableItemsChanged<AgendaItem>> = useCallback(({ changed, viewableItems }) => {
         if(!autoScrollIsReadyRef.current) return;
         handleOnChangeVisibleItemIndexes(viewableItems[0]?.index, viewableItems[viewableItems.length - 1]?.index);
         if (!autoScrollIsLockedRef.current) return;
@@ -121,7 +121,7 @@ export default function AgendaContentFlatList<T extends any>({
             return () => clearTimeout(timeout);
         } else agendaContentFlatListRef.current.scrollToIndex({ index: derivedSelectedDateIndex, animated: true });
     }, [derivedSelectedDateIndex]);
-    return <FlatList
+    return <FlatList<AgendaItem>
         ref={agendaContentFlatListRef}
         data={itemsWithFilledGaps}
         keyExtractor={(item) => getDateIdentity(item.date)}
@@ -130,9 +130,13 @@ export default function AgendaContentFlatList<T extends any>({
             {
                 itemGroup.items.length ? 
                 <VStack className={itemGroupStyles({ space: styles.itemsSpacing })}>
-                    {itemGroup.items.map((item, itemIndex) => <React.Fragment key={`${itemGroup.date}-${itemIndex}`}>
-                        {renderItem(item, itemGroup.date)}
-                    </React.Fragment>)}
+                    {itemGroup.items
+                        .map((item, itemIndex) => <AgendaContentCard 
+                            key={`${itemGroup.date}-${itemIndex}`} 
+                            item={item} 
+                            date={itemGroup.date} 
+                        />)
+                    }
                 </VStack>
                 : <Center className="flex-1 border border-dashed rounded-lg h-full border-gray-400">
                     <Text>No activity on this day</Text>
@@ -183,9 +187,8 @@ export default function AgendaContentFlatList<T extends any>({
     />
 }
 
-type AgendaContentFlatListProps<T extends any> = {
-    items: Array<AgendaItem<T>>,
-    renderItem: RenderItemFunction<T>,
+type AgendaContentFlatListProps = {
+    items: Array<AgendaItem>,
     hasLoadedAllItems: boolean,
     isLoadingMoreItems: boolean,
     onLoadMoreItems: () => void,

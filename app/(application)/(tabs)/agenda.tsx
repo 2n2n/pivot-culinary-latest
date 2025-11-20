@@ -53,15 +53,6 @@ export default function ApplicationAgendaScreen() {
         options={{
           displayedStartingWeekDay: "monday", // dictates where the week should start from
         }}
-        renderItem={(item, date) => {
-          // NOTE: renderItem renders the item in the agenda list
-          if (item.type === "tripleseat-event") return <AgendaEventCard event={item}>
-              <AgendaEventCardStarRating eventId={item.id} />
-              {isToday(date) && <AgendaEventCardPostFeedbackButton eventId={item.id} />}
-          </AgendaEventCard> 
-          else if (item.type === "directus-event") return <AgendaDirectusEventCard event={item} />;
-          else return null;
-        }}
       />
     </TabSafeAreaView>
   );
