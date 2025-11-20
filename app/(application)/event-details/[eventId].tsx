@@ -369,11 +369,11 @@ function ReviewsActionsSheet({
                         </HStack>
 
                         <HStack className="gap-2">
-                          {/* {Array.from({
+                          {Array.from({
                             length: Math.round(feedback.rating),
                           }).map((_, i) => (
                             <Icon key={i} as={Star} size={16} />
-                          ))} */}
+                          ))}
                         </HStack>
                       </VStack>
                     </VStack>
