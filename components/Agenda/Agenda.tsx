@@ -1,4 +1,4 @@
-import type { AgendaItem, AgendaOptions, AgendaStyles, RenderItemFunction } from "@/components/Agenda/types";
+import type { AgendaItem, AgendaOptions, AgendaStyles } from "@/components/Agenda/types";
 
 import { getDateIdentity, getSafeDateRangeEnd, getSafeDateRangeStart } from "@/components/Agenda/helpers";
 import AgendaContentReturnToPresentButton from "@/components/Agenda/AgendaContentReturnToPresentButton";
@@ -8,7 +8,6 @@ import AgendaMonthIndicator from "@/components/Agenda/AgendaMonthIndicator";
 import AgendaDateSelection from "@/components/Agenda/AgendaSelection";
 import { AgendaComponentContext } from "@/components/Agenda/context";
 import AgendaUISkeleton from "@/components/Agenda/AgendaUISkeleton";
-import AgendaEmptyList from "@/components/Agenda/AgendaEmptyList";
 import { VStack } from "@/components/ui/vstack";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -27,7 +26,6 @@ export default function Agenda<T extends any>(
         hasLoadedAllItems = false,
         isLoadingMoreItems = false,
         onLoadMoreItems = () => {},
-        renderItem, 
         dateRangeStart = subDays(new Date(), 7), 
         initialDateRangeEnd = addDays(new Date(), 7),
         options,
@@ -79,8 +77,7 @@ export default function Agenda<T extends any>(
                 </VStack>
                 <Animated.View style={AgendaStyles.contentContainer}>
                     <AgendaContentFlatList 
-                        items={items} 
-                        renderItem={renderItem}
+                        items={items}
                         hasLoadedAllItems={hasLoadedAllItems}
                         isLoadingMoreItems={isLoadingMoreItems}
                         onLoadMoreItems={handleLoadMoreItems}
@@ -139,7 +136,7 @@ const DEFAULT_STYLES = {
  */
 type AgendaProps<T extends any> = {
     /** **Required** - Array of agenda items grouped by date */
-    items: Array<AgendaItem<T>>,
+    items: Array<AgendaItem>,
     /** Whether the agenda is currently loading the initial data, will make the agenda screen display a skeleton UI */
     isLoading?: boolean,
     /** Whether more items are being loaded (paginated/infinite scroll) */
@@ -163,8 +160,6 @@ type AgendaProps<T extends any> = {
     isRefreshing?: boolean,
     /** Callback fired when user initiates a refresh */
     onRefresh?: () => void,
-    /** **Required** - Function to render each individual agenda item */
-    renderItem: RenderItemFunction<T>,
     /** Configuration options for agenda behavior and display
      * @property {AgendaItemSpacing} itemsSpacing - The spacing between the agenda items (defaults to "sm")
      * @property {AgendaItemSpacing} itemGroupSpacing - The spacing between the agenda item groups (defaults to "sm")

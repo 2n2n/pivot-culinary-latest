@@ -32,9 +32,4 @@ export type AgendaStyles = {
 /**
  * An item in the agenda, grouped by date
  */
-export type AgendaItem<T extends any> = {date: Date, items: Array<T>};
-
-/**
- * Function to render an individual agenda item
- */
-export type RenderItemFunction<T extends any> = (schedule: T, date: Date) => React.ReactNode;
+export type AgendaItem = {date: Date, items: Array<GenericEvent>};
