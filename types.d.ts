@@ -172,6 +172,7 @@ declare global {
     location_id: number;
     event_ids: number[];
     status: string;
+    grand_total: number;
     total_event_actual_amount: number;
     total_actual_amount: number;
     total_event_grand_total: number;
@@ -212,9 +213,11 @@ declare global {
     created_at: string;
     updated_at: string;
     deleted_at?: string | null;
-  }
+  };
 
-  type GenericEvent = TripleseatEvent & { type: "tripleseat-event" } | DirectusEvent & { type: "directus-event" };
+  type GenericEvent =
+    | (TripleseatEvent & { type: "tripleseat-event" })
+    | (DirectusEvent & { type: "directus-event" });
 
   type BookingEvent = {
     id: string;

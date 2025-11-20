@@ -103,40 +103,49 @@ export const formatFullDate = (date: string) => {
   });
 };
 
-export const formatCurrency = (amount: number, currency: string = 'USD') => {
-  if (!amount && amount !== 0) return "--";
-  else return Number(amount).toLocaleString("en-US", {
-    style: "currency",
-    currency: currency,
-  });
-}
+export const formatCurrency = (amount: number, currency: string = "USD") => {
+  console.log(amount);
+  if (!amount) return "--";
+  else
+    return Number(amount).toLocaleString("en-US", {
+      style: "currency",
+      currency: currency,
+    });
+};
 
-export const parseDate = (unknownDateLike: unknown = null): Date | undefined => {
+export const parseDate = (
+  unknownDateLike: unknown = null
+): Date | undefined => {
   if (!unknownDateLike) return;
-  if (['number', 'string'].includes(typeof unknownDateLike)) {
-      if (typeof unknownDateLike === 'number' && (unknownDateLike < 0 || isNaN(unknownDateLike))) return;
-      const toDate = new Date(unknownDateLike as number | string);
-      if(isNaN(toDate.getTime())) return;
-      else return toDate;
+  if (["number", "string"].includes(typeof unknownDateLike)) {
+    if (
+      typeof unknownDateLike === "number" &&
+      (unknownDateLike < 0 || isNaN(unknownDateLike))
+    )
+      return;
+    const toDate = new Date(unknownDateLike as number | string);
+    if (isNaN(toDate.getTime())) return;
+    else return toDate;
   }
-  if (typeof unknownDateLike === 'object') {
-      const { seconds } = unknownDateLike as Timestamp;
-      const { getTime } = unknownDateLike as Date;
-      if (!seconds && !getTime) return;
-      if (seconds) return new Date(seconds * 1000);
-      if (getTime && typeof getTime === 'function') return unknownDateLike as Date;
+  if (typeof unknownDateLike === "object") {
+    const { seconds } = unknownDateLike as Timestamp;
+    const { getTime } = unknownDateLike as Date;
+    if (!seconds && !getTime) return;
+    if (seconds) return new Date(seconds * 1000);
+    if (getTime && typeof getTime === "function")
+      return unknownDateLike as Date;
   }
   return;
-}
+};
 
 export const dateToLocalFormat = (
-  date: string | number | Date, 
-  _format: string, 
-  timeZone: string = 'US/Mountain'
+  date: string | number | Date,
+  _format: string,
+  timeZone: string = "US/Mountain"
 ) => {
-  if (!_format) throw new Error('No date format is provided');
+  if (!_format) throw new Error("No date format is provided");
   const parsedDate = parseDate(date);
-  if (!parsedDate) throw new Error('The date provided is not parseable');
+  if (!parsedDate) throw new Error("The date provided is not parseable");
   return format(parsedDate, _format, { timeZone });
 };
 
@@ -166,23 +175,23 @@ export const findBookingAddress: (custom_fields: CustomField[]) => string = (
 type Timestamp = {
   seconds: number;
   nanoseconds: number;
-}
+};
 // list of error messages are found here https://firebase.google.com/docs/reference/js/auth#autherrorcodes
 export const translateError = (errorMessage: string) => {
-  switch(errorMessage) {
+  switch (errorMessage) {
     case "auth/network-request-failed":
-      return "Unable to login. Please check your internet connection and try again."
+      return "Unable to login. Please check your internet connection and try again.";
     case "auth/invalid-phone-number":
-      return "Your phone number is invalid."
+      return "Your phone number is invalid.";
     case "auth/operation-not-allowed":
-    case "auth/app-not-authorized": 
-      return "Your app is not authorized. Please contact the developer."
+    case "auth/app-not-authorized":
+      return "Your app is not authorized. Please contact the developer.";
     case "auth/too-many-requests":
-      return "Your number was temporarily blocked due to unusual activity. Try again later."
+      return "Your number was temporarily blocked due to unusual activity. Try again later.";
     case "auth/user-disabled":
-      return "Your account was suspended. Please contact Pivot Culinary."
+      return "Your account was suspended. Please contact Pivot Culinary.";
     case "auth/invalid-verification-code":
-      return "You have entered an invalid OTP code. Please try again."
+      return "You have entered an invalid OTP code. Please try again.";
     case "auth/captcha-check-failed":
     case "auth/recaptcha-not-enabled":
     case "auth/missing-recaptcha-token":
@@ -190,10 +199,10 @@ export const translateError = (errorMessage: string) => {
     case "auth/invalid-recaptcha-action":
     case "auth/missing-recaptcha-version":
     case "auth/invalid-recaptcha-version":
-      return "Captcha check failed. Please try again."
+      return "Captcha check failed. Please try again.";
     case "auth/code-expired":
-      return "Your OTP code has expired. Please try again and request a new code."
-    default: 
-      return "An unexpected error has occurred. Please try again later."
+      return "Your OTP code has expired. Please try again and request a new code.";
+    default:
+      return "An unexpected error has occurred. Please try again later.";
   }
-}
+};
