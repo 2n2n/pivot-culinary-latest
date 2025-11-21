@@ -5,10 +5,11 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
+import { twMerge } from "tailwind-merge";
 import React from "react";
 import { Linking } from "react-native";
 
-const AccountManagerContact: React.FC<{ manager: Contact }> = ({ manager }) => {
+const AccountManagerContact: React.FC<{ manager: Contact, textClassName?: string, buttonClassName?: string }> = ({ manager, textClassName, buttonClassName }) => {
   return (
     <HStack className="items-center justify-between py-1 px-4">
       <HStack className="items-center gap-3 flex-1">
@@ -19,10 +20,10 @@ const AccountManagerContact: React.FC<{ manager: Contact }> = ({ manager }) => {
           />
         </Avatar>
         <VStack className="flex-1">
-          <Text className="text-white text-lg font-semibold">
+          <Text className={twMerge("text-white text-lg font-semibold", textClassName)}>
             {manager.first_name + " " + manager.last_name}
           </Text>
-          <Text className="text-white/80 text-sm">
+          <Text className={twMerge("text-white/80 text-sm", textClassName)}>
             {manager?.title || "Account Manager"}
           </Text>
         </VStack>
@@ -36,9 +37,9 @@ const AccountManagerContact: React.FC<{ manager: Contact }> = ({ manager }) => {
                 Linking.openURL(`tel:${manager.phone_numbers?.[0].number}`);
               }}
               size="sm"
-              className="w-12 h-12 rounded-full bg-background-transparent border border-white"
+              className={twMerge("w-12 h-12 rounded-full bg-background-transparent border border-white", buttonClassName)}
             >
-              <Icon className="text-white" as={Phone} />
+              <Icon className={twMerge("text-white", textClassName)} as={Phone} />
             </Button>
             <Button
               onPress={() => {
@@ -47,9 +48,9 @@ const AccountManagerContact: React.FC<{ manager: Contact }> = ({ manager }) => {
                 }
               }}
               size="sm"
-              className="w-12 h-12 rounded-full bg-background-transparent border border-white"
+              className={twMerge("w-12 h-12 rounded-full bg-background-transparent border border-white", buttonClassName)}
             >
-              <Icon className="text-white" as={MessageSquareMore} />
+              <Icon className={twMerge("text-white", textClassName)} as={MessageSquareMore} />
             </Button>
           </>
         )}

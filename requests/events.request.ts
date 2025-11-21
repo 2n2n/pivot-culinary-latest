@@ -65,3 +65,10 @@ export const getEventsFromOtherPages = async (
   const results = await Promise.all(pagesRequest);
   return results.flat();
 };
+
+export const getEventById = async (eventId: number | string) => {
+  const request = await authenticate();
+  return await request
+    .get(`v1/events/${eventId}.json`)
+    .then(({ data }) => data?.event) as TripleseatEvent;
+};

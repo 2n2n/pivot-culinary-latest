@@ -38,6 +38,13 @@
       "@react-native-firebase/auth",
       "@react-native-firebase/crashlytics",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you upload them as attachments to your event feedback.",
+          "cameraPermission": "The app accesses your camera to let you take photos as attachments to your event feedback."
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "ios": {

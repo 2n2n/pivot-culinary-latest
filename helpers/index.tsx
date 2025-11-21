@@ -172,6 +172,13 @@ export const findBookingAddress: (custom_fields: CustomField[]) => string = (
   ).trim();
 };
 
+export const getStorageFilePath = (id: string, mimeType: string) => {
+  let extension;
+  if (mimeType === "image/png") extension = "png";
+  else extension = "jpg";
+  return `/tmp/feedbacks/${id}.${extension}`;
+}
+
 type Timestamp = {
   seconds: number;
   nanoseconds: number;
