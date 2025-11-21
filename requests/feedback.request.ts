@@ -1,5 +1,6 @@
 import { average, getFirestore, getAggregateFromServer, getDocs, query, where, collection, Timestamp } from "@react-native-firebase/firestore";
 import { subDays } from "date-fns";
+import { getFunctions } from "@react-native-firebase/functions";
 
 const safeParseNumber = (value: unknown) => {
     if (!value) return 0;
@@ -11,7 +12,7 @@ const safeParseNumber = (value: unknown) => {
     } else {
         return 0;
     }
-}
+};
 
 export const getAllFeedbacks = async () => {
   const start = performance.now();
@@ -54,3 +55,7 @@ export const getEventAverageRating = async (eventId: string) => {
   console.log(`Got event [${eventId}] average rating in ${(end - start).toFixed(2)} ms`);
   return totalAverage;
 };
+
+export const submitFeedback = getFunctions().httpsCallable("saveFeedback");
+
+export const submitRealtimeFeedback = getFunctions().httpsCallable("saveRealtimeFeedback");
