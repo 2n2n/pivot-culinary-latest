@@ -193,6 +193,7 @@ declare global {
     deleted_at?: string | null;
     location: Location;
     booking: Booking;
+    contact: Contact;
     custom_fields: CustomField[];
     documents?: TripleseatDocument[];
   };
